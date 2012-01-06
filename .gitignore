@@ -1,0 +1,10 @@
+# Folders to ignore #
+OutputRoot/
+bin/
+obj/
+
+# Known files to ignore always #
+*.suo
+*.user
+~*.docx
+**\msbuild.log

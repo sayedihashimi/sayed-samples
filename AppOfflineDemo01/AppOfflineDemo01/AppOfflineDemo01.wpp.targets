@@ -1,0 +1,199 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!--<UsingTask TaskName="ExportManifestFile" AssemblyFile="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\Web\Microsoft.Web.Publishing.Tasks.dll"/>-->
+  <Target Name="InitalizeAppOffline">
+    <!-- Cannot declare these outside of a target because this is imported before the PackageTempRootDir is defined as well as others -->
+    <PropertyGroup>
+      <EnableAppOfflineSupport Condition=" '$(EnableAppOfflineSupport)'=='' ">true</EnableAppOfflineSupport>
+      <MSDeployExe Condition=" '$(MSDeployExe)'=='' ">$(ProgramFiles)\IIS\Microsoft Web Deploy V2\msdeploy.exe</MSDeployExe>
+      <!-- MSDeploy doesn't like paths that end with a \ so make sure to not place them in these properties -->
+      <AppOfflineTempRootDir Condition=" '$(AppOfflineTempRootDir)'=='' ">$(PackageTempRootDir)\AppOffline</AppOfflineTempRootDir>
+      <AppOfflineContentDir Condition=" '$(AppOfflineContentDir)'=='' ">$(AppOfflineTempRootDir)\Content</AppOfflineContentDir>
+      <AppOfflineArchiveDir Condition=" '$(AppOfflineArchiveDir)'=='' ">$(AppOfflineTempRootDir)\ArchiveDir</AppOfflineArchiveDir>
+      <!-- internal properties -->
+      <_AppOfflineSourceManifestFile>$(AppOfflineTempRootDir)\ao-SourceManifest.xml</_AppOfflineSourceManifestFile>
+    </PropertyGroup>    
+  </Target>
+  
+  <Target Name="CleanAppOfflineTempDir" DependsOnTargets="InitalizeAppOffline" AfterTargets="Clean;MSDeployPublish">
+    <ItemGroup>
+      <_AppOfflineFilesToDelete Remove="@(_AppOfflineFilesToDelete)"/>
+      <_AppOfflineFilesToDelete Include="$(AppOfflineTempRootDir)\**\*" />
+    </ItemGroup>
+    <Delete Files="@(_AppOfflineFilesToDelete)" />
+  </Target>
+
+  <PropertyGroup>
+    <PublishAppOfflineToDest>
+      InitalizeAppOffline;
+      CleanAppOfflineTempDir;
+      GenerateAppOfflineSourceManifest
+    </PublishAppOfflineToDest>
+  </PropertyGroup>
+  
+  <Target Name="PublishAppOfflineToDest" BeforeTargets="MSDeployPublish" DependsOnTargets="$(PublishAppOfflineToDest)">
+    <MakeDir Directories="$(AppOfflineTempRootDir)"/>
+    <MakeDir Directories="$(AppOfflineContentDir)"/>
+    <!--<Copy SourceFiles="app_offline-template.htm"-->
+    
+    <!--
+      We need to create an MSDeploy archivhe which has an app_offline.htm file and sync that
+      to the destination before the publish begins
+    -->
+  <!--
+  To generate the archive we will use a command similar to the following
+  %msdeploy% 
+  -source:manifest='C:\temp\appOffline\ao.SourceManifest.xml' 
+  -dest:archiveDir='C:\temp\appOffline\01',IncludeAcls='False' 
+  -verb:sync 
+  -declareParam:name='IIS Web Application Name',kind='ProviderPath',scope='IisApp',match="^C:\\temp\\appOffline\\appOffline-content$",defaultvalue='Default Web Site/FooBar01',tags='IisApp
+  -->
+    <PropertyGroup>
+      <_Cmd>"$(MSDeployExe)" -source:manifest="$(_AppOfflineSourceManifestFileFullPath)" -dest:archiveDir="$(_AppOfflineArchiveDirFullPath)",IncludeAcls='False'</_Cmd>
+      <_Cmd>$(_Cmd) -verb:sync </_Cmd>
+      <_Cmd>$(_Cmd) -declareParam:name='$(DeployParameterIISAppName)',kind='ProviderPath',scope='IisApp',match=&quot;^$(AppOfflineContentDir.Replace('\','\\'))$&quot;,defaultvalue='$(DeployIisAppPath)',tags='IisApp</_Cmd>
+    </PropertyGroup>
+
+    <Message Text="Creating AppOffline MSDeploy source manifest with the command: [$(_Cmd)]"/>
+    
+    <Exec Command="$(_Cmd)" />
+    
+    <!-- Now we need to sync this archive dir to the destination -->
+    <ItemGroup>
+      <_AoMsDeploySourceProviderSetting Include="archiveDir">
+        <Path>$(_AppOfflineArchiveDirFullPath)</Path>
+        <EncryptPassword>$(DeployEncryptKey)</EncryptPassword>
+        <WebServerAppHostConfigDirectory>$(_MSDeploySourceWebServerAppHostConfigDirectory)</WebServerAppHostConfigDirectory>
+        <WebServerManifest>$(_MSDeploySourceWebServerManifest)</WebServerManifest>
+        <WebServerDirectory>$(_MSDeploySourceWebServerDirectory)</WebServerDirectory>
+      </_AoMsDeploySourceProviderSetting>
+
+      <_AoMsDeployDestinationProviderSetting Include="auto">
+        <Path>$(MSDeployPublishDestinationRoot)</Path>
+        <ComputerName>$(_PublishMsDeployServiceUrl)</ComputerName>
+        <UserName>$(UserName)</UserName>
+        <Password>$(Password)</Password>
+        <EncryptPassword>$(DeployEncryptKey)</EncryptPassword>
+        <IncludeAcls>False</IncludeAcls>
+        <AuthType>$(AuthType)</AuthType>
+        <WebServerAppHostConfigDirectory>$(_MSDeployDestinationWebServerAppHostConfigDirectory)</WebServerAppHostConfigDirectory>
+        <WebServerManifest>$(_MSDeployDestinationWebServerManifest)</WebServerManifest>
+        <WebServerDirectory>$(_MSDeployDestinationWebServerDirectory)</WebServerDirectory>
+      </_AoMsDeployDestinationProviderSetting>
+
+      <_AoArchivePublishSetParam Include="$(DeployParameterIISAppName)">
+        <Value>$(DeployIisAppPath)</Value>
+      </_AoArchivePublishSetParam>
+    </ItemGroup>
+
+    <Message Text="************************************************************************" />
+    <Message Text="Calling MSDeploy to publish from the source manifest to the archive dir" Importance="high" />
+    <Message Text="************************************************************************" />
+
+    <MSdeploy
+          MSDeployVersionsToTry="$(_MSDeployVersionsToTry)"
+          Verb="sync"
+          Source="@(_AoMsDeploySourceProviderSetting)"
+          Destination="@(_AoMsDeployDestinationProviderSetting)"
+          EnableRule="DoNotDeleteRule"
+          AllowUntrusted="$(AllowUntrustedCertificate)"
+          RetryAttempts="$(RetryAttemptsForDeployment)"
+          SimpleSetParameterItems="@(_AoArchivePublishSetParam)"
+          ExePath="$(MSDeployPath)" />
+    <Error Text=" --------------------FOOBAR------------------------------------"/>
+
+  </Target>
+
+  <Target Name="GenerateAppOfflineSourceManifest">
+    <!-- Copy the app_offline-template.htm to the content folder -->
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\app_offline-template.htm"
+          DestinationFiles="$(AppOfflineContentDir)\app_offline.htm" />
+
+    <PropertyGroup>
+      <_AppOfflineContentDirFullPath>$([System.IO.Path]::GetFullPath($(AppOfflineContentDir)))</_AppOfflineContentDirFullPath>
+      <_AppOfflineSourceManifestFileFullPath>$([System.IO.Path]::GetFullPath($(_AppOfflineSourceManifestFile)))</_AppOfflineSourceManifestFileFullPath>
+      <_AppOfflineArchiveDirFullPath>$([System.IO.Path]::GetFullPath($(AppOfflineArchiveDir)))</_AppOfflineArchiveDirFullPath>
+    </PropertyGroup>
+    
+    <!-- Now create a source manifest for this, we will use that to create an MSDeploy archive -->
+    <ItemGroup>
+      <_TmpMsDeploySourceManifest Include="iisApp">
+        <Path>$(_AppOfflineContentDirFullPath)</Path>
+      </_TmpMsDeploySourceManifest>
+    </ItemGroup>
+    
+    <ExportManifestFile Manifests="@(_TmpMsDeploySourceManifest)" ManifestFile="$(_AppOfflineSourceManifestFileFullPath)" />
+  </Target>
+
+  <Target Name="Sample" BeforeTargets="MSDeployPublish">
+    <ItemGroup>
+      <_AoMsDeployDestinationProviderSettingTemp Include="auto">
+        <Path>$(MSDeployPublishDestinationRoot)</Path>
+        <ComputerName>$(_PublishMsDeployServiceUrl)</ComputerName>
+        <UserName>$(UserName)</UserName>
+        <Password>$(Password)</Password>
+        <EncryptPassword>$(DeployEncryptKey)</EncryptPassword>
+        <IncludeAcls>False</IncludeAcls>
+        <AuthType>$(AuthType)</AuthType>
+        <WebServerAppHostConfigDirectory>$(_MSDeployDestinationWebServerAppHostConfigDirectory)</WebServerAppHostConfigDirectory>
+        <WebServerManifest>$(_MSDeployDestinationWebServerManifest)</WebServerManifest>
+        <WebServerDirectory>$(_MSDeployDestinationWebServerDirectory)</WebServerDirectory>
+      </_AoMsDeployDestinationProviderSettingTemp>
+    </ItemGroup>
+    <!--_AoMsDeployDestinationProviderSettingTemp-->
+    <Message Text="_AoMsDeployDestinationProviderSettingTemp: @(_AoMsDeployDestinationProviderSettingTemp)"/>
+    <Message Text="_AoMsDeployDestinationProviderSettingTemp.Path : %(_AoMsDeployDestinationProviderSettingTemp.Path)"/>
+    <Message Text="_AoMsDeployDestinationProviderSettingTemp.ComputerName : %(_AoMsDeployDestinationProviderSettingTemp.ComputerName)"/>
+    <Message Text="_AoMsDeployDestinationProviderSettingTemp.UserName : %(_AoMsDeployDestinationProviderSettingTemp.UserName)"/>
+    <Message Text="_AoMsDeployDestinationProviderSettingTemp.Password : %(_AoMsDeployDestinationProviderSettingTemp.Password)"/>
+    <Message Text="_AoMsDeployDestinationProviderSettingTemp.EncryptPassword : %(_AoMsDeployDestinationProviderSettingTemp.EncryptPassword)"/>
+    <Message Text="_AoMsDeployDestinationProviderSettingTemp.IncludeAcls : %(_AoMsDeployDestinationProviderSettingTemp.IncludeAcls)"/>
+    <Message Text="_AoMsDeployDestinationProviderSettingTemp.AuthType : %(_AoMsDeployDestinationProviderSettingTemp.AuthType)"/>
+    <Message Text="_AoMsDeployDestinationProviderSettingTemp.WebServerAppHostConfigDirectory : %(_AoMsDeployDestinationProviderSettingTemp.WebServerAppHostConfigDirectory)"/>
+    <Message Text="_AoMsDeployDestinationProviderSettingTemp.WebServerManifest : %(_AoMsDeployDestinationProviderSettingTemp.WebServerManifest)"/>
+    <Message Text="_AoMsDeployDestinationProviderSettingTemp.WebServerDirectory : %(_AoMsDeployDestinationProviderSettingTemp.WebServerDirectory)"/>
+
+    <ItemGroup>
+      <_AoMsDeploySourceProviderSettingTemp Include="manifest">
+        <Path>$(MSDeployPublishSourceRoot)</Path>
+        <EncryptPassword>$(DeployEncryptKey)</EncryptPassword>
+        <WebServerAppHostConfigDirectory>$(_MSDeploySourceWebServerAppHostConfigDirectory)</WebServerAppHostConfigDirectory>
+        <WebServerManifest>$(_MSDeploySourceWebServerManifest)</WebServerManifest>
+        <WebServerDirectory>$(_MSDeploySourceWebServerDirectory)</WebServerDirectory>
+      </_AoMsDeploySourceProviderSettingTemp>
+    </ItemGroup>
+    
+    <Message Text="_AoMsDeploySourceProviderSettingTemp: @(_AoMsDeploySourceProviderSettingTemp)"/>
+    <Message Text="_AoMsDeploySourceProviderSettingTemp.Path %(_AoMsDeploySourceProviderSettingTemp.Path)"/>
+    <Message Text="_AoMsDeploySourceProviderSettingTemp.EncryptPassword %(_AoMsDeploySourceProviderSettingTemp.EncryptPassword)"/>
+    <Message Text="_AoMsDeploySourceProviderSettingTemp.WebServerAppHostConfigDirectory %(_AoMsDeploySourceProviderSettingTemp.WebServerAppHostConfigDirectory)"/>
+    <Message Text="_AoMsDeploySourceProviderSettingTemp.WebServerManifest %(_AoMsDeploySourceProviderSettingTemp.WebServerManifest)"/>
+    <Message Text="_AoMsDeploySourceProviderSettingTemp.WebServerDirectory %(_AoMsDeploySourceProviderSettingTemp.WebServerDirectory)"/>
+
+
+
+
+    <!--<MSdeploy
+          Condition="$(UseMsdeployExe)"
+          MSDeployVersionsToTry="$(_MSDeployVersionsToTry)"
+          Verb="sync"
+          Source="@(MsDeploySourceProviderSetting)"
+          Destination="@(_AoMsDeployDestinationProviderSetting)"
+          DisableLink="$(PublishDisableLinks)"
+          EnableLink="$(PublishEnableLinks)"
+          EnableRule="$(MsDeployDoNotDeleteRule)"
+          AllowUntrusted="$(AllowUntrustedCertificate)"
+          SkipRuleItems="@(MsDeploySkipRules)"
+          SetParameterItems="@(_VsPublish_MsDeployDeclareParameters)"
+          OptimisticParameterDefaultValue="$(EnableOptimisticParameterDefaultValue)"
+          ImportSetParametersItems="$(_VsPublishParametersFile)"
+          RetryAttempts="$(RetryAttemptsForDeployment)"
+          ExePath="$(MSDeployPath)" />-->
+    
+    
+    
+    
+  </Target>
+  
+</Project>
