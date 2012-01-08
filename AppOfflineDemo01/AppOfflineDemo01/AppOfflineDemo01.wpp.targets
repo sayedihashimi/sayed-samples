@@ -131,6 +131,9 @@
     <ExportManifestFile Manifests="@(_TmpMsDeploySourceManifest)" ManifestFile="$(_AppOfflineSourceManifestFileFullPath)" />
   </Target>
   
+  <!--***********************************************************************
+  Make sure app_offline-template.htm gets published as app_offline.htm
+  ***************************************************************************-->
   <!-- We need to create a replace rule for app_offline-template.htm->app_offline.htm for when the app get's published -->
   <ItemGroup>
     <FilesForPackagingFromProject Include="app_offline-template.htm">
@@ -144,6 +147,12 @@
     </MsDeploySkipRules>
   </ItemGroup>
 
+  <!--***********************************************************************
+  When publish is completed we need to delete the app_offline.htm
+  ***************************************************************************-->
+  
+  
+  
   <Target Name="Sample" BeforeTargets="MSDeployPublish">
     <ItemGroup>
       <_AoMsDeployDestinationProviderSettingTemp Include="auto">
