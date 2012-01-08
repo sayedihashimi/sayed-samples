@@ -1,0 +1,1 @@
+%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe AppOfflineDemo01.csproj /p:DeployOnBuild=true;DeployTarget=MSDeployPublish;MSDeployPublishMethod=InProc;MSDeployServiceUrl=localhost;DeployIisAppPath="Default Web Site/AppOfflineDemo" /fl
