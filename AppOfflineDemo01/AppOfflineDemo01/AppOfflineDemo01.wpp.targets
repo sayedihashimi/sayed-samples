@@ -1,34 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-
-  <!--<UsingTask TaskName="ExportManifestFile" AssemblyFile="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\Web\Microsoft.Web.Publishing.Tasks.dll"/>-->
   <Target Name="InitalizeAppOffline">
-    <!-- Cannot declare these outside of a target because this is imported before the PackageTempRootDir is defined as well as others -->
+    <!-- 
+    This property needs to be declared inside of target because this is imported before
+    the MSDeployPath property is defined as well as others -->
     <PropertyGroup>
-      <EnableAppOfflineSupport Condition=" '$(EnableAppOfflineSupport)'=='' ">true</EnableAppOfflineSupport>
       <MSDeployExe Condition=" '$(MSDeployExe)'=='' ">$(MSDeployPath)msdeploy.exe</MSDeployExe>
-      <!-- MSDeploy doesn't like paths that end with a \ so make sure to not place them in these properties -->
-      <AppOfflineTempRootDir Condition=" '$(AppOfflineTempRootDir)'=='' ">$(PackageTempRootDir)\AppOffline</AppOfflineTempRootDir>
-      <AppOfflineContentDir Condition=" '$(AppOfflineContentDir)'=='' ">$(AppOfflineTempRootDir)\Content</AppOfflineContentDir>
-      <AppOfflineArchiveDir Condition=" '$(AppOfflineArchiveDir)'=='' ">$(AppOfflineTempRootDir)\ArchiveDir</AppOfflineArchiveDir>
-      <!-- internal properties -->
-      <_AppOfflineSourceManifestFile>$(AppOfflineTempRootDir)\ao-SourceManifest.xml</_AppOfflineSourceManifestFile>
     </PropertyGroup>    
-  </Target>
-  
-  <Target Name="CleanAppOfflineTempDir" DependsOnTargets="InitalizeAppOffline" AfterTargets="Clean">
-    <ItemGroup>
-      <_AppOfflineFilesToDelete Remove="@(_AppOfflineFilesToDelete)"/>
-      <_AppOfflineFilesToDelete Include="$(AppOfflineTempRootDir)\**\*" />
-    </ItemGroup>
-    <Delete Files="@(_AppOfflineFilesToDelete)" />
   </Target>
 
   <PropertyGroup>
     <PublishAppOfflineToDest>
       InitalizeAppOffline;
-      CleanAppOfflineTempDir;
-      GenerateAppOfflineSourceManifest
     </PublishAppOfflineToDest>
   </PropertyGroup>
 
@@ -39,7 +22,12 @@
       -dest:contentPath="Default Web Site/AppOfflineDemo/app_offline.htm"
   -->
 
-  <Target Name="PublishAppOfflineToDest" BeforeTargets="MSDeployPublish" DependsOnTargets="$(PublishAppOfflineToDest)">
+  <!--***********************************************************************
+  Make sure app_offline-template.htm gets published as app_offline.htm
+  ***************************************************************************-->
+  <Target Name="PublishAppOfflineToDest" 
+          BeforeTargets="MSDeployPublish" 
+          DependsOnTargets="$(PublishAppOfflineToDest)">
     <ItemGroup>
       <_AoPubAppOfflineSourceProviderSetting Include="contentPath">
         <Path>$(MSBuildProjectDirectory)\app_offline-template.htm</Path>
@@ -74,104 +62,9 @@
           SimpleSetParameterItems="@(_AoArchivePublishSetParam)"
           ExePath="$(MSDeployPath)" />
   </Target>
-  
-  <Target Name="PublishAppOfflineToDest-OLD" BeforeTargets="MSDeployPublish-OLD" DependsOnTargets="$(PublishAppOfflineToDest)">
-    <MakeDir Directories="$(AppOfflineTempRootDir)"/>
-    <MakeDir Directories="$(AppOfflineContentDir)"/>
-    <!--<Copy SourceFiles="app_offline-template.htm"-->
-    
-    <!--
-      We need to create an MSDeploy archivhe which has an app_offline.htm file and sync that
-      to the destination before the publish begins
-    -->
-  <!--
-  To generate the archive we will use a command similar to the following
-  %msdeploy% 
-  -source:manifest='C:\temp\appOffline\ao.SourceManifest.xml' 
-  -dest:archiveDir='C:\temp\appOffline\01',IncludeAcls='False' 
-  -verb:sync 
-  -declareParam:name='IIS Web Application Name',kind='ProviderPath',scope='IisApp',match="^C:\\temp\\appOffline\\appOffline-content$",defaultvalue='Default Web Site/FooBar01',tags='IisApp
-  -->
-    <PropertyGroup>
-      <_Cmd>"$(MSDeployExe)" -source:manifest="$(_AppOfflineSourceManifestFileFullPath)" -dest:archiveDir="$(_AppOfflineArchiveDirFullPath)",IncludeAcls='False'</_Cmd>
-      <_Cmd>$(_Cmd) -verb:sync </_Cmd>
-      <_Cmd>$(_Cmd) -declareParam:name='$(DeployParameterIISAppName)',kind='ProviderPath',scope='IisApp',match=&quot;^$(_AppOfflineContentDirFullPath.Replace('\','\\'))$&quot;,defaultvalue='$(DeployIisAppPath)',tags='IisApp</_Cmd>
-    </PropertyGroup>
 
-    <Message Text="Creating AppOffline MSDeploy source manifest with the command: [$(_Cmd)]"/>
-    
-    <Exec Command="$(_Cmd)" />
-    
-    <!-- Now we need to sync this archive dir to the destination -->
-    <ItemGroup>
-      <_AoMsDeploySourceProviderSetting Include="archiveDir">
-        <Path>$(_AppOfflineArchiveDirFullPath)</Path>
-        <EncryptPassword>$(DeployEncryptKey)</EncryptPassword>
-        <WebServerAppHostConfigDirectory>$(_MSDeploySourceWebServerAppHostConfigDirectory)</WebServerAppHostConfigDirectory>
-        <WebServerManifest>$(_MSDeploySourceWebServerManifest)</WebServerManifest>
-        <WebServerDirectory>$(_MSDeploySourceWebServerDirectory)</WebServerDirectory>
-      </_AoMsDeploySourceProviderSetting>
-
-      <_AoMsDeployDestinationProviderSetting Include="auto">
-        <Path>$(MSDeployPublishDestinationRoot)</Path>
-        <ComputerName>$(_PublishMsDeployServiceUrl)</ComputerName>
-        <UserName>$(UserName)</UserName>
-        <Password>$(Password)</Password>
-        <EncryptPassword>$(DeployEncryptKey)</EncryptPassword>
-        <IncludeAcls>False</IncludeAcls>
-        <AuthType>$(AuthType)</AuthType>
-        <WebServerAppHostConfigDirectory>$(_MSDeployDestinationWebServerAppHostConfigDirectory)</WebServerAppHostConfigDirectory>
-        <WebServerManifest>$(_MSDeployDestinationWebServerManifest)</WebServerManifest>
-        <WebServerDirectory>$(_MSDeployDestinationWebServerDirectory)</WebServerDirectory>
-      </_AoMsDeployDestinationProviderSetting>
-
-      <_AoArchivePublishSetParam Include="$(DeployParameterIISAppName)">
-        <Value>$(DeployIisAppPath)</Value>
-      </_AoArchivePublishSetParam>
-    </ItemGroup>
-
-    <Message Text="************************************************************************" />
-    <Message Text="Calling MSDeploy to publish from the source manifest to the archive dir" Importance="high" />
-    <Message Text="************************************************************************" />
-
-    <MSdeploy
-          MSDeployVersionsToTry="$(_MSDeployVersionsToTry)"
-          Verb="sync"
-          Source="@(_AoMsDeploySourceProviderSetting)"
-          Destination="@(_AoMsDeployDestinationProviderSetting)"
-          EnableRule="DoNotDeleteRule"
-          AllowUntrusted="$(AllowUntrustedCertificate)"
-          RetryAttempts="$(RetryAttemptsForDeployment)"
-          SimpleSetParameterItems="@(_AoArchivePublishSetParam)"
-          ExePath="$(MSDeployPath)" />
-    <!--
-    <Error Text=" ********************FOOBAR************************************"/>
-  -->
-  </Target>
-
-  <Target Name="GenerateAppOfflineSourceManifest">
-    <!-- Copy the app_offline-template.htm to the content folder -->
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\app_offline-template.htm"
-          DestinationFiles="$(AppOfflineContentDir)\app_offline.htm" />
-
-    <PropertyGroup>
-      <_AppOfflineContentDirFullPath Condition=" '$([System.IO.Path]::IsPathRooted($(AppOfflineContentDir)))'=='true' ">$([System.IO.Path]::GetFullPath($(AppOfflineContentDir)))</_AppOfflineContentDirFullPath>
-      <_AppOfflineContentDirFullPath Condition=" '$([System.IO.Path]::IsPathRooted($(AppOfflineContentDir)))'=='false' ">$([System.IO.Path]::GetFullPath($(MSBuildProjectDirectory)\$(AppOfflineContentDir)))</_AppOfflineContentDirFullPath>
-      <_AppOfflineContentDirFullPath>$([System.IO.Path]::GetFullPath($(AppOfflineContentDir)))</_AppOfflineContentDirFullPath>
-      <_AppOfflineSourceManifestFileFullPath>$([System.IO.Path]::GetFullPath($(_AppOfflineSourceManifestFile)))</_AppOfflineSourceManifestFileFullPath>
-      <_AppOfflineArchiveDirFullPath>$([System.IO.Path]::GetFullPath($(AppOfflineArchiveDir)))</_AppOfflineArchiveDirFullPath>
-    </PropertyGroup>
-
-    <Message Text="_AppOfflineContentDirFullPath: $(_AppOfflineContentDirFullPath)" Importance="high" />
-    
-    <!-- Now create a source manifest for this, we will use that to create an MSDeploy archive -->
-    <ItemGroup>
-      <_TmpMsDeploySourceManifest Include="iisApp">
-        <Path>$(_AppOfflineContentDirFullPath)</Path>
-      </_TmpMsDeploySourceManifest>
-    </ItemGroup>
-    
-    <ExportManifestFile Manifests="@(_TmpMsDeploySourceManifest)" ManifestFile="$(_AppOfflineSourceManifestFileFullPath)" />
+  <Target Name="APackage" AfterTargets="Package">
+    <Message Text="DeployTarget: $(DeployTarget)" Importance="high"/>
   </Target>
   
   <!--***********************************************************************
@@ -179,7 +72,8 @@
   ***************************************************************************-->
   <!-- We need to create a replace rule for app_offline-template.htm->app_offline.htm for when the app get's published -->
   <ItemGroup>
-    <FilesForPackagingFromProject Include="app_offline-template.htm">
+    <!-- Make sure not to include this file if a package is being created, so condition this on publishing -->
+    <FilesForPackagingFromProject Include="app_offline-template.htm" Condition=" '$(DeployTarget)'=='MSDeployPublish' ">
       <DestinationRelativePath>app_offline.htm</DestinationRelativePath>
     </FilesForPackagingFromProject>
 
@@ -230,8 +124,5 @@
     </PropertyGroup>
 
     <Exec Command="$(_Cmd)"/>
-    
-  </Target>
-
-  
+  </Target>  
 </Project>
