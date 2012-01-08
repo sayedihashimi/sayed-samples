@@ -1,0 +1,23 @@
+﻿<parameters>
+
+  <parameter name="Username"
+             description="Enter the value for the username"
+             defaultValue="domain\username">
+    <parameterEntry kind="XmlFile" scope="Web.config"
+                    match="/configuration/appSettings/add[@key='username']" />
+  </parameter>
+  
+  <parameter name="AdminEmail"
+               description="Enter the value for the adminEmail"
+               defaultValue="domain\username">
+    <parameterEntry kind="XmlFile" scope="Web.config"
+                    match="/configuration/appSettings/add[@key='adminEmail']" />
+  </parameter>
+  
+  <parameter name="someOtherValue"
+               description="Enter the value for the someOtherValue"
+               defaultValue="someOtherValue default value">
+    <parameterEntry kind="XmlFile" scope="Web.config"
+                    match="/configuration/appSettings/add[@key='someOtherValue']" />
+  </parameter>
+</parameters>
