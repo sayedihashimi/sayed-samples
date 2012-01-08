@@ -6,7 +6,7 @@
     <!-- Cannot declare these outside of a target because this is imported before the PackageTempRootDir is defined as well as others -->
     <PropertyGroup>
       <EnableAppOfflineSupport Condition=" '$(EnableAppOfflineSupport)'=='' ">true</EnableAppOfflineSupport>
-      <MSDeployExe Condition=" '$(MSDeployExe)'=='' ">$(ProgramFiles)\IIS\Microsoft Web Deploy V2\msdeploy.exe</MSDeployExe>
+      <MSDeployExe Condition=" '$(MSDeployExe)'=='' ">$(MSDeployPath)msdeploy.exe</MSDeployExe>
       <!-- MSDeploy doesn't like paths that end with a \ so make sure to not place them in these properties -->
       <AppOfflineTempRootDir Condition=" '$(AppOfflineTempRootDir)'=='' ">$(PackageTempRootDir)\AppOffline</AppOfflineTempRootDir>
       <AppOfflineContentDir Condition=" '$(AppOfflineContentDir)'=='' ">$(AppOfflineTempRootDir)\Content</AppOfflineContentDir>
@@ -16,7 +16,7 @@
     </PropertyGroup>    
   </Target>
   
-  <Target Name="CleanAppOfflineTempDir" DependsOnTargets="InitalizeAppOffline" AfterTargets="Clean;MSDeployPublish">
+  <Target Name="CleanAppOfflineTempDir" DependsOnTargets="InitalizeAppOffline" AfterTargets="Clean">
     <ItemGroup>
       <_AppOfflineFilesToDelete Remove="@(_AppOfflineFilesToDelete)"/>
       <_AppOfflineFilesToDelete Include="$(AppOfflineTempRootDir)\**\*" />
@@ -150,7 +150,22 @@
   <!--***********************************************************************
   When publish is completed we need to delete the app_offline.htm
   ***************************************************************************-->
-  
+  <Target Name="DeleteAppOffline" AfterTargets="MSDeployPublish">
+    <!--
+    %msdeploy% -verb:delete -dest:contentPath="{IIS-Path}/app_offline.htm"
+    -->
+    <Message Text="************************************************************************" />
+    <Message Text="Calling MSDeploy to delete the app_offline.htm file" Importance="high" />
+    <Message Text="************************************************************************" />
+
+    <!-- We cannot use the MSDeploy/VSMSDeploy tasks for delete so we have to call msdeploy.exe directly -->
+    <PropertyGroup>
+      <_Cmd>"$(MSDeployExe)" -verb:delete -dest:contentPath="$(DeployIisAppPath)/app_offline.htm"</_Cmd>
+    </PropertyGroup>
+
+    <Exec Command="$(_Cmd)"/>
+    
+  </Target>
   
   
   <Target Name="Sample" BeforeTargets="MSDeployPublish">
