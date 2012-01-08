@@ -1,6 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
+  
+  
+  
   <!--<UsingTask TaskName="ExportManifestFile" AssemblyFile="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\Web\Microsoft.Web.Publishing.Tasks.dll"/>-->
   <Target Name="InitalizeAppOffline">
     <!-- Cannot declare these outside of a target because this is imported before the PackageTempRootDir is defined as well as others -->
@@ -52,7 +55,7 @@
     <PropertyGroup>
       <_Cmd>"$(MSDeployExe)" -source:manifest="$(_AppOfflineSourceManifestFileFullPath)" -dest:archiveDir="$(_AppOfflineArchiveDirFullPath)",IncludeAcls='False'</_Cmd>
       <_Cmd>$(_Cmd) -verb:sync </_Cmd>
-      <_Cmd>$(_Cmd) -declareParam:name='$(DeployParameterIISAppName)',kind='ProviderPath',scope='IisApp',match=&quot;^$(AppOfflineContentDir.Replace('\','\\'))$&quot;,defaultvalue='$(DeployIisAppPath)',tags='IisApp</_Cmd>
+      <_Cmd>$(_Cmd) -declareParam:name='$(DeployParameterIISAppName)',kind='ProviderPath',scope='IisApp',match=&quot;^$(_AppOfflineContentDirFullPath.Replace('\','\\'))$&quot;,defaultvalue='$(DeployIisAppPath)',tags='IisApp</_Cmd>
     </PropertyGroup>
 
     <Message Text="Creating AppOffline MSDeploy source manifest with the command: [$(_Cmd)]"/>
@@ -101,8 +104,9 @@
           RetryAttempts="$(RetryAttemptsForDeployment)"
           SimpleSetParameterItems="@(_AoArchivePublishSetParam)"
           ExePath="$(MSDeployPath)" />
-    <Error Text=" --------------------FOOBAR------------------------------------"/>
-
+    <!--
+    <Error Text=" ********************FOOBAR************************************"/>
+  -->
   </Target>
 
   <Target Name="GenerateAppOfflineSourceManifest">
@@ -111,10 +115,14 @@
           DestinationFiles="$(AppOfflineContentDir)\app_offline.htm" />
 
     <PropertyGroup>
+      <_AppOfflineContentDirFullPath Condition=" '$([System.IO.Path]::IsPathRooted($(AppOfflineContentDir)))'=='true' ">$([System.IO.Path]::GetFullPath($(AppOfflineContentDir)))</_AppOfflineContentDirFullPath>
+      <_AppOfflineContentDirFullPath Condition=" '$([System.IO.Path]::IsPathRooted($(AppOfflineContentDir)))'=='false' ">$([System.IO.Path]::GetFullPath($(MSBuildProjectDirectory)\$(AppOfflineContentDir)))</_AppOfflineContentDirFullPath>
       <_AppOfflineContentDirFullPath>$([System.IO.Path]::GetFullPath($(AppOfflineContentDir)))</_AppOfflineContentDirFullPath>
       <_AppOfflineSourceManifestFileFullPath>$([System.IO.Path]::GetFullPath($(_AppOfflineSourceManifestFile)))</_AppOfflineSourceManifestFileFullPath>
       <_AppOfflineArchiveDirFullPath>$([System.IO.Path]::GetFullPath($(AppOfflineArchiveDir)))</_AppOfflineArchiveDirFullPath>
     </PropertyGroup>
+
+    <Message Text="_AppOfflineContentDirFullPath: $(_AppOfflineContentDirFullPath)" Importance="high" />
     
     <!-- Now create a source manifest for this, we will use that to create an MSDeploy archive -->
     <ItemGroup>
