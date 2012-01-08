@@ -31,8 +31,51 @@
       GenerateAppOfflineSourceManifest
     </PublishAppOfflineToDest>
   </PropertyGroup>
-  
+
+  <!--
+    %msdeploy% 
+      -verb:sync 
+      -source:contentPath="C:\path\to\app_offline-template.htm" 
+      -dest:contentPath="Default Web Site/AppOfflineDemo/app_offline.htm"
+  -->
+
   <Target Name="PublishAppOfflineToDest" BeforeTargets="MSDeployPublish" DependsOnTargets="$(PublishAppOfflineToDest)">
+    <ItemGroup>
+      <_AoPubAppOfflineSourceProviderSetting Include="contentPath">
+        <Path>$(MSBuildProjectDirectory)\app_offline-template.htm</Path>
+        <EncryptPassword>$(DeployEncryptKey)</EncryptPassword>
+        <WebServerAppHostConfigDirectory>$(_MSDeploySourceWebServerAppHostConfigDirectory)</WebServerAppHostConfigDirectory>
+        <WebServerManifest>$(_MSDeploySourceWebServerManifest)</WebServerManifest>
+        <WebServerDirectory>$(_MSDeploySourceWebServerDirectory)</WebServerDirectory>
+      </_AoPubAppOfflineSourceProviderSetting>
+
+      <_AoPubAppOfflineDestProviderSetting Include="contentPath">
+        <Path>"$(DeployIisAppPath)/app_offline.htm"</Path>
+        <ComputerName>$(_PublishMsDeployServiceUrl)</ComputerName>
+        <UserName>$(UserName)</UserName>
+        <Password>$(Password)</Password>
+        <EncryptPassword>$(DeployEncryptKey)</EncryptPassword>
+        <IncludeAcls>False</IncludeAcls>
+        <AuthType>$(AuthType)</AuthType>
+        <WebServerAppHostConfigDirectory>$(_MSDeployDestinationWebServerAppHostConfigDirectory)</WebServerAppHostConfigDirectory>
+        <WebServerManifest>$(_MSDeployDestinationWebServerManifest)</WebServerManifest>
+        <WebServerDirectory>$(_MSDeployDestinationWebServerDirectory)</WebServerDirectory>
+      </_AoPubAppOfflineDestProviderSetting>
+    </ItemGroup>
+
+    <MSdeploy
+          MSDeployVersionsToTry="$(_MSDeployVersionsToTry)"
+          Verb="sync"
+          Source="@(_AoPubAppOfflineSourceProviderSetting)"
+          Destination="@(_AoPubAppOfflineDestProviderSetting)"
+          EnableRule="DoNotDeleteRule"
+          AllowUntrusted="$(AllowUntrustedCertificate)"
+          RetryAttempts="$(RetryAttemptsForDeployment)"
+          SimpleSetParameterItems="@(_AoArchivePublishSetParam)"
+          ExePath="$(MSDeployPath)" />
+  </Target>
+  
+  <Target Name="PublishAppOfflineToDest-OLD" BeforeTargets="MSDeployPublish-OLD" DependsOnTargets="$(PublishAppOfflineToDest)">
     <MakeDir Directories="$(AppOfflineTempRootDir)"/>
     <MakeDir Directories="$(AppOfflineContentDir)"/>
     <!--<Copy SourceFiles="app_offline-template.htm"-->
@@ -152,90 +195,43 @@
   ***************************************************************************-->
   <Target Name="DeleteAppOffline" AfterTargets="MSDeployPublish">
     <!--
-    %msdeploy% -verb:delete -dest:contentPath="{IIS-Path}/app_offline.htm"
+    %msdeploy% 
+      -verb:delete 
+      -dest:contentPath="{IIS-Path}/app_offline.htm",computerName="...",username="...",password="..."
     -->
     <Message Text="************************************************************************" />
     <Message Text="Calling MSDeploy to delete the app_offline.htm file" Importance="high" />
     <Message Text="************************************************************************" />
 
-    <!-- We cannot use the MSDeploy/VSMSDeploy tasks for delete so we have to call msdeploy.exe directly -->
+    <ItemGroup>
+      <_AoDeleteAppOfflineDestProviderSetting Include="contentPath">
+        <Path>$(DeployIisAppPath)/app_offline.htm</Path>
+        <ComputerName>$(_PublishMsDeployServiceUrl)</ComputerName>
+        <UserName>$(UserName)</UserName>
+        <Password>$(Password)</Password>
+        <EncryptPassword>$(DeployEncryptKey)</EncryptPassword>
+        <AuthType>$(AuthType)</AuthType>
+        <WebServerAppHostConfigDirectory>$(_MSDeployDestinationWebServerAppHostConfigDirectory)</WebServerAppHostConfigDirectory>
+        <WebServerManifest>$(_MSDeployDestinationWebServerManifest)</WebServerManifest>
+        <WebServerDirectory>$(_MSDeployDestinationWebServerDirectory)</WebServerDirectory>
+      </_AoDeleteAppOfflineDestProviderSetting>
+    </ItemGroup>
+    
+    <!-- 
+    We cannot use the MSDeploy/VSMSDeploy tasks for delete so we have to call msdeploy.exe directly.
+    When they support delete we can just pass in @(_AoDeleteAppOfflineDestProviderSetting) as the dest
+    -->
     <PropertyGroup>
-      <_Cmd>"$(MSDeployExe)" -verb:delete -dest:contentPath="$(DeployIisAppPath)/app_offline.htm"</_Cmd>
+      <_Cmd>"$(MSDeployExe)" -verb:delete -dest:contentPath="%(_AoDeleteAppOfflineDestProviderSetting.Path)"</_Cmd>
+      <_Cmd Condition=" '%(_AoDeleteAppOfflineDestProviderSetting.ComputerName)' != '' ">$(_Cmd),computerName="%(_AoDeleteAppOfflineDestProviderSetting.ComputerName)"</_Cmd>
+      <_Cmd Condition=" '%(_AoDeleteAppOfflineDestProviderSetting.UserName)' != '' ">$(_Cmd),username="%(_AoDeleteAppOfflineDestProviderSetting.UserName)"</_Cmd>
+      <_Cmd Condition=" '%(_AoDeleteAppOfflineDestProviderSetting.Password)' != ''">$(_Cmd),password=$(Password)</_Cmd>
+      <_Cmd Condition=" '%(_AoDeleteAppOfflineDestProviderSetting.AuthType)' != ''">$(_Cmd),authType="%(_AoDeleteAppOfflineDestProviderSetting.AuthType)"</_Cmd>
     </PropertyGroup>
 
     <Exec Command="$(_Cmd)"/>
     
   </Target>
-  
-  
-  <Target Name="Sample" BeforeTargets="MSDeployPublish">
-    <ItemGroup>
-      <_AoMsDeployDestinationProviderSettingTemp Include="auto">
-        <Path>$(MSDeployPublishDestinationRoot)</Path>
-        <ComputerName>$(_PublishMsDeployServiceUrl)</ComputerName>
-        <UserName>$(UserName)</UserName>
-        <Password>$(Password)</Password>
-        <EncryptPassword>$(DeployEncryptKey)</EncryptPassword>
-        <IncludeAcls>False</IncludeAcls>
-        <AuthType>$(AuthType)</AuthType>
-        <WebServerAppHostConfigDirectory>$(_MSDeployDestinationWebServerAppHostConfigDirectory)</WebServerAppHostConfigDirectory>
-        <WebServerManifest>$(_MSDeployDestinationWebServerManifest)</WebServerManifest>
-        <WebServerDirectory>$(_MSDeployDestinationWebServerDirectory)</WebServerDirectory>
-      </_AoMsDeployDestinationProviderSettingTemp>
-    </ItemGroup>
-    <!--_AoMsDeployDestinationProviderSettingTemp-->
-    <Message Text="_AoMsDeployDestinationProviderSettingTemp: @(_AoMsDeployDestinationProviderSettingTemp)"/>
-    <Message Text="_AoMsDeployDestinationProviderSettingTemp.Path : %(_AoMsDeployDestinationProviderSettingTemp.Path)"/>
-    <Message Text="_AoMsDeployDestinationProviderSettingTemp.ComputerName : %(_AoMsDeployDestinationProviderSettingTemp.ComputerName)"/>
-    <Message Text="_AoMsDeployDestinationProviderSettingTemp.UserName : %(_AoMsDeployDestinationProviderSettingTemp.UserName)"/>
-    <Message Text="_AoMsDeployDestinationProviderSettingTemp.Password : %(_AoMsDeployDestinationProviderSettingTemp.Password)"/>
-    <Message Text="_AoMsDeployDestinationProviderSettingTemp.EncryptPassword : %(_AoMsDeployDestinationProviderSettingTemp.EncryptPassword)"/>
-    <Message Text="_AoMsDeployDestinationProviderSettingTemp.IncludeAcls : %(_AoMsDeployDestinationProviderSettingTemp.IncludeAcls)"/>
-    <Message Text="_AoMsDeployDestinationProviderSettingTemp.AuthType : %(_AoMsDeployDestinationProviderSettingTemp.AuthType)"/>
-    <Message Text="_AoMsDeployDestinationProviderSettingTemp.WebServerAppHostConfigDirectory : %(_AoMsDeployDestinationProviderSettingTemp.WebServerAppHostConfigDirectory)"/>
-    <Message Text="_AoMsDeployDestinationProviderSettingTemp.WebServerManifest : %(_AoMsDeployDestinationProviderSettingTemp.WebServerManifest)"/>
-    <Message Text="_AoMsDeployDestinationProviderSettingTemp.WebServerDirectory : %(_AoMsDeployDestinationProviderSettingTemp.WebServerDirectory)"/>
 
-    <ItemGroup>
-      <_AoMsDeploySourceProviderSettingTemp Include="manifest">
-        <Path>$(MSDeployPublishSourceRoot)</Path>
-        <EncryptPassword>$(DeployEncryptKey)</EncryptPassword>
-        <WebServerAppHostConfigDirectory>$(_MSDeploySourceWebServerAppHostConfigDirectory)</WebServerAppHostConfigDirectory>
-        <WebServerManifest>$(_MSDeploySourceWebServerManifest)</WebServerManifest>
-        <WebServerDirectory>$(_MSDeploySourceWebServerDirectory)</WebServerDirectory>
-      </_AoMsDeploySourceProviderSettingTemp>
-    </ItemGroup>
-    
-    <Message Text="_AoMsDeploySourceProviderSettingTemp: @(_AoMsDeploySourceProviderSettingTemp)"/>
-    <Message Text="_AoMsDeploySourceProviderSettingTemp.Path %(_AoMsDeploySourceProviderSettingTemp.Path)"/>
-    <Message Text="_AoMsDeploySourceProviderSettingTemp.EncryptPassword %(_AoMsDeploySourceProviderSettingTemp.EncryptPassword)"/>
-    <Message Text="_AoMsDeploySourceProviderSettingTemp.WebServerAppHostConfigDirectory %(_AoMsDeploySourceProviderSettingTemp.WebServerAppHostConfigDirectory)"/>
-    <Message Text="_AoMsDeploySourceProviderSettingTemp.WebServerManifest %(_AoMsDeploySourceProviderSettingTemp.WebServerManifest)"/>
-    <Message Text="_AoMsDeploySourceProviderSettingTemp.WebServerDirectory %(_AoMsDeploySourceProviderSettingTemp.WebServerDirectory)"/>
-
-
-
-
-    <!--<MSdeploy
-          Condition="$(UseMsdeployExe)"
-          MSDeployVersionsToTry="$(_MSDeployVersionsToTry)"
-          Verb="sync"
-          Source="@(MsDeploySourceProviderSetting)"
-          Destination="@(_AoMsDeployDestinationProviderSetting)"
-          DisableLink="$(PublishDisableLinks)"
-          EnableLink="$(PublishEnableLinks)"
-          EnableRule="$(MsDeployDoNotDeleteRule)"
-          AllowUntrusted="$(AllowUntrustedCertificate)"
-          SkipRuleItems="@(MsDeploySkipRules)"
-          SetParameterItems="@(_VsPublish_MsDeployDeclareParameters)"
-          OptimisticParameterDefaultValue="$(EnableOptimisticParameterDefaultValue)"
-          ImportSetParametersItems="$(_VsPublishParametersFile)"
-          RetryAttempts="$(RetryAttemptsForDeployment)"
-          ExePath="$(MSDeployPath)" />-->
-    
-    
-    
-    
-  </Target>
   
 </Project>
