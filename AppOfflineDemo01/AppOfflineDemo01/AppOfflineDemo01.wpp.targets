@@ -63,10 +63,6 @@
           ExePath="$(MSDeployPath)" />
   </Target>
 
-  <Target Name="APackage" AfterTargets="Package">
-    <Message Text="DeployTarget: $(DeployTarget)" Importance="high"/>
-  </Target>
-  
   <!--***********************************************************************
   Make sure app_offline-template.htm gets published as app_offline.htm
   ***************************************************************************-->
