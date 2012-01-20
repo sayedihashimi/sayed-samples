@@ -10,6 +10,9 @@
   </Target>
 
   <PropertyGroup>
+    <AppOfflineTemplateFilename>
+      app_offline-template.htm
+    </AppOfflineTemplateFilename>
     <PublishAppOfflineToDest>
       InitalizeAppOffline;
     </PublishAppOfflineToDest>
@@ -30,7 +33,7 @@
           DependsOnTargets="$(PublishAppOfflineToDest)">
     <ItemGroup>
       <_AoPubAppOfflineSourceProviderSetting Include="contentPath">
-        <Path>$(MSBuildProjectDirectory)\app_offline-template.htm</Path>
+        <Path>$(MSBuildProjectDirectory)\$(AppOfflineTemplateFilename)</Path>
         <EncryptPassword>$(DeployEncryptKey)</EncryptPassword>
         <WebServerAppHostConfigDirectory>$(_MSDeploySourceWebServerAppHostConfigDirectory)</WebServerAppHostConfigDirectory>
         <WebServerManifest>$(_MSDeploySourceWebServerManifest)</WebServerManifest>
@@ -69,14 +72,14 @@
   <!-- We need to create a replace rule for app_offline-template.htm->app_offline.htm for when the app get's published -->
   <ItemGroup>
     <!-- Make sure not to include this file if a package is being created, so condition this on publishing -->
-    <FilesForPackagingFromProject Include="app_offline-template.htm" Condition=" '$(DeployTarget)'=='MSDeployPublish' ">
+    <FilesForPackagingFromProject Include="$(AppOfflineTemplateFilename)" Condition=" '$(DeployTarget)'=='MSDeployPublish' ">
       <DestinationRelativePath>app_offline.htm</DestinationRelativePath>
     </FilesForPackagingFromProject>
 
     <!-- This will prevent app_offline-template.htm from being published -->
     <MsDeploySkipRules Include="SkipAppOfflineTemplate">
       <ObjectName>filePath</ObjectName>
-      <AbsolutePath>app_offline-template.htm</AbsolutePath>
+      <AbsolutePath>$(AppOfflineTemplateFilename)</AbsolutePath>
     </MsDeploySkipRules>
   </ItemGroup>
 
