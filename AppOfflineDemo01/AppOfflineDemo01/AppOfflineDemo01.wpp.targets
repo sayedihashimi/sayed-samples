@@ -10,9 +10,7 @@
   </Target>
 
   <PropertyGroup>
-    <AppOfflineTemplateFilename>
-      app_offline-template.htm
-    </AppOfflineTemplateFilename>
+    <AppOfflineTemplateFilename Condition=" '$(AppOfflineTemplateFilename)'=='' ">app_offline-template.htm</AppOfflineTemplateFilename>
     <PublishAppOfflineToDest>
       InitalizeAppOffline;
     </PublishAppOfflineToDest>
