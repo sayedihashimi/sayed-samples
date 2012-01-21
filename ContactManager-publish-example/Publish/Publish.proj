@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="FullPublish" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!--
+  We need to import the environment properties for publishing.
+  When publishing is invoked the property TargetEnvPropsFile needs to be specified
+  -->
+  <Import Project="$(TargetEnvPropsFile)"/>
+  
+  <PropertyGroup>
+    <WhatIf Condition=" '$(Whatif)'=='' ">false</WhatIf>
+    <BuildingInTeamBuild Condition=" '$(TeamFoundationServerUrl)'!='' ">true</BuildingInTeamBuild>
+    <Configuration Condition=" '$(Configuration)'=='' ">Release</Configuration>
+    <SourceRoot Condition=" '$(SourceRoot)'=='' ">..\</SourceRoot>
+    
+    <OutputRoot Condition=" '$(OutputRoot)'=='' ">..\Publish\Out\</OutputRoot>
+    <!-- If Team Build is being used then we need to override this value -->
+    <OutputRoot Condition=" '$(BuildingInTeamBuild)'=='true' ">$(OutDir)</OutputRoot>
+        
+    <VsdbCmdExe Condition=" '$(VsdbCmdExe)'=='' ">C:\Program Files (x86)\Microsoft Visual Studio 10.0\VSTSDB\Deploy\vsdbcmd.exe</VsdbCmdExe>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- This is where the .deploymanifest file will be written to during a build -->    
+    <_DbDeployManifestPath>$(OutputRoot)ContactManager.Database.deploymanifest</_DbDeployManifestPath>    
+    <!-- The folder where the .zip and .cmd file will be located for ContactManager.Mvc Web project -->
+    <_ContactManagerDest>$(OutputRoot)_PublishedWebsites\ContactManager.Mvc_Package\</_ContactManagerDest>
+    <!-- The folder where the .zip and .cmd file will be located for ContactManager.Service Web project -->
+    <_ContactManagerSvcDest>$(OutputRoot)_PublishedWebsites\ContactManager.Service_Package\</_ContactManagerSvcDest>
+
+    <_CmDbScriptPath>$(OutputRoot)Publish-ContactManager-Db.sql</_CmDbScriptPath>
+    <!-- This will go into the web.config -->
+    <_CmFullConnectionString>$(CmDatabaseConnectionString);Initial Catalog=$(CmTargetDatabase)</_CmFullConnectionString>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <ProjectsToBuild Include="$(SourceRoot)ContactManager-WCF.sln"/>
+  </ItemGroup>
+  
+  <!-- 
+  This builds the projects/solutions. We need to ensure that if its a Team Build that the build doesn't occur because
+  Team Build will take care of that for us as well as other things such as unit test and what not.
+  -->
+  <Target Name="BuildProjects" Condition=" '$(BuildingInTeamBuild)'!='true' ">
+    <!--
+    This is not executed if Team Build is used
+    -->
+    <MSBuild Projects="@(ProjectsToBuild)"
+             Properties="OutDir=$(OutputRoot);Configuration=$(Configuration);DeployOnBuild=true;DeployTarget=Package"
+             Targets="Rebuild" />
+  </Target>
+  
+  <!--
+  This will get all of the web packages (as well as .cmd files) and .dbschema files for publishing.
+  -->
+  <Target Name="GatherPackagesForPublishing">
+    <ItemGroup>
+      <PublishPackages Include="$(_ContactManagerDest)ContactManager.Mvc.deploy.cmd">
+        <WebPackage>true</WebPackage>
+        <ParametersXml>$(_ContactManagerDest)ContactManager.Mvc.SetParameters.xml</ParametersXml>
+        <AdditionalMSDeployParameters>-allowUntrusted</AdditionalMSDeployParameters>
+
+        <IisWebAppName>$(ContactManagerIisPath)</IisWebAppName>
+        
+        <ServiceEndpointParamName>ContactService Service Endpoint Address</ServiceEndpointParamName>
+        <ServiceEndpointValue>$(ContactManagerTargetUrl)</ServiceEndpointValue>
+      </PublishPackages>
+      
+      <PublishPackages Include="$(_ContactManagerSvcDest)ContactManager.Service.deploy.cmd">
+        <WebPackage>true</WebPackage>
+        <ParametersXml>$(_ContactManagerSvcDest)ContactManager.Service.SetParameters.xml</ParametersXml>
+        
+        <ConnectionName>ContactManagerContext-Web.config Connection String</ConnectionName>
+        <!-- You have to escape the ; characters for the XmlPoke task -->
+        <ConnectionString>$(_CmFullConnectionString.Replace(";","%3b"))</ConnectionString>
+        <IisWebAppName>$(ContactManagerServiceIisPath)</IisWebAppName>
+        
+      </PublishPackages>
+      
+      <DbPublishPackages Include="$(_DbDeployManifestPath)">
+        <DbPackage>true</DbPackage>
+        <DatabaseConnectionString>$(CmDatabaseConnectionString)</DatabaseConnectionString>
+        <TargetDatabase>$(CmTargetDatabase)</TargetDatabase>
+      </DbPublishPackages>
+    </ItemGroup>
+  </Target>
+
+  <!--
+  This target is executed once per database.
+  -->
+  <Target Name="PublishDbPackages" Outputs="%(DbPublishPackages.Identity)">
+    <Message Text="OutputRoot: $(OutputRoot)" />
+    <!-- 
+         vsdbcmd.exe /a:Deploy 
+                     /cs:"Data Source=sayedha-hp2;User Id=sa;Password=PASSWORD-HERE" 
+                     /p:TargetDatabase=ContactManager  
+                     /manifest:"C:\Data\TFS-Repo\sh-tfs-01\Default\ContactManager\Publish\Out\ContactManager.Database\ContactManager.Database.deploymanifest" 
+                     /script:"..\Publish\Out\ContactManager.Database\Publish-ContactManager-Db.sql" 
+                     /dd
+                     
+          We are publishing using the manifest because we may have pre/post deployment scripts
+    -->
+    <PropertyGroup>
+      <!-- default is to not deploy the database -->
+      <_DbDeployOrScript></_DbDeployOrScript>
+      <_DbDeployOrScript Condition=" '$(Whatif)'!='true' ">/dd</_DbDeployOrScript>
+      <_Cmd>"$(VsdbCmdExe)" /a:Deploy /cs:"%(DbPublishPackages.DatabaseConnectionString)" /p:TargetDatabase=%(DbPublishPackages.TargetDatabase) /manifest:"%(DbPublishPackages.FullPath)" /script:"$(_CmDbScriptPath)" $(_DbDeployOrScript)</_Cmd>
+    </PropertyGroup>
+
+    <Message Text="Deploying database [%(DbPublishPackages.TargetDatabase)] using connection [%(DbPublishPackages.DatabaseConnectionString)] "/>
+    <Exec Command="$(_Cmd)"/>
+
+    <Message Text="DB publish script created at: [$(_CmDbScriptPath)]" Importance="high"
+             Condition=" '$(Whatif)'=='true' "/>
+  </Target>
+  
+  <!--
+  This target is executed once per web project.
+  -->
+  <Target Name="PublishWebPackages" Outputs="%(PublishPackages.Identity)">
+    <!-- Update the SetParameters.xml to have the correct parameter values -->
+    <XmlPoke XmlInputPath="%(PublishPackages.ParametersXml)"
+             Query="//parameters/setParameter[@name='%(PublishPackages.ConnectionName)']/@value"
+             Value='%(PublishPackages.ConnectionString)'
+             Condition =" '%(PublishPackages.ConnectionName)'!=''" />
+
+    <XmlPoke XmlInputPath="%(PublishPackages.ParametersXml)"
+             Query="//parameters/setParameter[@name='IIS Web Application Name']/@value"
+             Value="%(PublishPackages.IisWebAppName)"
+             Condition =" '%(PublishPackages.IisWebAppName)'!=''" />
+
+    <XmlPoke XmlInputPath="%(PublishPackages.ParametersXml)"
+             Query="//parameters/setParameter[@name='%(PublishPackages.ServiceEndpointParamName)']/@value"
+             Value="%(PublishPackages.ServiceEndpointValue)"
+             Condition =" '%(PublishPackages.ServiceEndpointParamName)'!=''" />    
+    <!--
+    ContactManager.Mvc.deploy.cmd /T /M:http://jamlew-sqlx/MSDEPLOYAGENTSERVICE /U:redmond\sayedha /P:%password% /A:NTLM -allowUntrusted
+    -->  
+    <PropertyGroup>
+      <!-- default is no Whatif unless specified, ensure to clear this each time this target executes -->
+      <_WhatIfSwtich>/Y</_WhatIfSwtich>
+      <_WhatIfSwtich Condition=" '$(_WhatIf)'=='true' ">/T</_WhatIfSwtich>
+      <!--<_Cmd>%(PublishPackages.FullPath) $(_WhatifSwtich) /M:$(MSDeployComputerName) /U:$(MSDeployUsername) /P:$(Password) /A:$(MSDeployAuth) %(PublishPackages.AdditionalMSDeployParameters)</_Cmd>-->
+      <_Cmd>%(PublishPackages.FullPath) $(_WhatifSwtich) /M:$(MSDeployComputerName) %(PublishPackages.AdditionalMSDeployParameters)</_Cmd>
+    </PropertyGroup>
+    
+    <Message Text="Publishing web project [%(PublishPackages.WebPackage)]"/>
+    <Exec Command="$(_Cmd)"/>
+  </Target>
+
+  <!-- We should not execute this target if Team Build is being used, Team Build will take care of this for us. -->
+  <Target Name="Clean" Condition=" '$(BuildingInTeamBuild)'!='true' ">
+    <Message Text="Cleaning up the output directory [$(OutputRoot)]"/>
+    <ItemGroup>
+      <_FilesToDelete Include="$(OutputRoot)**\*"/>
+    </ItemGroup>
+    <Delete Files="@(_FilesToDelete)"/>
+    <RemoveDir Directories="$(OutputRoot)"/>
+  </Target>
+  
+  <PropertyGroup>
+    <FullPublishDependsOn>
+      Clean;
+      BuildProjects;
+      GatherPackagesForPublishing;
+      PublishDbPackages;
+      PublishWebPackages;
+    </FullPublishDependsOn>
+  </PropertyGroup>
+  <Target Name="FullPublish" DependsOnTargets="$(FullPublishDependsOn)" />
+</Project>

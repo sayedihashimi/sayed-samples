@@ -1,0 +1,19 @@
+﻿@model ContactManager.Mvc.ContactServiceReference.Contact
+
+@{
+    ViewBag.Title = string.Format("View Contact: {0} {1}",Model.FirstName,Model.LastName);
+}
+
+<ul>
+    <li><label class="label">FirstName</label><label class="value">@Model.FirstName</label></li>
+    <li><label class="label">LastName</label><label class="value">@Model.LastName</label></li>
+    <li><label class="label">Phone</label><label class="value">@Model.Phone</label></li>
+    <li><label class="label">Email</label><label class="value">@Model.Email</label></li>
+    <li><label class="label">Street1</label><label class="value">@Model.Address.Street1</label></li>
+    <li><label class="label">Street2</label><label class="value">@Model.Address.Street2</label></li>
+    <li><label class="label">State</label><label class="value">@Model.Address.State</label></li>
+    <li><label class="label">City</label><label class="value">@Model.Address.City</label></li>
+    <li><label class="label">Zip</label><label class="value">@Model.Address.Zip</label></li>
+</ul>
+
+@Html.ActionLink("Back to contacts", "ViewContacts", "Contacts")

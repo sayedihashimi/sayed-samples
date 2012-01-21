@@ -1,0 +1,8 @@
+﻿<parameters>
+  <parameter name="ContactService Service Endpoint Address"
+           description="Enter the value for the pate to the include file"
+           defaultValue="http://localhost/ContactManagerService">
+    <parameterEntry kind="XmlFile" scope="Web.config"
+                    match="/configuration/system.serviceModel/client/endpoint[@name='BasicHttpBinding_IContactService']/@address" />
+  </parameter>
+</parameters>

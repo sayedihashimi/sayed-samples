@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- This file specifies environment specific values for the publish process -->
+  <PropertyGroup>    
+    <!-- Environment specific properties here -->
+    <!--<MSDeployComputerName Condition=" '$(MSDeployComputerName)'=='' ">http://jamlew-sqlx/MSDEPLOYAGENTSERVICE</MSDeployComputerName>-->
+    <!--<MSDeployComputerName Condition=" '$(MSDeployComputerName)'=='' ">sayedha-w5003</MSDeployComputerName>-->
+    <MSDeployComputerName Condition=" '$(MSDeployComputerName)'=='' ">sayedha-hp2</MSDeployComputerName>
+    <MSDeployUsername Condition=" '$(MSDeployUsername)'=='' ">redmond\sayedha</MSDeployUsername>
+    <MSDeployPassword Condition=" '$(MSDeployPassword)'=='' ">$(Password)</MSDeployPassword>
+    <MSDeployAuth Condition=" '$(MSDeployAuth)'=='' ">NTLM</MSDeployAuth>
+
+    <!--<ContactManagerTargetUrl Condition =" '$(ContactManagerTargetUrl)'=='' ">http://sayedha-w5003/ContactManagerService/ContactService.svc</ContactManagerTargetUrl>-->
+    <ContactManagerTargetUrl Condition =" '$(ContactManagerTargetUrl)'=='' ">http://sayedha-hp2:83/ContactManagerService/ContactService.svc</ContactManagerTargetUrl>
+    <ContactManagerIisPath Condition=" '$(ContactManagerIisPath)'=='' ">DemoSite/ContactManager</ContactManagerIisPath>
+
+    <ContactManagerServiceIisPath Condition=" '$(ContactManagerServiceIisPath)'=='' ">DemoSite/ContactManagerService</ContactManagerServiceIisPath>
+
+    <CmDatabaseConnectionString Condition=" '$(CmDatabaseConnectionString)'=='' ">Data Source=sayedha-hp2;User Id=sa;Password=p@ssw0rd</CmDatabaseConnectionString>
+    <CmTargetDatabase Condition=" '$(CmTargetDatabase)'=='' ">ContactManager</CmTargetDatabase>
+  </PropertyGroup>
+  
+</Project>

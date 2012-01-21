@@ -1,0 +1,29 @@
+﻿@model List<ContactManager.Mvc.ContactServiceReference.Contact>
+
+@{
+    ViewBag.Title = "All Contacts";
+}
+
+<h2>All Contacts</h2>
+
+<table id="ContactsTable">
+<thead>
+<tr>
+    <td>View</td>
+    <td>ID</td>
+    <td>First Name</td>
+    <td>Last Name</td>
+</tr>
+</thead>
+<tbody>
+@foreach (var c in @Model) {
+    <tr>
+        <td><a href="@Url.Action("ViewContact","Contacts",new {id=@c.ID})">View</a></td>
+        <td>@c.ID</td>
+        <td>@c.FirstName</td>
+        <td>@c.LastName</td>
+    </tr>
+}
+</tbody>
+</table>
+<a href="@Url.Action("AddContact","Contacts")" id="addContactLink">Add a contact</a>

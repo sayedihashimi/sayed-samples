@@ -1,0 +1,7 @@
+﻿#ContactsTable thead {font-weight:bold;}
+
+#main ul {list-style:none;}
+.label {display:block;font-weight:bold;margin-top:10px;}
+form ul label {display:block;font-weight:bold;margin-top:10px;}
+input[type='submit']{margin-top:20px;}
+#addContactLink{margin-top:20px;display:block;}
