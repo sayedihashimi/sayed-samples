@@ -1,0 +1,21 @@
+﻿@model ContactManager.Mvc.Models.AddContactPageModel
+
+<h2>Add a contact</h2>
+
+@using (@Html.BeginForm()) {
+<ul>
+    <li><label>First name</label><input type="text" name="Contact.FirstName" /></li>
+    <li><label>Last name</label><input type="text" name="Contact.LastName" /></li>
+    <li><label>Phone</label><input type="text" name="Contact.Phone" /></li>
+    <li><label>Email</label><input type="text" name="Contact.Email" /></li>
+    <li><label>Street1</label><input type="text" name="Contact.Address.Street1" /></li>
+    <li><label>Street2</label><input type="text" name="Contact.Address.Street2" /></li>
+    <li><label>State</label>@Html.DropDownList("Contact.Address.State",@Model.States)</li>
+    <li><label>City</label><input type="text" name="Contact.Address.City" /></li>
+    
+    <li><label>Zip</label><input type="text" name="Contact.Address.Zip" /></li>
+    
+    <input type="submit" value="Add Contact" />   
+</ul>        
+}
+@Html.ActionLink("Back to contacts", "Contacts", "ViewContacts")

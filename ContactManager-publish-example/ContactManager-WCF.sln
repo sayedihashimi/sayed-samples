@@ -1,0 +1,81 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactManager.Service", "ContactManager.Service\ContactManager.Service.csproj", "{ED06E0FF-D41B-4B74-9E42-405BFB148DA8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactManager.Common", "ContactManager.Common\ContactManager.Common.csproj", "{A0BDEF04-008B-422F-A9C6-175FDE646432}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactManager.Mvc", "ContactManager.Mvc\ContactManager.Mvc.csproj", "{46010A9A-3520-45D1-8C85-C5B2CE7C0557}"
+	ProjectSection(ProjectDependencies) = postProject
+		{ED06E0FF-D41B-4B74-9E42-405BFB148DA8} = {ED06E0FF-D41B-4B74-9E42-405BFB148DA8}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sql", "Sql", "{6A3B916C-158A-41F9-A16A-B603FB02220C}"
+	ProjectSection(SolutionItems) = preProject
+		Sql\CreateDatabase.sql = Sql\CreateDatabase.sql
+	EndProjectSection
+EndProject
+Project("{C8D11400-126E-41CD-887F-60BD40844F9E}") = "ContactManager.Database", "ContactManager.Database\ContactManager.Database.dbproj", "{67CBC824-A49E-4E9B-A947-360F3DFE65C3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Publish", "Publish", "{AF6DC724-154A-4D61-9156-3CA8315A3427}"
+	ProjectSection(SolutionItems) = preProject
+		Publish\Publish.proj = Publish\Publish.proj
+		Publish\Reset-Database.sql = Publish\Reset-Database.sql
+		Publish\Reset-local.cmd = Publish\Reset-local.cmd
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EnvConfig", "EnvConfig", "{9E309142-C380-4FBE-927A-902260B71357}"
+	ProjectSection(SolutionItems) = preProject
+		Publish\EnvConfig\Env-Dev.proj = Publish\EnvConfig\Env-Dev.proj
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 5
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://sh-tfs-01:8080/tfs/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = ContactManager.Common\\ContactManager.Common.csproj
+		SccProjectName1 = ContactManager.Common
+		SccLocalPath1 = ContactManager.Common
+		SccProjectUniqueName2 = ContactManager.Service\\ContactManager.Service.csproj
+		SccProjectName2 = ContactManager.Service
+		SccLocalPath2 = ContactManager.Service
+		SccProjectUniqueName3 = ContactManager.Mvc\\ContactManager.Mvc.csproj
+		SccProjectName3 = ContactManager.Mvc
+		SccLocalPath3 = ContactManager.Mvc
+		SccProjectUniqueName4 = ContactManager.Database\\ContactManager.Database.dbproj
+		SccProjectName4 = ContactManager.Database
+		SccLocalPath4 = ContactManager.Database
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ED06E0FF-D41B-4B74-9E42-405BFB148DA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED06E0FF-D41B-4B74-9E42-405BFB148DA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED06E0FF-D41B-4B74-9E42-405BFB148DA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED06E0FF-D41B-4B74-9E42-405BFB148DA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0BDEF04-008B-422F-A9C6-175FDE646432}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0BDEF04-008B-422F-A9C6-175FDE646432}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0BDEF04-008B-422F-A9C6-175FDE646432}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0BDEF04-008B-422F-A9C6-175FDE646432}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46010A9A-3520-45D1-8C85-C5B2CE7C0557}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46010A9A-3520-45D1-8C85-C5B2CE7C0557}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46010A9A-3520-45D1-8C85-C5B2CE7C0557}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46010A9A-3520-45D1-8C85-C5B2CE7C0557}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67CBC824-A49E-4E9B-A947-360F3DFE65C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67CBC824-A49E-4E9B-A947-360F3DFE65C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67CBC824-A49E-4E9B-A947-360F3DFE65C3}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{67CBC824-A49E-4E9B-A947-360F3DFE65C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67CBC824-A49E-4E9B-A947-360F3DFE65C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67CBC824-A49E-4E9B-A947-360F3DFE65C3}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9E309142-C380-4FBE-927A-902260B71357} = {AF6DC724-154A-4D61-9156-3CA8315A3427}
+	EndGlobalSection
+EndGlobal
