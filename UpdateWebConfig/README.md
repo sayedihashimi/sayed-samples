@@ -1,0 +1,1 @@
+This is a sample which shows how you can use MSDeploy to update a single file on a web server. In this case the sample updates web.config.
