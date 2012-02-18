@@ -146,7 +146,7 @@
     <MSDeployPath Condition="'$(MSDeployPath)'==''">$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\IIS Extensions\MSDeploy\1@InstallPath)</MSDeployPath>
     <MSDeployExe Condition=" '$(MSDeployExe)'=='' ">$(MSDeployPath)msdeploy.exe</MSDeployExe>
   </PropertyGroup>
-  <Target Name="CreateWebDeployPackage" AfterTargets="PublishOnly">
+  <Target Name="CreateWebDeployPackage" AfterTargets="Publish" DependsOnTargets="Publish">
     <!--
     %msdeploy% 
       -verb:sync 
