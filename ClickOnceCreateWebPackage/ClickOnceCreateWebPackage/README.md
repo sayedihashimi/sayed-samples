@@ -1,0 +1,1 @@
+﻿This sample shows how you can create a Web Deploy package when you publish a ClickOnce project.
