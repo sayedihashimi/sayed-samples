@@ -26,7 +26,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>2</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -106,6 +106,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
@@ -137,7 +138,6 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  
   <PropertyGroup>
     <WebDeployPackageName Condition=" '$(WebDeployPackageName)'=='' ">$(MSBuildProjectName).zip</WebDeployPackageName>
     <!--Unless specified otherwise, the tools will go to HKLM\SOFTWARE\Microsoft\IIS Extensions\MSDeploy\1 to get the installpath for msdeploy.exe.-->
@@ -146,7 +146,6 @@
     <MSDeployPath Condition="'$(MSDeployPath)'==''">$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\IIS Extensions\MSDeploy\1@InstallPath)</MSDeployPath>
     <MSDeployExe Condition=" '$(MSDeployExe)'=='' ">$(MSDeployPath)msdeploy.exe</MSDeployExe>
   </PropertyGroup>
-
   <Target Name="CreateWebDeployPackage" AfterTargets="PublishOnly">
     <!--
     %msdeploy% 
@@ -157,7 +156,6 @@
     <PropertyGroup>
       <Cmd>"$(MSDeployExe)" -verb:sync -source:contentPath="$(MSBuildProjectDirectory)\$(PublishDir)" -dest:package="$(OutDir)$(WebDeployPackageName)"</Cmd>
     </PropertyGroup>
-
     <Message Text="Creating web deploy package with command: $(Cmd)" />
     <Exec Command="$(Cmd)" />
   </Target>

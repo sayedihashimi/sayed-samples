@@ -1,0 +1,2 @@
+﻿This sample shows how you can create a Web Deploy package when you publish a ClickOnce project.
+Just take a look at the modifications at the bottom of the project file at ClickOnceCreateWebPackage\ClickOnceCreateWebPackage.csproj.
