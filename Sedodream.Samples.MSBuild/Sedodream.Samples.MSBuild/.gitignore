@@ -1,0 +1,5 @@
+# Folders to ignore #
+bin/
+obj/
+
+# Known files to ignore always #
