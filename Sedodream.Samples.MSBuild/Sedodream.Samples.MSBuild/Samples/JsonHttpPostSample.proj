@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project ToolsVersion="4.0" DefaultTargets="Demo" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <UsingTask TaskName="JsonHttpPost"
+             AssemblyFile="..\Sedodream.Samples.MSBuild.dll"/>
+
+  <PropertyGroup>
+    <Url>http://localhost:12914/api/config</Url>
+    <PostContent>
+      {
+      "Name" : "Package-name-here-3",
+      "PackageType": "msdeploy",
+      "PackageName" : "PackageNameHere",
+      "Version" : "version-here",
+      "PackageLocation" : "C:\\temp\\PkgLocation\\foo.zip",
+      "Tags" : [ "tag01" ],
+      "PackageManifest": "manifestContentHere"
+      }
+    </PostContent>    
+  </PropertyGroup>
+  
+  <Target Name="Demo">
+    <Error Text="Url property is empty" Condition=" '$(Url)'=='' "/>
+    <Error Text="PostContent property is empty" Condition=" '$(PostContent)'=='' "/>
+
+    <JsonHttpPost Url="$(Url)"
+              PostContent="$(PostContent)" />    
+  </Target>
+
+</Project>
