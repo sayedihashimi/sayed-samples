@@ -103,6 +103,7 @@
   <ItemGroup>
     <None Include="Samples\UploadToBlob.proj">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>

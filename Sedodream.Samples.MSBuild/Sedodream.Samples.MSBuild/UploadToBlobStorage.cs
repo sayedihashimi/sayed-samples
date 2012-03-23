@@ -25,6 +25,9 @@
         [Required]
         public string FileToUpload { get; set; }
 
+        [Output]
+        public string BlobUri { get; set; }
+
         /// <summary>
         /// Defaults to true
         /// </summary>
@@ -52,6 +55,9 @@
 
                 CloudBlob blob = container.GetBlobReference(this.BlobName);
                 blob.UploadFile(this.FileToUpload);
+
+                this.BlobUri = blob.Uri.AbsoluteUri;
+
             }
             catch (Exception ex) {
                 string message = "An error occurred trying to upload the file to blob storage.";

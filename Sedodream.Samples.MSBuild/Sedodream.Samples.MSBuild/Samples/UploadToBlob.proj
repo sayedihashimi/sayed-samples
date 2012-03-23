@@ -20,8 +20,12 @@
 
     <UploadToBlobStorage StorageConnectionString="$(MyStorageConnectionString)"
                          ContainerName="$(MyContainerName)"
-                         FileToUpload="$(FileToUpload)"
-                         />
+                         FileToUpload="$(FileToUpload)">
+      <Output PropertyName ="BlobUri" TaskParameter ="BlobUri"/>
+    </UploadToBlobStorage>
+
+    <Message Text="URI of the uploaded file: $(BlobUri)" />
+    
   </Target>
 
 </Project>
