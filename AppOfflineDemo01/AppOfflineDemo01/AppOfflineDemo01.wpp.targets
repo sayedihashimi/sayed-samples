@@ -79,6 +79,14 @@
       <ObjectName>filePath</ObjectName>
       <AbsolutePath>$(AppOfflineTemplateFilename)</AbsolutePath>
     </MsDeploySkipRules>
+    
+    <!-- We need to create a skip rule to ensure app_offline.htm doesn't get deleted if 
+         the "Leave Extra files on destination (do not delete)" is not checked. -->
+    <MsDeploySkipRules Include="SkipDeleteAppOffline">
+      <ObjectName>filePath</ObjectName>
+      <AbsolutePath>app_offline.htm</AbsolutePath>
+    </MsDeploySkipRules>
+    
   </ItemGroup>
 
   <!--***********************************************************************
