@@ -1,0 +1,24 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+  <ItemGroup>
+    <src Include="src\**\sub_one.txt" />
+  </ItemGroup>
+  <Target Name="PrintWellKnownMetadata">
+
+    <Message Text="===== Well known metadata =====" />
+    <!-- %40 = @ -->
+    <!-- %25 = % -->
+    <Message Text="%40(src->'%25(FullPath)'): @(src->'%(FullPath)')" />
+    <Message Text="%40(src->'%25(Rootdir)'): @(src->'%(Rootdir)')" />
+    <Message Text="%40(src->'%25(Filename)'): @(src->'%(Filename)')" />
+    <Message Text="%40(src->'%25(Extension)'): @(src->'%(Extension)')" />
+    <Message Text="%40(src->'%25(RelativeDir)'): @(src->'%(RelativeDir)')" />
+    <Message Text="%40(src->'%25(Directory)'): @(src->'%(Directory)')" />
+    <Message Text="%40(src->'%25(RecursiveDir)'): @(src->'%(RecursiveDir)')" />
+    <Message Text="%40(src->'%25(Identity)'): @(src->'%(Identity)')" />
+    <Message Text="%40(src->'%25(ModifiedTime)'): @(src->'%(ModifiedTime)')" />
+    <Message Text="%40(src->'%25(CreatedTime)'): @(src->'%(CreatedTime)')" />
+    <Message Text="%40(src->'%25(AccessedTime)'): @(src->'%(AccessedTime)')" />
+
+  </Target>
+</Project>

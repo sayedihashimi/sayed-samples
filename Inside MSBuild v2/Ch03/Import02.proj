@@ -1,0 +1,12 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         DefaultTargets="All" ToolsVersion="4.0">
+
+  <Target Name="PrintPath">
+    <Message Text="MSBuildProjectFullPath: $(MSBuildProjectFullPath)" />
+  </Target>
+
+  <Import Project="Import\Import02.targets" />
+
+  <Target Name="All"
+          DependsOnTargets="PrintPath;PrintPathImport;PrintCompile" />
+</Project>

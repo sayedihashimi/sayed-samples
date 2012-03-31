@@ -1,0 +1,25 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         DefaultTargets="Demo">
+
+  <UsingTask AssemblyFile="$(MSBuildProjectDirectory)\..\Examples.Tasks.dll"
+           TaskName="GetDate"/>
+
+  <Target Name="Demo">
+    <GetDate>
+      <Output PropertyName="DateUnformatted" TaskParameter="Date" />
+    </GetDate>
+
+    <GetDate Format="yyyyMMdd.hh.ss">
+      <Output PropertyName="DateValue" TaskParameter="Date" />
+    </GetDate>
+
+    <PropertyGroup>
+      <FolderName>$(MSBuildProjectName)_$(DateValue)</FolderName>
+    </PropertyGroup>
+
+    <Message Text="DateUnformatted value: $(DateUnformatted)"/>
+    <Message Text="DateValue value: $(DateValue)"/>
+    <Message Text="FolderName value: $(FolderName)"/>
+  </Target>
+
+</Project>

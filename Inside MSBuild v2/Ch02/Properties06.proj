@@ -1,0 +1,17 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+
+  <PropertyGroup>
+    <AssemblyName>assemblyName</AssemblyName>
+  </PropertyGroup>
+
+  <Target Name="PrintInfo">
+    <Message Text="AssemblyName: $(AssemblyName)" />
+    <Message Text ="OutputPath: $(OutputPath)" />
+  </Target>
+
+  <PropertyGroup>
+    <OutputPath>outputPath</OutputPath>
+  </PropertyGroup>
+
+</Project>

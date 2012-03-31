@@ -1,0 +1,19 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+  
+  <ItemGroup>
+    <Server Include="Server1">
+      <Type>2008</Type>
+      <Name>SVR01</Name>
+      <AdminContact>Adam Barr</AdminContact>
+      <AdminContact>Kim Abercrombie</AdminContact>
+    </Server>
+  </ItemGroup>
+
+  <Target Name="PrintInfo" Outputs="%(Server.Identity)">
+    <Message Text="Server: @(Server)" />
+    <Message Text="Admin: @(Server->'%(AdminContact)')" />
+  </Target>
+</Project>
+
+

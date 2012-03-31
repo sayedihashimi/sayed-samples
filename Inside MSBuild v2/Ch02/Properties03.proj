@@ -1,0 +1,20 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+
+  <PropertyGroup>
+    <Configuration>Debug</Configuration>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Configuration>Release</Configuration>
+  </PropertyGroup>
+
+  <Target Name="PrintConfig">
+    <Message Text="Config: $(Configuration)"/>
+  </Target>
+
+  <PropertyGroup>
+    <Configuration>CustomRelease</Configuration>
+  </PropertyGroup>
+
+</Project>

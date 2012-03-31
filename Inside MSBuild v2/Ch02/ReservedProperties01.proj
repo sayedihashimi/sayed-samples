@@ -1,0 +1,29 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+  <Target Name="PrintReservedProperties">
+    <Message Text="MSBuildProjectDirectory: $(MSBuildProjectDirectory)" />
+    <Message Text="MSBuildProjectDirectoryNoRoot: $(MSBuildProjectDirectoryNoRoot)" />
+    <Message Text="MSBuildProjectFile: $(MSBuildProjectFile)" />
+    <Message Text="MSBuildProjectExtension: $(MSBuildProjectExtension)" />
+    <Message Text="MSBuildProjectFullPath: $(MSBuildProjectFullPath)" />
+    <Message Text="MSBuildProjectName: $(MSBuildProjectName)" />
+    <Message Text="MSBuildToolsPath: $(MSBuildToolsPath)" />
+    <Message Text="MSBuildProjectDefaultTargets: $(MSBuildProjectDefaultTargets)" />
+    <Message Text="MSBuildExtensionsPath: $(MSBuildExtensionsPath)" />
+    <Message Text="MSBuildExtensionsPath32: $(MSBuildExtensionsPath32)" />
+    <Message Text="MSBuildExtensionsPath64: $(MSBuildExtensionsPath64)" />
+    <Message Text="MSBuildNodeCount: $(MSBuildNodeCount)" />
+    <Message Text="MSBuildStartupDirectory: $(MSBuildStartupDirectory)" />
+    <Message Text="MSBuildToolsPath: $(MSBuildToolsPath)" />
+    <Message Text="MSBuildToolsVersion: $(MSBuildToolsVersion)" />
+    <Message Text="MSBuildLastTaskResult: $(MSBuildLastTaskResult)" />
+    <Message Text="MSBuildProgramFiles32: $(MSBuildProgramFiles32)" />
+    <Message Text="MSBuildThisFile: $(MSBuildThisFile)" />
+    <Message Text="MSBuildThisFileDirectory: $(MSBuildThisFileDirectory)" />
+    <Message Text="MSBuildThisFileDirectoryNoRoot: $(MSBuildThisFileDirectoryNoRoot)" />
+    <Message Text="MSBuildThisFileExtension: $(MSBuildThisFileExtension)" />
+    <Message Text="MSBuildThisFileFullPath: $(MSBuildThisFileFullPath)" />
+    <Message Text="MSBuildThisFileName: $(MSBuildThisFileName)" />
+    <Message Text="MSBuildOverrideTasksPath: $(MSBuildOverrideTasksPath)" />
+  </Target>
+</Project>

@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ProjectSchemaDefinitions xmlns="http://schemas.microsoft.com/build/2009/properties" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+  <Rule Name="Docx2Html" PageTemplate="tool" DisplayName="Docx2Html" >
+    
+    <Rule.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="ProjDoc" />
+    </Rule.DataSource>
+      
+    <Rule.Categories>
+      <Category Name="Conversion" DisplayName="Conversion" />
+    </Rule.Categories>
+     
+    <StringProperty Name="OutputDirectory" DisplayName="Output Directory" Category="Conversion" Subtype="folder"
+                    Description="Specifies the directory in which to place the output html files" />
+
+    <BoolProperty Name="ValidateHtml" DisplayName="Validate html" Category="Conversion"
+                  Description="Causes the output html to be validated for standards compliance" />
+    
+    <EnumProperty Name="WhichHtmlFileType" DisplayName="Html file type" Description="Select the html file type to save in" Category="Conversion" >
+      <EnumValue Name="html" DisplayName="Web page (.html)" Description="Html page with resources saved in a separate folder" />
+      <EnumValue Name="mht" DisplayName="Single file web page (.mht)" Description="A single file containing the html code and all resources" />
+    </EnumProperty>
+
+  </Rule>
+
+  <ItemType Name="ProjDoc" DisplayName="Project documentation" />
+  <ContentType Name="ProjDoc" DisplayName="Project documentation" ItemType="ProjDoc" />
+  <FileExtension Name="*.docx" ContentType="ProjDoc" />
+
+</ProjectSchemaDefinitions>

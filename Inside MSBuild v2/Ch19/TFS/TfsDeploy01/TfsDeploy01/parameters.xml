@@ -1,0 +1,26 @@
+﻿<parameters>
+  <parameter name="Vdir">
+    <parameterEntry kind="XmlFile"
+                    scope="Web.config"
+                    match="/configuration/appSettings/add[@key='pageSize']/@value" />
+  </parameter>
+  <parameter name="PageSize"
+             description="Enter the value for page size"
+             defaultValue="25"
+             tags="applicationSettings">
+    <parameterEntry kind="XmlFile" scope="Web.config"
+                    match="/configuration/appSettings/add[@key='pageSize']/@value" />
+  </parameter>
+  <parameter name="IncludesConfigPath"
+             description="Enter the value for the pate to the include file"
+             defaultValue="~/Config/includes.xml.config" tags="applicationSettings">
+    <parameterEntry kind="XmlFile" scope="Web.config"
+                    match="/configuration/appSettings/add[@key='IncludesConfigPath']/@value" />
+  </parameter>
+  <parameter name="IncludesApplicationName"
+             description="Enter the value for the includes application name"
+             defaultValue="inlinetasks.com" tags="applicationSettings">
+    <parameterEntry kind="XmlFile" scope="Web.config"
+                    match="/configuration/appSettings/add[@key='IncludesApplicationName']/@value" />
+  </parameter>
+</parameters>

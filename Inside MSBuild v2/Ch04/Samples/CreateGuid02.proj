@@ -1,0 +1,39 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0"
+         DefaultTargets="Demo">
+
+  <UsingTask
+    TaskName="CreateGuid02"
+    TaskFactory="CodeTaskFactory"
+    AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" >
+    <ParameterGroup>
+      <NumToCreate ParameterType="System.Int32" Required="true" />
+      <Guids ParameterType="System.String[]" Output="true" />
+    </ParameterGroup>
+    <Task>
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+            List<string> guids = new List<string>();
+            for (int i = 0; i < NumToCreate; i++)
+            {
+                guids.Add(Guid.NewGuid().ToString());
+            }
+            Guids = guids.ToArray();
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+
+  <Target Name="Demo">
+    <CreateGuid02 NumToCreate="1">
+      <Output ItemName="Id01" TaskParameter="Guids" />
+    </CreateGuid02>
+    <Message Text="Id01: @(Id01)" />
+
+    <CreateGuid02 NumToCreate="4">
+      <Output ItemName="Id02" TaskParameter="Guids" />
+    </CreateGuid02>
+    <Message Text=" " />
+    <Message Text="Id02: @(Id02)" />
+  </Target>
+</Project>

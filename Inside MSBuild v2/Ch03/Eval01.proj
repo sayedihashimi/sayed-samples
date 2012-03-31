@@ -1,0 +1,19 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0"
+         DefaultTargets="PrintInfo">
+
+  <PropertyGroup>
+    <PropOne>one</PropOne>
+    <PropTwo>$(PropThree)</PropTwo>
+    <PropThree>three</PropThree>
+    <PropFour>$(PropThree)</PropFour>
+  </PropertyGroup>
+
+  <Target Name="PrintInfo">
+    <Message Text="PropOne: $(PropOne)" />
+    <Message Text="PropTwo: $(PropTwo)" />
+    <Message Text="PropThree: $(PropThree)" />
+    <Message Text="PropFour: $(PropFour)" />
+  </Target>
+</Project>
+

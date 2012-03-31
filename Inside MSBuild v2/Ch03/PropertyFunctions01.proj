@@ -1,0 +1,24 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0"
+         DefaultTargets="Demo">
+
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  
+  
+  <Target Name="Demo">
+    <Message Text="Configuration: $(Configuration)" Importance="high"/>
+    <Message Text="OutputPath: $(OutputPath)" Importance="high"/>
+    <Message Text="================================================================" Importance="high" />
+    <Message Text="OutputPath length: $(OutputPath.Length)"/>
+    <Message Text="OutputPath ends with '\': $(OutputPath.EndsWith('\'))"/>
+    <Message Text="OutputPath no trailing slash: $(OutputPath.TrimEnd('\'))"/>
+    <Message Text="OutputPath no trailing slash ends with Configuration: $(OutputPath.TrimEnd('\').EndsWith('$(Configuration)'))"/>
+    <Message Text="OutputPath root: $(OutputPath.TrimEnd('\').Replace($(Configuration),''))"/>
+    <Message Text="OutputPath root no trailing slash: $(OutputPath.TrimEnd('\').Replace($(Configuration),'').TrimEnd('\'))"/>
+  </Target>
+  
+</Project>
+

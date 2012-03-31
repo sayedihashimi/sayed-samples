@@ -1,0 +1,94 @@
+<!--
+  Demonstrates project files.
+  © Copyright 2008, Sayed Ibrahim Hashimi (sayed.hashimi@gmail.com)
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" 
+         ToolsVersion="4.0"
+         DefaultTargets="FullBuild">
+
+  <ItemGroup>
+    <AllConfigurations Include="Debug" />
+    <AllConfigurations Include="Release" />
+  </ItemGroup>
+  
+  <PropertyGroup>
+    <FullBuildDependsOn>
+      BeforeBuild;
+      CoreBuild;
+      AfterBuild
+    </FullBuildDependsOn>
+    <FullRebuildDependsOn>
+      BeforeRebuild;
+      Clean;
+      FullBuild;
+      AfterRebuild
+    </FullRebuildDependsOn>
+  </PropertyGroup>
+
+  <Target Name="FullBuild"
+          DependsOnTargets="$(FullBuildDependsOn)"/>
+  <Target Name="BeforeBuild">
+    <!-- Get latest -->
+    <!-- Generate code -->
+  </Target>
+  <Target Name="AfterBuild">
+    <!-- Unit tests -->
+    <!-- Code Analysis -->
+  </Target>
+
+  <Target Name="FullRebuild"
+          DependsOnTargets="$(FullRebuildDependsOn)"/>
+  
+<ItemGroup>
+  <!--
+  Properties and AdditionalProperties metadata are automatically
+  passed when using the MSBuild task.
+  If Properties metadata exists, it takes precedence over and REPLACES
+  any value for Properties provided to the MSBuild task itself.
+  -->
+  <ProjectsToBuild Include="SampleSolution\ClassLibrary1\ClassLibrary1.csproj">
+    <AdditionalProperties>
+      AssemblyFileMajorVersion=2;AssemblyMajorVersion=2;
+      AssemblyFileMinorVersion=6;AssemblyMinorVersion=6
+    </AdditionalProperties>
+  </ProjectsToBuild>
+  <ProjectsToBuild Include="SampleSolution\ClassLibrary2\ClassLibrary2.csproj">
+    <AdditionalProperties>
+      AssemblyFileMajorVersion=2;AssemblyMajorVersion=2;
+      AssemblyFileMinorVersion=6;AssemblyMinorVersion=6
+    </AdditionalProperties>
+  </ProjectsToBuild>
+  <ProjectsToBuild Include="SampleSolution\WpfApplication1\WpfApplication1.csproj">
+    <AdditionalProperties>
+      AssemblyFileMajorVersion=3;AssemblyMajorVersion=3;
+      AssemblyFileMinorVersion=91;AssemblyMinorVersion=91
+    </AdditionalProperties>
+  </ProjectsToBuild>
+  <ProjectsToBuild Include="SampleSolution\WindowsFormsApplication1\WindowsFormsApplication1.csproj">
+    <AdditionalProperties>
+      AssemblyFileMajorVersion=3;AssemblyMajorVersion=3;
+      AssemblyFileMinorVersion=91;AssemblyMinorVersion=91
+    </AdditionalProperties>
+  </ProjectsToBuild>
+  <ProjectsToBuild Include="SampleSolution\unittest\Unittest.Proj1\Unittest.Proj1.csproj">
+  </ProjectsToBuild>
+  <ProjectsToBuild Include="SampleSolution\unittest\Unittest.Proj2\Unittest.Proj2.csproj">
+  </ProjectsToBuild>
+</ItemGroup>
+<Target Name="CoreBuild">
+  <MSBuild 
+    Projects="@(ProjectsToBuild)"
+    BuildInParallel="true"
+    Properties="Configuration=%(AllConfigurations.Identity)"
+    />
+</Target>
+
+<Target Name="Clean">
+  <!-- Clean for each configuration -->
+  <MSBuild
+    Projects="@(ProjectsToBuild)"
+    BuildInParallel="true"
+    Properties="Configuration=%(AllConfigurations.Identity)"
+    Targets="Clean" />
+</Target>
+</Project>

@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+  Microsoft Visual Studio 2010 Web Deployment Project 
+  http://go.microsoft.com/fwlink/?LinkID=104956
+
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.30319</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C4AC8379-E059-4C19-894D-AA6A849D3CA2}</ProjectGuid>
+    <SourceWebPhysicalPath>WebApplication1</SourceWebPhysicalPath>
+    <SourceWebProject>{3161B34E-AE96-4095-B397-3259E5A9EC9E}|Ch09\WebApplication1\WebApplication1.csproj</SourceWebProject>
+    <SourceWebVirtualPath>/WebApplication1.csproj</SourceWebVirtualPath>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>.\Debug</OutputPath>
+    <EnableUpdateable>true</EnableUpdateable>
+    <UseMerge>true</UseMerge>
+    <SingleAssemblyName>WebApplication1.csproj_deploy</SingleAssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <OutputPath>.\Release</OutputPath>
+    <EnableUpdateable>true</EnableUpdateable>
+    <UseMerge>true</UseMerge>
+    <SingleAssemblyName>WebApplication1.csproj_deploy</SingleAssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="WebApplication1\WebApplication1.csproj">
+      <Project>{3161B34E-AE96-4095-B397-3259E5A9EC9E}</Project>
+      <Name>WebApplication1</Name>
+    </ProjectReference>
+    <ProjectReference Include="WebApplication1\WebApplication1.csproj">
+      <Project>{3161B34E-AE96-4095-B397-3259E5A9EC9E}</Project>
+      <Name>WebApplication1</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <AssemblyAttributes Include="AssemblyFileVersion">
+      <Value>1.2.3.4</Value>
+    </AssemblyAttributes>
+    <AssemblyAttributes Include="AssemblyVersion">
+      <Value>1.2.3.4</Value>
+    </AssemblyAttributes>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WebDeployment\v10.0\Microsoft.WebDeployment.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.WebDeployment.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="BeforeMerge">
+  </Target>
+  <Target Name="AfterMerge">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <OutputPath>Out_01\$(Configuration)\</OutputPath>
+  </PropertyGroup>
+</Project>

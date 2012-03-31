@@ -1,0 +1,23 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0"
+         DefaultTargets="Demo">
+
+  <UsingTask
+    TaskName="HelloWorldIt02"
+    TaskFactory="CodeTaskFactory"
+    AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" >
+    <Task>
+      <Code Type="Fragment" Language="vb">
+        <![CDATA[
+          Dim message As String
+          message = String.Format("{0} {1}{2}", "Hello", "World",", from VB.NET")
+          Log.LogMessage(message)
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+
+  <Target Name="Demo">
+    <HelloWorldIt02 />
+  </Target>
+</Project>

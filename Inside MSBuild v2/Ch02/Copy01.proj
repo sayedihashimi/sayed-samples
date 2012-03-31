@@ -1,0 +1,19 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+
+  <ItemGroup>
+    <SourceFiles Include="src\*" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <Dest>dest\</Dest>
+  </PropertyGroup>
+
+  <Target Name="PrintFiles">
+    <Message Text="SourceFiles: @(SourceFiles)" />
+  </Target>
+  <Target Name="CopyFiles">
+    <Copy SourceFiles="@(SourceFiles)"
+          DestinationFolder="$(Dest)" />
+  </Target>
+</Project>

@@ -1,0 +1,25 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0"
+         DefaultTargets="Demo">
+
+  <UsingTask
+    TaskName="BatchFile01"
+    TaskFactory="BatchFileTaskFactory"
+    AssemblyFile="$(MSBuildProjectDirectory)\..\Examples.Tasks.dll" >
+    <ParameterGroup>
+      <Message />
+      <ExitCode Output="true"/>
+    </ParameterGroup>
+    <Task>
+      <Script Filepath="$(MSBuildProjectDirectory)\Batch-File01.cmd"/>
+    </Task>
+  </UsingTask>
+
+  <Target Name="Demo">
+    <Message Text="About to execute task"/>
+    <BatchFile01 Message="Execute this file">
+      <Output TaskParameter="ExitCode" PropertyName="ExitCodeFromTask"/>
+    </BatchFile01>
+    <Message Text="ExitCodeFromTask: $(ExitCodeFromTask)"/>
+  </Target>
+</Project>  

@@ -1,0 +1,36 @@
+﻿<!--
+  Demonstates the Exec task.
+  © Copyright 2008, Sayed Ibrahim Hashimi (sayed.hashimi@gmail.com)
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0"
+         DefaultTargets="StartService">
+
+  <!-- Extension Pack required for fxcop.targets file -->
+  <PropertyGroup>
+    <ExtensionTasksPath>$(MSBuildThisFileDirectory)\..\Contrib\ExtensionPack\4.0\</ExtensionTasksPath>
+  </PropertyGroup>
+  <Import Project="$(ExtensionTasksPath)MSBuild.ExtensionPack.tasks"/>
+
+  <Target Name="StartService">
+    <!-- 
+      The convention when using the MSBuild Extension Pack is to 
+      fully qualify the task name to avoid any possible collision with
+      other tasks.
+     -->
+    <MSBuild.ExtensionPack.Computer.WindowsService
+      TaskAction="Start"
+      ServiceName="aspnet_state" />
+
+    <!-- Similar to the command -->
+    <!-- <Exec Command="net start aspnet_state" IgnoreExitCode="true" /> -->
+  </Target>
+  <Target Name="StopService">
+    <MSBuild.ExtensionPack.Computer.WindowsService
+      TaskAction="Stop"
+      ServiceName="aspnet_state"/>
+
+    <!-- Similar to the command -->
+    <!-- <Exec Command="net stop aspnet_state" IgnoreExitCode="true" /> -->
+  </Target>
+</Project>

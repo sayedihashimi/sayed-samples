@@ -1,0 +1,11 @@
+﻿<Project
+  xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+  DefaultTargets="Demo">
+
+  <UsingTask AssemblyFile="$(MSBuildProjectDirectory)\..\Examples.Tasks.dll"
+             TaskName="HelloWorld" />
+
+  <Target Name="Demo">
+    <HelloWorld />
+  </Target> 
+</Project>

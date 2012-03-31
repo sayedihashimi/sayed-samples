@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <setParameter name="IIS Web Application Name" 
+                value="QA01 Web Site/TfsDeploy" />
+  <setParameter name="PageSize" 
+                value="150" />
+  <setParameter name="IncludesConfigPath" 
+                value="~/Config/includes.xml.qa01.config" />
+  <setParameter name="IncludesApplicationName" 
+                value="qa01.inlinetasks.com" />
+</parameters>

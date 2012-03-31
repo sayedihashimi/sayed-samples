@@ -1,0 +1,14 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+
+  <Target Name="PrintProperty">
+    <Message Text="AssemblyName: $(AssemblyName)" />
+
+    <CreateProperty Value="Sedodream.Build.Tasks">
+      <Output TaskParameter="Value" PropertyName="AssemblyName" />
+    </CreateProperty>
+
+    <Message Text="AssemblyName: $(AssemblyName)" />
+  </Target>
+
+</Project>

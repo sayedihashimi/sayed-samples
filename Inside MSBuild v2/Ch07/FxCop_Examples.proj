@@ -1,0 +1,84 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" 
+         ToolsVersion="4.0"
+         DefaultTargets="Build">
+  <PropertyGroup>
+    <SourceRoot>$(MSBuildProjectDirectory)\</SourceRoot>
+    <ContribRoot>..\Contrib\</ContribRoot>
+    <FxCopOutputRoot>$(SourceRoot)BuildTemp\FxCopTemp\</FxCopOutputRoot>
+    <Configuration>debug</Configuration>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <_TaskOutputRoot>$(SourceRoot)Examples.Tasks\</_TaskOutputRoot>
+    <_LoggerOutputRoot>$(SourceRoot)Examples.Loggers\</_LoggerOutputRoot>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <FxCopProjects 
+      Include="$(_TaskOutputRoot)Examples.Tasks.csproj">
+      <Outputs>$(_TaskOutputRoot)bin\$(Configuration)\Examples.Tasks.dll</Outputs>
+    </FxCopProjects>
+    <FxCopProjects 
+      Include="$(_LoggerOutputRoot)Examples.Loggers.csproj">
+      <Outputs>$(_LoggerOutputRoot)bin\$(Configuration)\Examples.Loggers.dll</Outputs>
+    </FxCopProjects>
+
+    <FxCopAssemblies Include="@(FxCopProjects->'%(Outputs)')" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <BuildDependsOn>
+      $(BuildDependsOn);
+      CoreBuild;
+      RunFxcop;
+    </BuildDependsOn>
+    <RebuildDependsOn>
+      Clean;
+      $(BuildDependsOn)
+    </RebuildDependsOn>
+  </PropertyGroup>
+  <Target Name="Rebuild" DependsOnTargets="$(RebuildDependsOn)"/>
+  <Target Name="Build" DependsOnTargets="$(BuildDependsOn)" />
+  <Target Name="Clean">
+    <MSBuild Projects="@(FxCopProjects)" Targets="Clean" />
+  </Target>
+  <Target Name="CoreBuild"
+          Inputs="@(FxCopProjects)"
+          Outputs="@(FxCopAssemblies)">
+    <!-- 
+      Build the FxCop assemblies & put the 
+      assemblies in the FxCopAssemblies Item -->
+    <MSBuild Projects="@(FxCopProjects)" />
+  </Target>
+
+  <PropertyGroup>
+    <CleanDependsOn>
+      $(CleanDependsOn);
+      CleanFxCop;
+    </CleanDependsOn>
+  </PropertyGroup>
+  <Target Name="Clean" DependsOnTargets="$(CleanDependsOn)">
+    <MSBuild Projects="@(FxCopProjects)" Targets="Clean" />
+  </Target>
+  <!-- Extension Pack required for fxcop.targets file -->
+<PropertyGroup>
+  <ExtensionTasksPath>$(MSBuildThisFileDirectory)\..\Contrib\ExtensionPack\4.0\</ExtensionTasksPath>
+</PropertyGroup>
+<Import Project="$(ExtensionTasksPath)MSBuild.ExtensionPack.tasks"/>
+  <!-- The MSBuild Community Tasks must be imported for the nunit.targets file -->
+  <Import 
+    Project="fxcop.targets"/>
+
+  <PropertyGroup>
+    <RunFxCopDependsOn>
+      $(RunFxCopDependsOn);
+      CoreBuild;
+      CustomAfterFxCop
+    </RunFxCopDependsOn>
+  </PropertyGroup>
+
+    <Target Name="CustomAfterFxCop">
+    <Message Text="FxCop executed." 
+             Importance="high" />
+  </Target>
+</Project>

@@ -1,0 +1,15 @@
+<!--  Import01.targets -->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+
+  <Target Name="PrintInfo">
+    <Message Text="SourceRoot: $(SourceRoot)" />
+    <Message Text="Configuration: $(Configuration)" />
+    <Message Text="SourceFiles: @(SourceFiles)" />
+  </Target>
+
+  <PropertyGroup>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+  </PropertyGroup>
+
+</Project>

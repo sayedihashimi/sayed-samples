@@ -1,0 +1,28 @@
+﻿<Project ToolsVersion="4.0"
+  xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <UsingTask
+    TaskName="Ref01"
+    TaskFactory="CodeTaskFactory"
+    AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" >
+    <ParameterGroup>
+      <Value Output="true"/>
+    </ParameterGroup>
+    <Task>
+      <Reference Include="$(MSBuildProjectDirectory)\..\Examples.Tasks.dll" />
+      <Using Namespace="Examples.Tasks"/>
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+          Value = ExampleValues.Name;
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+
+  <Target Name="Demo">
+    <Ref01>
+      <Output PropertyName="Result" TaskParameter="Value"/>
+    </Ref01>
+    <Message Text="Result: $(Result)"/>
+  </Target>
+</Project>

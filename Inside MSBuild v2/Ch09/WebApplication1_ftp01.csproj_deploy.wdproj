@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+  Microsoft Visual Studio 2010 Web Deployment Project 
+  http://go.microsoft.com/fwlink/?LinkID=104956
+
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.30319</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C4AC8379-E059-4C19-894D-AA6A849D3CA2}</ProjectGuid>
+    <SourceWebPhysicalPath>WebApplication1</SourceWebPhysicalPath>
+    <SourceWebProject>{3161B34E-AE96-4095-B397-3259E5A9EC9E}|WebApplication1\WebApplication1.csproj</SourceWebProject>
+    <SourceWebVirtualPath>/WebApplication1.csproj</SourceWebVirtualPath>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>.\Debug</OutputPath>
+    <EnableUpdateable>true</EnableUpdateable>
+    <UseMerge>true</UseMerge>
+    <SingleAssemblyName>WebApplication1.csproj_deploy</SingleAssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <OutputPath>.\Release</OutputPath>
+    <EnableUpdateable>true</EnableUpdateable>
+    <UseMerge>true</UseMerge>
+    <SingleAssemblyName>WebApplication1.csproj_deploy</SingleAssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="WebApplication1\WebApplication1.csproj">
+      <Project>{3161B34E-AE96-4095-B397-3259E5A9EC9E}</Project>
+      <Name>WebApplication1</Name>
+    </ProjectReference>
+    <ProjectReference Include="WebApplication1\WebApplication1.csproj">
+      <Project>{3161B34E-AE96-4095-B397-3259E5A9EC9E}</Project>
+      <Name>WebApplication1</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <AssemblyAttributes Include="AssemblyFileVersion">
+      <Value>1.2.3.4</Value>
+    </AssemblyAttributes>
+    <AssemblyAttributes Include="AssemblyVersion">
+      <Value>1.2.3.4</Value>
+    </AssemblyAttributes>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WebDeployment\v10.0\Microsoft.WebDeployment.targets" />
+  <ItemGroup>
+    <!-- Use the ExcludeFromBuild item to exclude files from being deployed -->
+    <ExcludeFromBuild Include="$(SourceWebPhysicalPath)\WebApplication1.csproj" />
+    <ExcludeFromBuild Include="$(SourceWebPhysicalPath)\WebApplication1.csproj.user" />
+    <ExcludeFromBuild Include="$(SourceWebPhysicalPath)\CustomOut\**\*" />
+    <ExcludeFromBuild Include="$(SourceWebPhysicalPath)\**\.svn\**\*" />
+  </ItemGroup>
+  <PropertyGroup>
+    <!-- Customize output location using the OutputPath property -->
+    <OutputPath>Out_Ftp\$(Configuration)\</OutputPath>
+  </PropertyGroup>
+  <!-- Extension Pack required for fxcop.targets file -->
+  <PropertyGroup>
+    <ExtensionTasksPath>$(MSBuildThisFileDirectory)\..\Contrib\ExtensionPack\4.0\</ExtensionTasksPath>
+  </PropertyGroup>
+  <Import Project="$(ExtensionTasksPath)MSBuild.ExtensionPack.tasks" />
+  <Target Name="ZipOutputFiles" DependsOnTargets="Build">
+    <ItemGroup>
+      <_FilesToZip Include="$(OutputPath)**\*" Exclude="$(OutputPath)obj\**\*;$(OutputPath)bin\Samples\**\*" />
+      <!-- Create an item so we can get full path -->
+      <_ZipOutputPathItem Include="$(OutputPath)" />
+    </ItemGroup>
+    <!-- 
+Zip task requires that we have the full path 
+to the working directory, so create an item
+from OutputPath to get that value.
+-->
+    <PropertyGroup>
+      <_ZipOutputPathFull>%(_ZipOutputPathItem.Fullpath)</_ZipOutputPathFull>
+      <!-- Get Date/Time to create unique .zip file name -->
+      <_DateTime>$([System.DateTime]::Now.ToString('ddMMyyyy_hh_ss'))</_DateTime>
+    </PropertyGroup>
+    <ItemGroup>
+      <_ZipFile Include="$(OutputPath)..\$(_DateTime)_outputs.zip" />
+    </ItemGroup>
+    <MSBuild.ExtensionPack.Compression.DNZip TaskAction="Create" CompressFiles="@(_FilesToZip->'%(FullPath)')" ZipFileName="@(_ZipFile)" RemoveRoot="$(_ZipOutputPathFull)" />
+  </Target>
+  <PropertyGroup>
+    <FtpFilesDependsOn>
+    Build;
+    ValidateFtpFilesSettings;
+    ZipOutputFiles;
+  </FtpFilesDependsOn>
+  </PropertyGroup>
+  <Target Name="FtpFiles" DependsOnTargets="$(FtpFilesDependsOn)">
+    <!-- Ensure _ZipFile is not empty -->
+    <Error Condition="'@(_ZipFile)'==''" Text="_ZipFile is required" />
+    <MSBuild.ExtensionPack.Communication.Ftp TaskAction="UploadFiles" Host="$(FtpRoot)" FileNames="%(_ZipFile.FullPath)" UserName="$(FtpUsername)" UserPassword="$(FtpPassword)" RemoteDirectoryName="$(FtpDirectory)" />
+  </Target>
+  <Target Name="ValidateFtpFilesSettings">
+    <Error Condition="'$(FtpRoot)'==''" Text="FtpRoot property is required" />
+    <Error Condition="'$(FtpUsername)'==''" Text="FtpUsername property is required" />
+    <Error Condition="'$(FtpPassword)'==''" Text="FtpPassword property is required" />
+  </Target>
+</Project>

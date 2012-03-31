@@ -1,0 +1,33 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+
+  <ItemGroup>
+    <Server Include="Server1">
+      <Type>2008</Type>
+      <Name>SVR01</Name>
+      <AdminContact>Sayed Ibrahim Hashimi</AdminContact>
+    </Server>
+    <Server Include="Server2">
+      <Type>2003</Type>
+      <Name>SVR02</Name>
+      <AdminContact>Sayed Y. Hashimi</AdminContact>
+    </Server>
+    <Server Include="Server3">
+      <Type>2008</Type>
+      <Name>SVR03</Name>
+      <AdminContact>Nicole Woodsmall</AdminContact>
+    </Server>
+    <Server Include="Server4">
+      <Type>2003</Type>
+      <Name>SVR04</Name>
+      <AdminContact>Keith Tingle</AdminContact>
+    </Server>
+  </ItemGroup>
+
+  <Target Name="PrintInfo" Outputs="%(Server.Identity)">
+    <Message Text="Server: @(Server)" />
+    <Message Text="Admin: @(Server->'%(AdminContact)')" />
+  </Target>
+
+</Project>
+

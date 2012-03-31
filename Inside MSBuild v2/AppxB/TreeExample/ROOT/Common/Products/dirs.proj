@@ -1,0 +1,17 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+
+
+  <Import Project="products.setting"/>
+
+  <!-- Define all ProjectFiles here -->
+
+  <ItemGroup>
+    <ProjectFiles Include="SCalculator\dirs.proj"/>
+    <ProjectFiles Include="SNotepad\dirs.proj"/>
+  </ItemGroup>
+
+  <Import Project="products.traversal.targets"/>
+  
+</Project>
+

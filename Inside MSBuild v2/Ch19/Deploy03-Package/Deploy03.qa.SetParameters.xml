@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <setParameter name="IIS Web Application Name" value="Default Web Site/Deploy03QA" />
+  <setParameter name="PageSize" value="125" />
+  <setParameter name="IncludesConfigPath" value="~/Config/includes.xml.qa.config" />
+  <setParameter name="IncludesApplicationName" value="qa.inlinetasks.com" />
+</parameters>

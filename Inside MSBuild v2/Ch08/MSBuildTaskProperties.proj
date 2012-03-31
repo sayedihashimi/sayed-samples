@@ -1,0 +1,54 @@
+﻿<!--
+  Demonstates the Exec task.
+  © Copyright 2008, Sayed Ibrahim Hashimi (sayed.hashimi@gmail.com)
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0"
+         DefaultTargets="Build">
+
+  <PropertyGroup>
+    <ExternalProjectFile>External.proj</ExternalProjectFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- No values for Properties or AdditionalProperties -->
+    <Projects Include="$(ExternalProjectFile)" />
+
+    <!-- Only values for Properties -->
+    <Projects Include="$(ExternalProjectFile)">
+      <Properties>
+        Name=One;
+        Source=PropertiesMD;
+      </Properties>
+    </Projects>
+
+    <!-- Only values for AdditionalProperties -->
+    <Projects Include="$(ExternalProjectFile)">
+      <AdditionalProperties>
+        Name=Two;
+        Source=AdditionalPropertiesMD;
+      </AdditionalProperties>
+    </Projects>
+
+    <!-- Values for both Properties and AdditionalProperties -->
+    <Projects Include="$(ExternalProjectFile)">
+      <Properties>
+        Name=Three;
+        Source=PropertiesMD;
+      </Properties>
+      <AdditionalProperties>
+        Name=Three;
+        Source=AdditionalPropertiesMD;
+      </AdditionalProperties>
+    </Projects>
+  </ItemGroup>
+
+  <Target Name="Build">
+    <!-- Execute the PrintInfo target for all projects in Projects -->
+    <MSBuild Properties="Name=propertiesMSBuildTask"
+             Projects="@(Projects)"
+             Targets="PrintInfo"
+             />
+  </Target>
+
+</Project>

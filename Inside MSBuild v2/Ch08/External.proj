@@ -1,0 +1,19 @@
+﻿<!--
+  Demonstates the Exec task.
+  © Copyright 2008, Sayed Ibrahim Hashimi (sayed.hashimi@gmail.com)
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+
+  <PropertyGroup>
+    <!-- Defaults here -->
+    <Name>none</Name>
+    <Source>none</Source>
+  </PropertyGroup>
+
+  <Target Name="PrintInfo">
+    <!-- Prints the values of the Name & Source properties -->
+    <Message Text="Name: $(Name)"/>
+    <Message Text="Source: $(Source)"/>
+  </Target>
+</Project>

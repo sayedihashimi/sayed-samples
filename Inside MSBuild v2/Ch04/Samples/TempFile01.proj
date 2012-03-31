@@ -1,0 +1,20 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0"
+         DefaultTargets="Demo">
+
+  <UsingTask AssemblyFile="$(MSBuildProjectDirectory)\..\Examples.Tasks.dll"
+             TaskName="TempFile"/>
+
+  <Target Name="Demo">   
+
+    <TempFile>
+      <Output ItemName="TestFile" TaskParameter="TempFilePath"/>
+    </TempFile>
+
+    <Message Text="TestFile: @(TestFile)"/>
+    <Message Text="TestFile.Filename: @(TestFile->'%(Filename)')"/>
+    <Message Text="TestFile.Extension: @(TestFile->'%(Extension)')"/>
+
+  </Target>
+
+</Project>

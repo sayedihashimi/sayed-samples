@@ -1,0 +1,1 @@
+echo Inside cmds.bat

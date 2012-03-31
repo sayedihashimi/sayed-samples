@@ -1,0 +1,33 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0"
+         DefaultTargets="Demo">
+
+  <UsingTask
+    TaskName="Replace01"
+    TaskFactory="CodeTaskFactory"
+    AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" >
+    <ParameterGroup>
+      <Input Required="true"/>
+      <Pattern Required="true"/>
+      <Replacement Required="true"/>
+      <Result Output="true"/>
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System.Text.RegularExpressions" />
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+          Result = Regex.Replace(Input, Pattern, Replacement);
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+
+  <Target Name="Demo">
+    <Replace01 Input="This is a ssn 123-45-7894 value" 
+               Pattern="\d{3}\-\d{2}\-\d{4}" 
+               Replacement="***-**-****">
+      <Output PropertyName="MaskedSsnString" TaskParameter="Result"/>
+    </Replace01>
+    <Message Text="MaskedSsnString: $(MaskedSsnString)"/>
+  </Target>
+</Project>

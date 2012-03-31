@@ -1,0 +1,12 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0"
+         DefaultTargets="Demo">  
+
+  <Target Name="Demo">
+    <Message Text="Add: $([MSBuild]::Add(5,9))"/>
+    <Message Text="Subtract01: $([MSBuild]::Subtract(90,768))"/>
+    <Message Text="Mult01: $([MSBuild]::Multiply(4,9))"/>
+    <Message Text="Div01: $([MSBuild]::Divide(100,5.2))"/>
+  </Target>
+</Project>
+

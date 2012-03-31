@@ -1,0 +1,15 @@
+﻿<!--
+  Demonstates the Exec task.
+  © Copyright 2008, Sayed Ibrahim Hashimi (sayed.hashimi@gmail.com)
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0"
+         DefaultTargets="Demo">
+
+  <Target Name="Demo">
+    <Message Text="Inside Demo target" />
+    <MSBuild Projects="MSBuildTask01_external.proj"
+             Targets="PrintMessage" />
+  </Target>
+
+</Project>

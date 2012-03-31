@@ -1,0 +1,24 @@
+﻿<!--
+  Demonstates the Exec task.
+  © Copyright 2008, Sayed Ibrahim Hashimi (sayed.hashimi@gmail.com)
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+  <!--
+  Insert custom steps into the build process
+  -->
+  <PropertyGroup>
+    <BuildDependsOn>
+      CustomBefore;
+      $(BuildDependsOn);
+      CustomAfter;
+    </BuildDependsOn>
+  </PropertyGroup>
+
+  <Target Name="CustomBefore">
+    <Message Text="Inside CustomBefore" Importance="high" />
+  </Target>
+  <Target Name="CustomAfter">
+    <Message Text="Inside CustomAfter" Importance="high" />
+  </Target>
+</Project>

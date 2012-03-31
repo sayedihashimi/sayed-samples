@@ -1,0 +1,33 @@
+﻿<!--
+  Demonstates the Exec task.
+  © Copyright 2008, Sayed Ibrahim Hashimi (sayed.hashimi@gmail.com)
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0"
+         DefaultTargets="UnitTest">
+
+  <PropertyGroup>
+    <ExtensionTasksPath>$(MSBuildThisFileDirectory)\..\Contrib\ExtensionPack\4.0\</ExtensionTasksPath>
+  </PropertyGroup>
+  <Import Project="$(ExtensionTasksPath)MSBuild.ExtensionPack.tasks"/>
+  
+  <ItemGroup>
+    <UnitTestProjects
+      Include="$(MSBuildProjectDirectory)\unittest\Unittest.Proj1\Unittest.Proj1.csproj">
+    </UnitTestProjects>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <NUnitResultFile>$(MSBuildProjectDirectory)\nunit-result.xml</NUnitResultFile>
+  </PropertyGroup>
+
+  <Target Name="UnitTest">
+    <!-- Build all the projects in UnitTestProjects -->
+    <MSBuild Projects="@(UnitTestProjects)" />
+    <!-- Execute the test cases, if any fail so will the build -->
+    <NUnit Assemblies="@(UnitTestProjects)"
+           ToolPath="C:\InsideMSBuild\Contrib\NUnit 2.5.7\bin\net-2.0\" />
+
+  </Target>
+</Project>
+

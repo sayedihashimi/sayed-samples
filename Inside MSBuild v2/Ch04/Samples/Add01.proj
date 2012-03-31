@@ -1,0 +1,33 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0"
+         DefaultTargets="Demo">
+
+  <UsingTask
+    TaskName="Add01"
+    TaskFactory="CodeTaskFactory"
+    AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" >
+    <ParameterGroup>
+      <Value1 ParameterType="System.Double" Required="true"/>
+      <Value2 ParameterType="System.Double" Required="true"/>
+      <Sum ParameterType="System.Double" Output="true"/>
+    </ParameterGroup>
+    <Task>
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+          Sum = Value1 + Value2;
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+
+  <Target Name="Demo">
+    <PropertyGroup>
+      <x>1.2</x>
+      <y>3.4</y>
+    </PropertyGroup>
+    <Add01 Value1="$(x)" Value2="$(y)">
+      <Output PropertyName="Result" TaskParameter="Sum"/>
+    </Add01>
+    <Message Text="$(x) + $(y) = $(Result)"/>
+  </Target>
+</Project>

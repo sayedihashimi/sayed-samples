@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  
+<Target Name="AddCustomParameters" BeforeTargets="Package">
+  <ItemGroup>
+    <MsDeployDeclareParameters Include="PageSize">
+      <Kind>XmlFile</Kind>
+      <Scope>Web.config</Scope>
+      <Match>/configuration/appSettings/add[@key='pageSize']/@value</Match>
+      <Description>Enter the value for page size</Description>
+      <DefaultValue>25</DefaultValue>
+      <Tags>applicationSettings</Tags>
+    </MsDeployDeclareParameters>
+
+    <MsDeployDeclareParameters Include="IncludesConfigPath">
+      <Kind>XmlFile</Kind>
+      <Scope>Web.config</Scope>
+      <Match>/configuration/appSettings/add[@key='IncludesConfigPath']/@value</Match>
+      <Description>Enter the value for the pate to the include file</Description>
+      <DefaultValue>~/Config/includes.xml.config</DefaultValue>
+      <Tags>applicationSettings</Tags>
+    </MsDeployDeclareParameters>
+
+    <MsDeployDeclareParameters Include="IncludesApplicationName">
+      <Kind>XmlFile</Kind>
+      <Scope>Web.config</Scope>
+      <Match>/configuration/appSettings/add[@key='IncludesApplicationName']/@value</Match>
+      <Description>Enter the value for the includes application name</Description>
+      <DefaultValue>inlinetasks.com</DefaultValue>
+      <Tags>applicationSettings</Tags>
+    </MsDeployDeclareParameters>
+  </ItemGroup>
+</Target>
+  
+</Project>

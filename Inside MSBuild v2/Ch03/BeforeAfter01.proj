@@ -1,0 +1,16 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" 
+         DefaultTargets="Build" ToolsVersion="4.0">
+
+  <Target Name="Build">
+    <Message Text="Build target"/>
+  </Target>
+
+  <Target Name="GenerateCode" BeforeTargets="Build">
+    <Message Text="GenerateCode target"/>
+  </Target>
+  
+  <Target Name="CustomCopyOutput" AfterTargets="Build">
+    <Message Text="CustomCopyOutput target"/>
+  </Target>
+  
+</Project>

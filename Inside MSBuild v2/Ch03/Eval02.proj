@@ -1,0 +1,17 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         DefaultTargets="PrintInfo" ToolsVersion="4.0">
+
+  <ItemGroup>
+    <ItemOne Include="One" />
+    <ItemTwo Include="@(ItemThree)" />
+    <ItemThree Include="Three" />
+    <ItemFour Include="@(ItemThree)" />
+  </ItemGroup>
+
+  <Target Name="PrintInfo">
+    <Message Text="ItemOne: @(ItemOne)" />
+    <Message Text="ItemTwo: @(ItemTwo)" />
+    <Message Text="ItemThree: @(ItemThree)" />
+    <Message Text="ItemFour: @(ItemFour)" />
+  </Target>
+</Project>

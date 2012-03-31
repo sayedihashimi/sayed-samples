@@ -1,0 +1,41 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+
+  <!-- Insert any customizations for settings here -->
+  <PropertyGroup>
+    <SkipNonexistentProjects>true</SkipNonexistentProjects>
+  </PropertyGroup>
+  
+  
+  <Import Project="common.setting"/>
+
+  <!-- Define all ProjectFiles here -->
+  <ItemGroup>
+    <ProjectFiles Include="Common.csproj"/>
+    <ProjectFiles Include="Common.IO\dirs.proj"/>
+    <ProjectFiles Include="Common.UI\dirs.proj"/>
+    <ProjectFiles Include="Products\dirs.proj"/>
+  </ItemGroup>
+
+  <Import Project="common.traversal.targets"/>
+
+  <!-- Insert any customizations for targets here -->
+
+  <PropertyGroup>
+    <BuildDependsOn>
+      CommonPrepareForBuild;
+      $(BuildDependsOn);
+      CommonBuildComplete;
+    </BuildDependsOn>
+  </PropertyGroup>
+
+  <Target Name="CommonPrepareForBuild">
+    <Message Text="CommonPrepareForBuild executed"
+             Importance="high"/>
+  </Target>
+  <Target Name="CommonBuildComplete">
+    <Message Text="CommonBuildComplete executed"
+             Importance="high"/>
+  </Target>
+</Project>
+

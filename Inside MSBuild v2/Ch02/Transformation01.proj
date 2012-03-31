@@ -1,0 +1,57 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0" 
+         DefaultTargets="All">
+  <ItemGroup>
+    <SourceFiles Include="src\**\*" Exclude="**\.svn\**\*" ></SourceFiles>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <DestFolder>copy\</DestFolder>
+  </PropertyGroup>
+
+  <!-- %40 = @ -->
+  <!-- %25 = % -->
+  <Target Name="PrintSourceFiles">
+    <Message Text="%40(SourceFiles):"
+             Importance="high" />
+    <Message Text="@(SourceFiles)" />
+  </Target>
+  
+  <Target Name="Demo01">
+    <Message Text="%40(SourceFiles->'%25(Filename)'):"
+             Importance="high" />
+    <Message Text="@(SourceFiles->'%(Filename)')" />
+  </Target>
+  
+  <Target Name="Demo02">
+    <Message Text="%40(SourceFiles->'%25(Filename)%25(Extension)'):"
+             Importance="high"/>
+    <Message Text="@(SourceFiles->'%(Filename)%(Extension)')" />
+  </Target>
+  
+  <Target Name="Demo03">
+    <Message Text="%40(SourceFiles->'%25(Filename)%25(Extension).bak'):"
+             Importance="high" />
+    <Message Text="@(SourceFiles->'%(Filename)%(Extension).bak')" />
+  </Target>
+  
+  <ItemGroup>
+    <Transform01
+      Include="@(SourceFiles->'$(DestFolder)%(RecursiveDir)%(Filename)%(Extension)')" />
+  </ItemGroup>
+
+  <Target Name="Demo04">
+    <Message Text="%40(Transform01):"
+             Importance="high" />
+    <Message Text="@(Transform01)" />
+    <Message Text="===== Copying files ====="
+             Importance="high" />
+    <Copy SourceFiles="@(SourceFiles)" DestinationFiles="@(Transform01)" />
+  </Target>
+
+
+
+  <Target Name="All"
+          DependsOnTargets="PrintSourceFiles;Demo01;Demo02;Demo03;Demo04" />
+
+</Project>

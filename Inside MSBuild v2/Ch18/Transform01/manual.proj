@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="TransformAll" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <UsingTask TaskName="TransformXml"
+           AssemblyFile="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\Web\Microsoft.Web.Publishing.Tasks.dll"/>
+
+  <PropertyGroup>
+    <DestDirectory>$(MSBuildProjectDirectory)\obj\TransformedFiles\</DestDirectory>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <TransformFiles Include="Web.Debug.config;Web.Release.config"/>
+  </ItemGroup>
+  
+  <Target Name="TransformAll">
+    <MakeDir Directories="$(DestDirectory)"/>
+    <Message Text="_FilesToDelete: @(_FilesToDelete)"/>
+    <TransformXml Source="web.config"
+                  Transform="%(TransformFiles.Identity)"
+                  Destination="@(TransformFiles->'$(DestDirectory)%(Filename).transformed.config')" />
+  </Target>
+
+</Project>

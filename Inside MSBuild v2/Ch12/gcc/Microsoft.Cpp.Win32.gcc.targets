@@ -1,0 +1,6 @@
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Target Name="Build">
+    <MakeDir Directories="$(TargetDir)"/>
+    <Exec Command="g++ -v @(ClCompile -> '&quot;%(FullPath)&quot;', ' ') -I &quot;$(ProgramFiles)\Microsoft SDKs\Windows\v7.0A\include&quot; -o &quot;$(TargetPath)&quot;" />
+  </Target>
+</Project>

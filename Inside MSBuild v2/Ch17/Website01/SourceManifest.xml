@@ -1,0 +1,7 @@
+﻿<sitemanifest>
+  <appHostConfig path="Default Web Site/Website01" />
+  <dirPath path="C:\InsideMSBuild\Ch17\Website01\"/>
+  <setAcl path="Default Web Site/Website01\App_Data" setAclAccess="ReadAndExecute,Write,Delete" />
+  <setAcl path="Default Web Site/Website01\logs" setAclAccess="Write" />
+  <runCommand path="echo after finished"/>
+</sitemanifest>

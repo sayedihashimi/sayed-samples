@@ -1,0 +1,14 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0"
+         DefaultTargets="Demo">
+
+  <Target Name="Demo">
+    <Message Text="DateTime.Now: $([System.DateTime]::Now)"/>
+    <Message Text="Days in month: $([System.DateTime]::DaysInMonth(2011,2))"/>
+    <Message Text="New Guid: $([System.Guid]::NewGuid())"/>
+    <Message Text="IsMatch: $([System.Text.RegularExpressions.Regex]::IsMatch('someInputHere','.*In.*'))"/>
+    <Message Text="Framework path: $([Microsoft.Build.Utilities.ToolLocationHelper]::GetPathToDotNetFramework(Microsoft.Build.Utilities.TargetDotNetFrameworkVersion.Version40))"/>
+    <Message Text="mspaint.exe path: $([Microsoft.Build.Utilities.ToolLocationHelper]::GetPathToSystemFile('mspaint.exe'))"/>
+  </Target>  
+</Project>
+

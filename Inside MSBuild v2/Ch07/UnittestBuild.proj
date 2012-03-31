@@ -1,0 +1,81 @@
+﻿<!--
+  Demonstrates dynamic properties.
+  © Copyright 2008, Sayed Ibrahim Hashimi (sayed.hashimi@gmail.com)
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0"
+         DefaultTargets="Build">
+  <PropertyGroup>
+    <SourceRoot>$(MSBuildProjectDirectory)\</SourceRoot>
+    <UnitTestRoot>$(SourceRoot)unittest\</UnitTestRoot>
+    <OutDirName>bin\</OutDirName>
+    <Configuration>Debug</Configuration>
+    <NUnitOutputDir>$(SourceRoot)BuildTemp\</NUnitOutputDir>
+    <GenericBuildRoot>$(SourceRoot)\..\</GenericBuildRoot>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <UnitTestProjects
+      Include="$(UnitTestRoot)Unittest.Proj1\Unittest.Proj1.csproj">
+      <ProjectName>Unittest.Proj1</ProjectName>
+    </UnitTestProjects>
+    <UnitTestProjects
+      Include="$(UnitTestRoot)Unittest.Proj2\Unittest.Proj2.csproj">
+      <ProjectName>Unittest.Proj2</ProjectName>
+    </UnitTestProjects>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <BuildDependsOn>
+      $(BuildDependsOn);
+      Clean;
+      CoreBuild;
+      UnitTest
+    </BuildDependsOn>
+  </PropertyGroup>
+  <Target Name="Build" DependsOnTargets="$(BuildDependsOn)" />
+  <Target Name="Clean">
+    <MSBuild Projects="@(UnitTestProjects)" Targets="Clean" />
+  </Target>
+  <Target Name="CoreBuild">
+    <!-- 
+      Build the NUnit assemblies & put the 
+      assemblies in the NUnitAssemblies Item -->
+    <MSBuild Projects="@(UnitTestProjects)">
+      <Output ItemName="NUnitAssemblies"
+              TaskParameter="TargetOutputs" />
+    </MSBuild>
+  </Target>
+
+  <PropertyGroup>
+    <RebuildDependsOn>
+      $(RebuildDependsOn);
+      Clean;
+      Build
+    </RebuildDependsOn>
+  </PropertyGroup>
+  <Target Name="Rebuild"
+          DependsOnTargets="$(RebuildDependsOn)" />
+
+  <!-- The MSBuild Community Tasks must be imported for the nunit.targets file -->
+  <!--
+  <Import
+    Project=
+    "$(GenericBuildRoot)Contrib\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets" />
+    -->
+  <!-- Import the nunit.proj file here -->
+  <Import
+    Project="nunit.targets" />
+
+  <PropertyGroup>
+    <UnitTestDependsOn>
+      CustomBeforeUnitTest;
+      $(UnitTestDependsOn);
+    </UnitTestDependsOn>
+  </PropertyGroup>
+
+  <Target Name="CustomBeforeUnitTest">
+    <Message Text="NUnitAssemblies:%0a%0d@(NUnitAssemblies,'%0a%0d')"
+             Importance="high" />
+  </Target>
+</Project>

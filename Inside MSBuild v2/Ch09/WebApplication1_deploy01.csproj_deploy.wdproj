@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+  Microsoft Visual Studio 2010 Web Deployment Project 
+  http://go.microsoft.com/fwlink/?LinkID=104956
+
+-->
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.30319</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9420DD92-86B9-4B06-BA4D-67B9218CBD8B}</ProjectGuid>
+    <SourceWebPhysicalPath>WebApplication1</SourceWebPhysicalPath>
+    <SourceWebProject>{3161B34E-AE96-4095-B397-3259E5A9EC9E}|Ch09\WebApplication1\WebApplication1.csproj</SourceWebProject>
+    <SourceWebVirtualPath>/WebApplication1.csproj</SourceWebVirtualPath>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>.\Debug</OutputPath>
+    <EnableUpdateable>true</EnableUpdateable>
+    <UseMerge>true</UseMerge>
+    <SingleAssemblyName>WebApplication1_deploy01.csproj_deploy</SingleAssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <OutputPath>.\Release</OutputPath>
+    <EnableUpdateable>true</EnableUpdateable>
+    <UseMerge>true</UseMerge>
+    <SingleAssemblyName>WebApplication1_deploy01.csproj_deploy</SingleAssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="WebApplication1\WebApplication1.csproj">
+      <Project>{3161B34E-AE96-4095-B397-3259E5A9EC9E}</Project>
+      <Name>WebApplication1</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WebDeployment\v10.0\Microsoft.WebDeployment.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.WebDeployment.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="BeforeMerge">
+  </Target>
+  <Target Name="AfterMerge">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <Target Name="DeployToServer" DependsOnTargets="BuildWebProject;Build">
+    <PropertyGroup>
+      <_ServerName>Ibrahim-P55</_ServerName>
+      <_VDirName>Sample01</_VDirName>
+      <_ServerDeployPath>\\$(_ServerName)\D$\Stage\$(_VDirName)\</_ServerDeployPath>
+      <_ServerLocalPath>D:\Stage\$(_VDirName)\</_ServerLocalPath>
+      <_ReplaceExisting>true</_ReplaceExisting>
+    </PropertyGroup>
+    <!-- Create dir if it doesn't exist -->
+    <MakeDir Directories="$(_ServerDeployPath)" />
+    <!-- Copy files -->
+    <ItemGroup>
+      <_FilesToDeploy Include="$(OutputPath)**\*" Exclude="$(OutputPath)obj\**\*;$(OutputPath)bin\Samples\**\*" />
+    </ItemGroup>
+    <Message Text="Copying files to remote server [$(_ServerName)]" />
+    <Copy SourceFiles="@(_FilesToDeploy)" DestinationFiles="@(_FilesToDeploy->'$(_ServerDeployPath)%(RecursiveDir)%(Filename)%(Extension)')" />
+    <CreateVirtualDirectory Alias="$(_VDirName)" ServerName="$(_ServerName)" Path="$(_ServerLocalPath)" ReplaceExisting="$(_ReplaceExisting)" />
+  </Target>
+  <PropertyGroup>
+    <_WebProject>$(SourceWebPhysicalPath)\WebApplication1.csproj</_WebProject>
+  </PropertyGroup>
+  <Target Name="BuildWebProject">
+    <MSBuild Projects="$(_WebProject)" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
+  </Target>
+</Project>

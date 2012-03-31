@@ -1,0 +1,20 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+
+  <PropertyGroup>
+    <SourceRoot>src\</SourceRoot>
+  </PropertyGroup>
+  <ItemGroup>
+    <SrcFiles Include="$(SourceRoot)**\*" Exclude="$(SourceRoot)**\.svn\**\*" />
+  </ItemGroup>
+
+  <Target Name="Build">
+    <Message Text="SrcFiles: @(SrcFiles)" />
+    <Message Text="Removing from item" Importance="high" />
+    <ItemGroup>
+      <SrcFiles Remove="$(SourceRoot)sub\*" />
+    </ItemGroup>
+    <Message Text="SrcFiles: @(SrcFiles)" />
+  </Target>
+
+</Project>

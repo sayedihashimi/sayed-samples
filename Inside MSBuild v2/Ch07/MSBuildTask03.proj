@@ -1,0 +1,45 @@
+﻿<!--
+  Demonstates the Exec task.
+  © Copyright 2008, Sayed Ibrahim Hashimi (sayed.hashimi@gmail.com)
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0"
+         DefaultTargets="BuildAll">
+  <PropertyGroup>
+    <UnitTestSrcRoot>unittest\</UnitTestSrcRoot>
+  </PropertyGroup>
+  <ItemGroup>
+    <UnitTestProjects
+      Include="$(UnitTestSrcRoot)Unittest.Proj1\Unittest.Proj1.csproj" />
+    <UnitTestProjects
+      Include="$(UnitTestSrcRoot)Unittest.Proj2\Unittest.Proj2.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <!-- BuildAll convention used here but these could be named anything. -->
+    <BuildAllDependsOn>
+      BeforeBuildAll;
+      CoreBuildAll;
+      AfterBuildAll
+    </BuildAllDependsOn>
+  </PropertyGroup>
+  <Target Name="BuildAll" DependsOnTargets="$(BuildAllDependsOn)" />
+
+  <Target Name="CoreBuildAll">
+    <MSBuild Projects="@(UnitTestProjects)"
+             Targets="Rebuild;"
+             Properties="Configuration=Release">
+      <Output ItemName="unitTestBuildOutputs" TaskParameter="TargetOutputs" />
+    </MSBuild>
+
+    <Message Text="unitTestBuildOutputs:%0a%0d@(unitTestBuildOutputs,'%0a%0d')" />
+  </Target>
+
+  <Target Name="BeforeBuildAll">
+    <Message Text="Before BuildAll" Importance="high" />
+  </Target>
+
+  <Target Name="AfterBuildAll">
+    <Message Text="After BuildAll" Importance="high" />
+  </Target>
+</Project>

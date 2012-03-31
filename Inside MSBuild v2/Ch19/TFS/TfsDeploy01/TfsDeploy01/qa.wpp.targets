@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Target Name="DeployToQA" DependsOnTargets="Package">
+    <Message Text="Deploying to QA01 now"/>
+    <!--msdeploy -verb:sync 
+                  -source:package=TfsDeploy01.zip 
+                  -dest:auto,
+                      computerName=WIN-MCX6WTF4J4R,
+                      username=deploy,
+                      password=p@ssw0rd 
+                  -setParamFile=C:\InsideMSBuild\Ch19\TFS\TfsDeploy01\DeploySettings\TfsDeploy01.QA01.SetParameters.xml 
+    -->
+
+    <!--****************************************************
+    Deploy to QA01
+    ********************************************************-->
+    <ItemGroup>
+      <QAMsDeploySourceProviderSetting Include="package">
+        <Path>$(PackageFileName)</Path>
+      </QAMsDeploySourceProviderSetting>
+      
+      <QAMsDeployDestinationProviderSetting Include="auto">
+        <ComputerName>WIN-MCX6WTF4J4R</ComputerName>
+        <UserName>$(Username)</UserName>
+        <Password>$(Password)</Password>
+      </QAMsDeployDestinationProviderSetting>
+
+      <QASetParamFile Include="..\DeploySettings\TfsDeploy01.QA01.SetParameters.xml"/>
+    </ItemGroup>
+
+    <PropertyGroup>
+      <_QASetParamFileFullPath>%(QASetParamFile.FullPath)</_QASetParamFileFullPath>
+    </PropertyGroup>
+    
+    <MSDeploy
+        Verb="sync"
+        Source="@(QAMsDeploySourceProviderSetting)"
+        ImportSetParametersItems="$(_QASetParamFileFullPath)"
+        Destination="@(QAMsDeployDestinationProviderSetting)"/>
+    
+    <!--****************************************************
+    Deploy to QA02
+    ********************************************************-->
+    <Message Text="Deploying to QA02 now"/>
+    <ItemGroup>
+      <QASetParamFile02 Include="..\DeploySettings\TfsDeploy01.QA02.SetParameters.xml"/>
+    </ItemGroup>
+
+    <PropertyGroup>
+      <_QASetParamFileFullPath>%(QASetParamFile02.FullPath)</_QASetParamFileFullPath>
+    </PropertyGroup>
+    
+    <MSDeploy
+        Verb="sync"
+        Source="@(QAMsDeploySourceProviderSetting)"
+        ImportSetParametersItems="$(_QASetParamFileFullPath)"
+        Destination="@(QAMsDeployDestinationProviderSetting)"/>
+  </Target>
+  
+</Project>

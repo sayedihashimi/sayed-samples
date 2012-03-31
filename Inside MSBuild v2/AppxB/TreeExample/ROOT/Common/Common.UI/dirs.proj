@@ -1,0 +1,18 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+
+
+  <Import Project="common.ui.setting"/>
+
+  <!-- Define all ProjectFiles here -->
+
+  <ItemGroup>
+    <ProjectFiles Include="Common.UI.csproj"/>
+    <ProjectFiles Include="Common.UI.Editors\dirs.proj"/>
+    <ProjectFiles Include="..\Products\dirs.proj"/>
+  </ItemGroup>
+
+  <Import Project="common.ui.traversal.targets"/>
+  
+</Project>
+

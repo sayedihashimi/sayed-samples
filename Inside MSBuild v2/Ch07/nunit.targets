@@ -1,0 +1,159 @@
+﻿<!--
+  Demonstrates dynamic properties.
+  © Copyright 2008, Sayed Ibrahim Hashimi (sayed.hashimi@gmail.com)
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <!--
+  The MSBuildCommunityTasks is required to have been imported to use this file.
+  -->
+  <PropertyGroup>
+    <ExtensionTasksPath>$(MSBuildThisFileDirectory)\..\Contrib\ExtensionPack\4.0\</ExtensionTasksPath>
+  </PropertyGroup>
+  <Import Project="$(ExtensionTasksPath)MSBuild.ExtensionPack.tasks"/>
+  
+<Target Name="ValidateNUnitSettings">
+  <!-- Validate assumptions that are contracted  -->
+  <Message Text="NUnitAssemblies: @(NUnitAssemblies)" Importance="low"/>
+
+  <Error Condition="'$(NUnitOutputDir)'==''"
+    Text="NUnitOutputDir property not defined"/>
+  
+  <Error Condition="'@(NUnitAssemblies)'==''"
+    Text="NUnitAssemblies not defined"/>
+  <Error Condition="'%(NUnitAssemblies.ProjectName)'==''"
+    Text="At least 1 item in NuitAssemblies doesn't have metadata 'ProjectName' defined."/>
+  <Error Condition="!Exists('%(NUnitAssemblies.FullPath)')"
+    Text="Couldn't locate assembly at: %(NUnitAssemblies.FullPath)" />
+  <Error Condition="!Exists('$(GenericBuildRoot)Contrib\NUnit 2.5.7\bin\net-2.0\nunit-console.exe')"
+Text="Couldn't locate nunit-console.exe at: $(GenericBuildRoot)Contrib\NUnit 2.5.7\bin\net-2.0\nunit-console.exe"/>
+</Target>
+
+  <PropertyGroup>
+    <!-- Default properties -->
+    <NUnitContinueOnError Condition="'$(NUnitContinueOnError)'==''">false</NUnitContinueOnError>
+    <NUnitFailureXPath Condition="'$(NUnitFailureXPath)'==''">string(/test-results/test-suite/results//*[starts-with(name(),'failure')])</NUnitFailureXPath>
+  </PropertyGroup>
+ 
+<PropertyGroup>
+  <!-- Declare target dependencies here -->
+  <UnitTestDependsOn>
+    $(UnitTestDependsOn);
+    BeforeUnitTest;
+    ValidateNUnitSettings;
+    UnitTestCore;
+    DetectNUnitFailures;
+    ReportNUnitFailures;
+    AfterUnitTest;
+  </UnitTestDependsOn>
+  <UnitTestCleanDependsOn>
+    $(UnitTestCleanDependsOn);
+    BeforeUnitTestClean;
+    CoreUnitTestClean;
+    AfterUnitTestClean;
+  </UnitTestCleanDependsOn>
+</PropertyGroup>
+<Target Name="UnitTest"
+   Inputs="%(NUnitAssemblies.Identity)"
+   Outputs="@(NUnitAssemblies->'$(NUnitOutputDir)%(ProjectName).UNITTEST.xml')" 
+   DependsOnTargets="$(UnitTestDependsOn)" />
+
+<Target Name="UnitTestCore" Outputs="%(NUnitAssemblies.Identity)">
+  <Message Text="Start UnitTest for @(NUnitAssemblies->'%(Fullpath)')"/>
+
+  <MakeDir  Condition="!Exists('$(NUnitOutputDir)')"
+            Directories="$(NUnitOutputDir)" />
+
+  <Message 
+    Condition="'$(GenBuildDebugMode)'=='true'" 
+    Text="Calling NUnit on:%0a%0d@(NUnitAssemblies,'%0a%0d')"/>
+
+  <PropertyGroup>
+    <NUnitContinueOnError
+      Condition="'$(NUnitContinueOnError)'==''">true</NUnitContinueOnError>
+  </PropertyGroup>
+  <!-- 
+  Don't rely on NUnit stopping build on failed unit test, we have more work afterwards
+  -->
+
+  <MSBuild.ExtensionPack.CodeQuality.NUnit 
+    Assemblies="@(NUnitAssemblies)" 
+    ToolPath="$(GenericBuildRoot)Contrib\NUnit 2.5.7\bin\net-2.0">
+  </MSBuild.ExtensionPack.CodeQuality.NUnit>
+    
+
+  <ItemGroup>
+    <_NUnitReportFiles
+      Include="@(NUnitAssemblies->'$(NUnitOutputDir)%(ProjectName).unittest.xml')" />
+  </ItemGroup>
+</Target>
+
+  <Target Name="DetectNUnitFailures" Outputs="%(_NUnitReportFiles.FullPath)">
+    <PropertyGroup>
+      <_CurrentNUnitReportFile>%(_NUnitReportFiles.FullPath)</_CurrentNUnitReportFile>
+    </PropertyGroup>
+
+    <Message Text="_CurrentNUnitReportFile: $(_CurrentNUnitReportFile)" Importance="low"/>
+    
+    <XmlRead ContinueOnError="true"
+         XmlFileName="$(_CurrentNUnitReportFile)"
+         XPath="$(NUnitFailureXPath)">
+      <Output TaskParameter="Value" PropertyName="_NUnitTestResult" />
+    </XmlRead>
+
+    <PropertyGroup>
+      <_NUnitFailed>false</_NUnitFailed>
+      <_NUnitFailed Condition="'$(_NUnitTestResult)'!=''">true</_NUnitFailed>
+    </PropertyGroup>
+
+    <Copy Condition="$(_NUnitFailed)==true"
+          SourceFiles="@(_NUnitReportFiles)"
+          DestinationFiles="@(_NUnitReportFiles->'%(RootDir)%(Directory)%(Filename).FAILED.xml')"/>
+
+    <Delete Condition="$(_NUnitFailed)==true"
+            Files="@(_NUnitReportFiles)"/>
+
+    <Message Text="_NUnitTestResult: $(_NUnitTestResult)" Importance="low"/>
+    <ItemGroup>
+      <_NUnitFailures Include="$(_CurrentNUnitReportFile)" Condition="'$(_NUnitFailed)'=='true'">
+        <Failure>$(_NUnitTestResult)</Failure>
+      </_NUnitFailures>
+    </ItemGroup>
+    <Message Text="_NUnitFailures: @(_NUnitFailures)"/>
+  </Target>
+
+  <Target Name="ReportNUnitFailures">
+    <PropertyGroup>
+      <_NUnitFailuresExist>false</_NUnitFailuresExist>
+      <_NUnitFailuresExist Condition="'@(_NUnitFailures)'!=''">true</_NUnitFailuresExist>
+      <_NUnitFailedMessage>@(_NUnitFailures->'%(Failure)','%0a%0d')</_NUnitFailedMessage>
+    </PropertyGroup>
+
+    <Message Text="_NUnitFailuresExist: $(_NUnitFailuresExist)" Importance="low"/>
+    <Message Text="_NUnitFailed: @(_NUnitFailed)" Importance="low"/>
+
+    <Error Condition="$(_NUnitFailuresExist)==true 
+                      AND
+                      $(NUnitContinueOnError)!=true"
+             Text="NUnit failures exist%0a%0d:$(_NUnitFailedMessage)"
+           />      
+  </Target>
+  
+<Target Name="CleanUnitTest" 
+        DependsOnTargets="$(UnitTestCleanDependsOn)"/>
+<Target Name="CoreUnitTestClean">
+  <MakeDir Directories="$(NUnitOutputDir)" 
+           Condition="!Exists('$(NUnitOutputDir)')"/>
+  <ItemGroup>
+    <_OldNUnitResultFiles Include="$(NUnitOutputDir)**\*.unittest.xml" />
+    <_OldNUnitResultFiles Include="$(NUnitOutputDir)**\*.FAILED.xml"/>
+  </ItemGroup>
+  
+  <Delete Files="@(_OldNUnitResultFiles)"/>
+</Target>
+  
+  <!-- Empty targets for extensibility -->
+  <Target Name="BeforeUnitTest" />
+  <Target Name="AfterUnitTest" />
+  <Target Name="BeforeUnitTestClean" />
+  <Target Name="AfterUnitTestClean" />
+</Project>

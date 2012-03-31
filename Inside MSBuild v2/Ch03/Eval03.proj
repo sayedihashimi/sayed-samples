@@ -1,0 +1,24 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0"
+         DefaultTargets="PrintInfo">
+
+  <PropertyGroup>
+    <OutputPathCopy>$(OutputPath)</OutputPathCopy>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <OutputPathItem Include="$(OutputPath)" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <Configuration>Debug</Configuration>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+  </PropertyGroup>
+
+  <Target Name="PrintInfo">
+    <Message Text="Configuration: $(Configuration)" />
+    <Message Text="OutputPath: $(OutputPath)"/>
+    <Message Text="OutputPathCopy: $(OutputPathCopy)" />
+    <Message Text="OutputPathItem: @(OutputPathItem)" />
+  </Target>
+</Project>

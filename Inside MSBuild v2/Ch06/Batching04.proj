@@ -1,0 +1,63 @@
+﻿<!--
+  This sample demonstrates using task batching to
+  copy a set of files into a set of folders.
+  © Copyright 2008, Sayed Ibrahim Hashimi (sayed.hashimi@gmail.com)
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+  <ItemGroup>
+    <Test1 Include="One">
+      <a>A1</a>
+      <b>B</b>
+      <c>C</c>
+    </Test1>
+    <Test1 Include="Two">
+      <a>A</a>
+      <b>B1</b>
+      <c>C</c>
+    </Test1>
+    <Test1 Include="Three">
+      <a>A1</a>
+      <b>B1</b>
+      <c>C1</c>
+    </Test1>
+    <Test2 Include="Four">
+      <a>A</a>
+      <b>B1</b>
+      <c>C1</c>
+    </Test2>
+    <Test2 Include="Five">
+      <a>A1</a>
+      <b>B</b>
+      <c>C2</c>
+    </Test2>
+    <Test2 Include="Six">
+      <a>A</a>
+      <b>B</b>
+      <c>C2</c>
+    </Test2>
+  </ItemGroup>
+
+  <Target Name="Task01">
+    <Message Text="%25(Test1.a): %(Test1.a)"/>
+    <Message Text="---------------------------------------" />
+    <Message Text="%25(Test2.a): %(Test2.a)"/>
+    <Message Text="---------------------------------------" />
+    <Message Text=
+      "%25(Test1.a): %(Test1.a) || %25(Test2.a): %(Test2.a)"/>
+  </Target>
+  <Target Name="Target01"
+          Outputs="%(Test1.a)%(Test2.a)">
+    <Message Text="%25(Test1.a): %(Test1.a) "/>
+    <Message Text="%25(Test1.Identity) %(Test1.Identity)"/>
+    <Message Text="---------------------------------------" />
+    <Message Text="%25(Test2.a): %(Test2.a)"/>
+    <Message Text="%25(Test2.Identity) %(Test2.Identity)"/>
+  </Target>
+
+  <Target Name="Task02">
+    <Message Text="@(Test1)@(Test2) %25(a):%(a)"/>
+  </Target>
+
+  <Target Name="All" DependsOnTargets="Task01;Target01"/>
+</Project>

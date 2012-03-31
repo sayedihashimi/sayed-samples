@@ -1,0 +1,61 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+  
+  <!-- Targets used to build all the projects -->
+
+  <PropertyGroup>
+    <BuildDependsOn>
+      $(BuildDependsOn);
+      CoreBuild
+    </BuildDependsOn>
+  </PropertyGroup>
+
+  <Target Name="Build" DependsOnTargets="$(BuildDependsOn)" />
+  <Target Name="CoreBuild">
+    <!--
+    Properties BuildInParallel and SkipNonexistentProjects
+    should be defined in the .setting file.
+    -->
+    <MSBuild Projects="@(ProjectFiles)"
+             BuildInParallel="$(BuildInParallel)"
+             SkipNonexistentProjects="$(SkipNonexistentProjects)"
+             Targets="Build"
+             />
+
+  </Target>
+
+  <PropertyGroup>
+    <RebuildDependsOn>
+      $(RebuildDependsOn);
+      CoreRebuild
+    </RebuildDependsOn>
+  </PropertyGroup>
+  <Target Name="Rebuild" DependsOnTargets="$(RebuildDependsOn)" />
+  <Target Name="CoreRebuild">
+    <MSBuild Projects="@(ProjectFiles)"
+             BuildInParallel="$(BuildInParallel)"
+             SkipNonexistentProjects="$(SkipNonexistentProjects)"
+             Targets="Rebuild"
+             />
+  </Target>
+
+  <PropertyGroup>
+    <CleanDependsOn>
+      $(CleanDependsOn);
+      CoreClean
+    </CleanDependsOn>
+  </PropertyGroup>
+  <Target Name="Clean" DependsOnTargets="$(CleanDependsOn)" />
+  <Target Name="CoreClean">
+    <MSBuild Projects="@(ProjectFiles)"
+             BuildInParallel="$(BuildInParallel)"
+             SkipNonexistentProjects="$(SkipNonexistentProjects)"
+             Targets="Clean"
+             />    
+    
+  </Target>
+  
+  
+  
+</Project>
+

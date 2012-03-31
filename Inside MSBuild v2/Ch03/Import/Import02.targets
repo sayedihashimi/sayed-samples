@@ -1,0 +1,17 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+
+  <ItemGroup>
+    <Compile Include="Class1.cs" />
+  </ItemGroup>
+
+  <Target Name="PrintPathImport">
+    <Message Text="MSBuildProjectFullPath: $(MSBuildProjectFullPath)" />
+  </Target>
+
+  <Target Name="PrintCompile">
+    <Message Text="Compile: @(Compile)" />
+    <Message Text="Compile.Fullpath: @(Compile->'%(Fullpath)','%0a%0d')" />
+  </Target>
+
+</Project>

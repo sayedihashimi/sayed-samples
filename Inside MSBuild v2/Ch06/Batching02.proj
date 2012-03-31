@@ -1,0 +1,36 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+  <PropertyGroup>
+    <SourceFolder>src\</SourceFolder>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <SourceFiles Include="$(SourceFolder)01.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </SourceFiles>
+    <SourceFiles Include="$(SourceFolder)02.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </SourceFiles>
+    <SourceFiles Include="$(SourceFolder)03.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </SourceFiles>
+    <SourceFiles Include="$(SourceFolder)04.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </SourceFiles>
+  </ItemGroup>
+
+  <Target Name="TaskBatching">
+    <!-- Transforms items into single string -->
+    <Message Text="---------------------------------------------" />
+    <Message Text="Not batched @(SourceFiles->'%(CopyToOutputDirectory)')" />
+    <!-- Invokes message task once per each batch -->
+    <Message Text="---------------------------------------------" />
+    <Message Text="Batched %(SourceFiles.CopyToOutputDirectory)" />
+  </Target>
+
+  <Target Name="TargetBatching" Outputs="%(SourceFiles.CopyToOutputDirectory)">
+    <Message Text="CopyToOutputDirectory: %(SourceFiles.CopyToOutputDirectory)" />
+    <Message Text="@(SourceFiles)" />
+  </Target>
+
+</Project>

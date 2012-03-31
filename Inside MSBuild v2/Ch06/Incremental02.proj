@@ -1,0 +1,33 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0" DefaultTargets="CopyFilesToDest">
+  <PropertyGroup>
+    <SourceFolder>src\</SourceFolder>
+    <DestFolder>dest\</DestFolder>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <SourceFiles Include="$(SourceFolder)*.txt" />
+  </ItemGroup>
+
+  <Target Name="CopyFilesToDest"
+     Inputs="@(SourceFiles)"
+     Outputs="@(SourceFiles->'$(DestFolder)%(RecursiveDir)%(Filename)%(Extension)')">
+    <Copy SourceFiles="@(SourceFiles)"
+      DestinationFiles=
+       "@(SourceFiles->'$(DestFolder)%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
+
+  <Target Name="CleanDestFolder">
+    <ItemGroup>
+      <_FilesToDelete Include="$(DestFolder)**\*"/>
+    </ItemGroup>
+    <Delete Files="@(_FilesToDelete)" />
+  </Target>
+
+  <Target Name="DeleteSomeRandomFiles">
+    <ItemGroup>
+      <_PartialFilesToDelete Include="$(DestFolder)01.txt;$(DestFolder)03.txt"/>
+    </ItemGroup>
+    <Delete Files="@(_PartialFilesToDelete)" />
+  </Target>
+</Project>

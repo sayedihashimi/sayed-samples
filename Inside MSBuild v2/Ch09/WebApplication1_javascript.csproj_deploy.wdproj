@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+  Microsoft Visual Studio 2010 Web Deployment Project 
+  http://go.microsoft.com/fwlink/?LinkID=104956
+
+-->
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.30319</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9420DD92-86B9-4B06-BA4D-67B9218CBD8B}</ProjectGuid>
+    <SourceWebPhysicalPath>WebApplication1</SourceWebPhysicalPath>
+    <SourceWebProject>{3161B34E-AE96-4095-B397-3259E5A9EC9E}|Ch09\WebApplication1\WebApplication1.csproj</SourceWebProject>
+    <SourceWebVirtualPath>/WebApplication1.csproj</SourceWebVirtualPath>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>.\Debug</OutputPath>
+    <EnableUpdateable>true</EnableUpdateable>
+    <UseMerge>true</UseMerge>
+    <SingleAssemblyName>WebApplication1_deploy01.csproj_deploy</SingleAssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <OutputPath>.\Release</OutputPath>
+    <EnableUpdateable>true</EnableUpdateable>
+    <UseMerge>true</UseMerge>
+    <SingleAssemblyName>WebApplication1_deploy01.csproj_deploy</SingleAssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="WebApplication1\WebApplication1.csproj">
+      <Project>{3161B34E-AE96-4095-B397-3259E5A9EC9E}</Project>
+      <Name>WebApplication1</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WebDeployment\v10.0\Microsoft.WebDeployment.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.WebDeployment.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="BeforeMerge">
+  </Target>
+  <Target Name="AfterMerge">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <!-- aspnet_regiis.exe requires a path without the trailing slash -->
+    <_OutputPathNoTrailingSlash>Out_JS01\$(Configuration)</_OutputPathNoTrailingSlash>
+    <!-- Customize output location using the OutputPath property -->
+    <OutputPath>$(_OutputPathNoTrailingSlash)\</OutputPath>
+    <_WebProject>$(SourceWebPhysicalPath)\WebApplication1.csproj</_WebProject>
+  </PropertyGroup>
+  <!--
+    JSCompress task is contained in MSBuildCommunityTasks 
+    This is a required to use the community tasks from a custom location.
+  -->
+  <PropertyGroup>
+    <MSBuildCommunityTasksPath>$(MSBuildThisFileDirectory)\..\Contrib\MSBuildCommunityTasks\</MSBuildCommunityTasksPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildThisFileDirectory)\..\Contrib\MSBuildCommunityTasks\MSBuild.Community.Tasks.targets" />
+  <PropertyGroup>
+    <BuildDependsOn Condition=" '$(Configuration)'=='Release' ">
+      BuildWebProject;
+      $(BuildDependsOn);
+      CompressJavascript
+    </BuildDependsOn>
+  </PropertyGroup>
+  <Target Name="CompressJavascript">
+    <ItemGroup>
+      <_JSFilesToCompress Include="$(OutputPath)Scripts\**\*.js" />
+    </ItemGroup>
+    <JSCompress Files="@(_JSFilesToCompress)" />
+  </Target>
+  <Target Name="BuildWebProject">
+    <MSBuild
+      Projects="$(_WebProject)"
+      Properties="Configuration=$(Configuration);Platform=$(Platform)" />
+  </Target>
+
+</Project>

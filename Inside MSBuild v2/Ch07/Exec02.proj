@@ -1,0 +1,26 @@
+﻿<!--
+  Demonstates the Exec task.
+  © Copyright 2008, Sayed Ibrahim Hashimi (sayed.hashimi@gmail.com)
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+  <ItemGroup>
+    <SrcFiles Include="src\*" Exclude="**.svn\**\*" />
+  </ItemGroup>
+  <Target Name="Demo">
+    <Message Text="SrcFiles: @(SrcFiles)" />
+    <Message Text="%0a%0dMaking files Readonly" Importance="high" />
+    <!-- Make SrcFiles Readonly -->
+    <Exec Command="attrib %(SrcFiles.Identity) +R" />
+
+    <!-- Display the attributes -->
+    <Exec Command="attrib %(SrcFiles.Identity)" />
+
+    <Message Text="%0a%0dMaking files writeable" Importance="high" />
+    <!-- Make SrcFiles Writeable -->
+    <Exec Command="attrib %(SrcFiles.Identity) -R" />
+
+    <!-- Display the attributes -->
+    <Exec Command="attrib %(SrcFiles.Identity)" />
+  </Target>
+</Project>

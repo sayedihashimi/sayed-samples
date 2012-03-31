@@ -1,0 +1,25 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0"
+         DefaultTargets="Demo">
+
+  <UsingTask AssemblyFile="$(MSBuildProjectDirectory)\..\Examples.Tasks.dll"
+             TaskName="Move"/>
+
+  <PropertyGroup>
+    <SampleFilesPath>$(MSBuildProjectDirectory)\sampleFiles\</SampleFilesPath>
+    <DestPath>$(MSBuildProjectDirectory)\dest\</DestPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <SampleFiles Include="$(SampleFilesPath)**\*.txt"
+                 Exclude="$(SourceFolder)**\.svn\**\*" />
+  </ItemGroup>
+
+  <Target Name="Demo">
+    <Move SourceFiles="@(SampleFiles)"
+          DestinationFiles=
+          "@(SampleFiles->'$(DestPath)%(RecursiveDir)%(Filename)%(Extension)')">
+    </Move>
+  </Target>
+
+</Project>

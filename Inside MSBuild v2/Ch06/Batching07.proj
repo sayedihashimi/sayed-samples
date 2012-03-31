@@ -1,0 +1,49 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0"
+         DefaultTargets="PrintInfo">
+  <ItemGroup>
+    <None Include="None01.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="None02.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="None03.txt;None4.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Compile Include="src01.cs;src02.cs;src03.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="src04.cs;src05.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="src06.cs" />
+  </ItemGroup>
+
+  <ItemDefinitionGroup>
+    <Compile>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Compile>
+  </ItemDefinitionGroup>
+
+  <Target Name="PrintInfo">
+    <ItemGroup>
+      <Compile Include="src07.cs" />
+      <Compile Include="src08.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Compile>
+    </ItemGroup>
+
+    <Message Text="%(CopyToOutputDirectory): @(None) @(Compile)" />
+    <Message Text="====" />
+    <Message Text="PreserveNewest: @(Compile) @(None)"
+             Condition="'%(CopyToOutputDirectory)'=='PreserveNewest'" />
+    <Message Text="Always: @(Compile) @(None)"
+             Condition="'%(CopyToOutputDirectory)'=='Always'" />
+    <Message Text="Never: @(Compile) @(None)"
+             Condition="'%(CopyToOutputDirectory)'=='Never'" />
+  </Target>
+</Project>

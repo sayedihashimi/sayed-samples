@@ -1,0 +1,33 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <SolutionFile Include="..\InsideMSBuild.sln"/>
+  </ItemGroup>
+  <Target Name="PrintSolutionInfo">
+    <Message Text="SolutionFile: @(SolutionFile)"/>
+  </Target>
+
+
+
+
+  <ItemGroup>
+    <Compile Include="Form1.cs;Form1.Designer.cs;Program.cs;Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <!-- Below is the same as the declaration of Compile above -->
+  <!--<ItemGroup>
+    <Compile Include="Form1.cs"/>
+    <Compile Include="Form1.Designer.cs"/>
+    <Compile Include="Program.cs"/>
+    <Compile Include="Properties\AssemblyInfo.cs"/>
+  </ItemGroup>-->
+  
+  
+  <Target Name="PrintCompileInfo">
+    <Message Text="Compile: @(Compile)"/>
+  </Target>
+  <Target Name="PrintCompileInfo2">
+    <Message Text="Compile: @(Compile->'%(Filename)')"/>
+    <Message Text=" "/>
+    <Message Text ="Compile: %(Compile.Filename)"/>
+  </Target>
+</Project>

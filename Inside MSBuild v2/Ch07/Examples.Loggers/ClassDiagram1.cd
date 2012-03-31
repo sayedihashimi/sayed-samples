@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Examples.Loggers.FileLoggerBase">
+    <Position X="1.5" Y="3" Width="2" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAABCAAAAYAAAQAEAAAAAAiAAAmAAQAAAEEAAAAIAQA=</HashCode>
+      <FileName>FileLoggerBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Examples.Loggers.XmlLogger">
+    <Position X="4.5" Y="2.25" Width="2" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>YIQCEAQYIACAAYAAAICACQCHUAAgBAAAAAACAAQACGA=</HashCode>
+      <FileName>XmlLogger.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.Build.Utilities.Logger" Collapsed="true">
+    <Position X="1.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="System.EventArgs" Collapsed="true">
+    <Position X="9.5" Y="1" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Microsoft.Build.Framework.BuildEventArgs">
+    <Position X="8.25" Y="2.5" Width="2.5" />
+    <TypeIdentifier />
+  </Class>
+  <Interface Name="Microsoft.Build.Framework.IEventSource">
+    <Position X="0.75" Y="7.5" Width="1.75" />
+    <TypeIdentifier />
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

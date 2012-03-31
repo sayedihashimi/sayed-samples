@@ -1,0 +1,72 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+  <PropertyGroup>
+    <SourceRoot>TestProjects\</SourceRoot>
+    <OutputRoot>..\BUILD\BuildTemp\</OutputRoot>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AllConfigurations Include="Debug configuration">
+      <Configuration>Debug</Configuration>
+    </AllConfigurations>
+    <AllConfigurations Include="Release configuration">
+      <Configuration>Release</Configuration>
+    </AllConfigurations>
+
+    <OutputPath Include="$(OutputRoot)One\">
+      <Path>$(OutputRoot)One\</Path>
+    </OutputPath>
+    <OutputPath Include="$(OutputRoot)Two\">
+      <Path>$(OutputRoot)Two\</Path>
+    </OutputPath>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Projects Include="$(SourceRoot)TestProj1\TestProj1.csproj" />
+    <Projects Include="$(SourceRoot)TestProj2\TestProj2.csproj" />
+    <Projects Include="$(SourceRoot)TestProj3\TestProj3.csproj" />
+  </ItemGroup>
+
+  <!-- Show an example of the Configuration batching deal -->
+  <Target Name="Task01">
+    <!-- Build each project for each defined configuration -->
+    <MSBuild Projects="@(Projects)"
+             Properties="Configuration=%(AllConfigurations.Configuration)"
+             Targets="Build"
+             ToolsVersion="4.0"
+             />
+  </Target>
+  <Target Name="Target01"
+          Outputs="%(AllConfigurations.Configuration)">
+    <!-- Build each project for each defined configuration -->
+    <MSBuild Projects="@(Projects)"
+             Properties="Configuration=%(AllConfigurations.Configuration)"
+             Targets="Build"
+             ToolsVersion="4.0"
+           />
+  </Target>
+
+  <Target Name="Target02" Outputs="%(Projects.Identity)">
+    <PropertyGroup>
+      <_CurrentProjectFilename>%(Projects.Filename)</_CurrentProjectFilename>
+      <_CurrentProjectFullpath>%(Projects.Fullpath)</_CurrentProjectFullpath>
+      <_CurrentOutputPath>$(OutputRoot)$(_CurrentProjectFilename)\</_CurrentOutputPath>
+    </PropertyGroup>
+
+    <MSBuild Projects="$(_CurrentProjectFullpath)"
+      Properties="Configuration=%(AllConfigurations.Configuration);
+      OutputPath=$(_CurrentOutputPath)%(AllConfigurations.Configuration)\"
+      Targets="Build"
+      ToolsVersion="4.0"
+           />
+  </Target>
+
+  <Target Name="Clean">
+    <!-- Build each project for each defined configuration -->
+    <MSBuild Projects="@(Projects)"
+             Properties="Configuration=%(AllConfigurations.Configuration)"
+             Targets="Clean"
+             ToolsVersion="4.0"
+             />
+  </Target>
+</Project>

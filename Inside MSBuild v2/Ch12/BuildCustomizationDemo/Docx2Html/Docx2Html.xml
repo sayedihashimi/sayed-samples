@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ProjectSchemaDefinitions xmlns="http://schemas.microsoft.com/build/2009/properties" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+  <Rule Name="Docx2Html" PageTemplate="tool" DisplayName="Docx2Html" >
+    
+    <Rule.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="ProjDoc" />
+    </Rule.DataSource>
+      
+    <Rule.Categories>
+      <Category Name="Conversion" DisplayName="Conversion" />
+      <Category Name="Command Line" Subtype="CommandLine" DisplayName="Command Line"/>
+    </Rule.Categories>
+     
+    <StringProperty Name="OutputDirectory" DisplayName="Output Directory" Category="Conversion" Subtype="folder"
+                    Switch="/outdir:&quot;[value]&quot;"
+                    Description="Specifies the directory in which to place the output html files" />
+
+    <BoolProperty Name="ValidateHtml" DisplayName="Validate html" Category="Conversion" Switch="/v"
+                  Description="Causes the output html to be validated for standards compliance" />
+    
+    <EnumProperty Name="WhichHtmlFileType" DisplayName="Html file type" Description="Select the html file type to save in" Category="Conversion" >
+      <EnumValue Name="html" DisplayName="Web page (.html)" Switch="/m" Description="Html page with resources saved in a separate folder" />
+      <EnumValue Name="mht" DisplayName="Single file web page (.mht)" Switch="/h" Description="A single file containing the html code and all resources" />
+    </EnumProperty>
+
+    <StringProperty Name="CommandLineTemplate" DisplayName="Command Line" Category="Command Line" Visible="False" IncludeInCommandLine="False" />
+
+    <StringListProperty Name="Inputs" Category="Command Line" IsRequired="true">
+      <StringListProperty.DataSource>
+        <DataSource
+           Persistence="ProjectFile"
+           ItemType="ProjDoc"
+           SourceType="Item" />
+      </StringListProperty.DataSource>
+    </StringListProperty>
+    
+  </Rule>
+
+  <ItemType Name="ProjDoc" DisplayName="Project documentation" />
+  <ContentType Name="ProjDoc" DisplayName="Project documentation" ItemType="ProjDoc" />
+  <FileExtension Name="*.docx" ContentType="ProjDoc" />
+
+</ProjectSchemaDefinitions>

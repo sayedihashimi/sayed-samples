@@ -1,0 +1,51 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+  <ItemGroup>
+    <Server Include="Server1">
+      <Type>2008</Type>
+      <Name>SVR01</Name>
+      <AdminContact>Sayed Ibrahim Hashimi</AdminContact>
+    </Server>
+    <Server Include="Server2">
+      <Type>2003</Type>
+      <Name>SVR02</Name>
+      <AdminContact>Sayed Y. Hashimi</AdminContact>
+    </Server>
+    <Server Include="Server3">
+      <Type>2008</Type>
+      <Name>SVR03</Name>
+      <AdminContact>Nicole Woodsmall</AdminContact>
+    </Server>
+    <Server Include="Server4">
+      <Type>2003</Type>
+      <Name>SVR04</Name>
+      <AdminContact>Keith Tingle</AdminContact>
+    </Server>
+  </ItemGroup>
+
+  <Target Name="PrintInfo">
+    <Message Text="%(Server.Identity) : %(Server.AdminContact)" />
+
+    <!-- just for new line -->
+    <Message Text=" " />
+    <Message Text="Overriding AdminContact" Importance="high" />
+    <!-- Override the AdminContact if it is set to Keith Tingle -->
+    <ItemGroup>
+      <Server Condition="'%(Server.AdminContact)' == 'Keith Tingle'">
+        <AdminContact>Sayed Ibrahim Hashimi</AdminContact>  
+      </Server>
+    </ItemGroup>
+    <Message Text="%(Server.Identity) : %(Server.AdminContact)" />
+
+    <Message Text=" "/>
+    <Message Text="Removing item" Importance="high" />
+    <!-- Remove an item  -->
+    <ItemGroup>
+      <Server Remove="Server2" />
+    </ItemGroup>
+    <Message Text="%(Server.Identity) : %(Server.AdminContact)" />
+    
+    <!--<Message Text="Server: @(Server)" />
+    <Message Text="Admin: @(Server->'%(AdminContact)')" />-->
+  </Target>
+</Project>

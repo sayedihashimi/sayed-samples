@@ -1,0 +1,62 @@
+<!--
+  This sample demonstrates using task batching to
+  copy a set of files into a set of folders.
+  © Copyright 2008, Sayed Ibrahim Hashimi (sayed.hashimi@gmail.com)
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+  <ItemGroup>
+    <Server Include="Server1">
+      <Type>2008</Type>
+      <Name>SVR01</Name>
+      <AdminContact>Sayed Ibrahim Hashimi</AdminContact>
+    </Server>
+    <Server Include="Server2">
+      <Type>2003</Type>
+      <Name>SVR02</Name>
+      <AdminContact>Sayed Y. Hashimi</AdminContact>
+    </Server>
+    <Server Include="Server3">
+      <Type>2008</Type>
+      <Name>SVR03</Name>
+      <AdminContact>Nicole Woodsmall</AdminContact>
+    </Server>
+    <Server Include="Server4">
+      <Type>2003</Type>
+      <Name>SVR04</Name>
+      <AdminContact>Keith Tingle</AdminContact>
+    </Server>
+  </ItemGroup>
+
+  <Target Name="TaskBatching">
+    <Message Text="%40(Server->'%25(Name)'): @(Server->'%(Name)')" />
+    <Message Text="===========================================" />
+    <!--
+      Task Batching Here over the Name metadata.
+      Notice that Message task is invoked once per unique batch
+    -->
+    <Message Text="%25(Server.Name): %(Server.Name)" />
+    <Message Text="===========================================" />
+    <Message Text="%25(Server.Type): %(Server.Type)" />
+    <Message Text="===========================================" />
+  </Target>
+
+  <Target Name="TargetBatching01" Outputs="%(Server.Name)">
+    <Message Text="===== TargetBatching01 ============" />
+    <Message Text="%25(Server.Name): %(Server.Name)" />
+    <Message Text="%25(Server.Type): %(Server.Type)" />
+    <Message Text="Server: @(Server)" />
+    <Message Text="==================================="/>
+  </Target>
+  <Target Name="TargetBatching02" Outputs="%(Server.Type)">
+    <Message Text="===== TargetBatching02 ============" />
+    <Message Text="%25(Server.Name): %(Server.Name)" />
+    <Message Text="%25(Server.Type): %(Server.Type)" />
+    <Message Text="Server: @(Server)" />
+    <Message Text="==================================="/>
+  </Target>
+
+
+  <Target Name="All"
+          DependsOnTargets="TaskBatching;TargetBatching01;TargetBatching02"/>
+</Project>

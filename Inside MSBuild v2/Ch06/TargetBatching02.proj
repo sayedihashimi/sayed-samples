@@ -1,0 +1,25 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+  <PropertyGroup>
+    <SourceRoot>$(MSBuildProjectDirectory)\TestProjects\</SourceRoot>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <BuildFile Include="$(SourceRoot)TestProj1.sln" />
+    <Config Include="Debug configuration">
+      <Configuration>Debug</Configuration>
+    </Config>
+    <Config Include="Release configuration">
+      <Configuration>Release</Configuration>
+    </Config>
+  </ItemGroup>
+
+  <Target Name="BuildAll"
+          Outputs="%(Config.Configuration)">
+
+    <Message Text="Start building for configuration: %(Config.Configuration)" />
+    <MSBuild Projects="@(BuildFile)"
+             Properties="Configuration=%(Config.Configuration)"
+             Targets="Rebuild" />
+  </Target>
+</Project>

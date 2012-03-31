@@ -1,0 +1,228 @@
+﻿<!--
+  Demonstrates FxCop integration.
+  © Copyright 2008, Sayed Ibrahim Hashimi (sayed.hashimi@gmail.com)
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <!-- Prerequisites:
+  1) The MSBuild Extension Pack is required to have been imported to use this file.
+  2) SDC Tasks is required to have been imported to use this file.
+  -->
+  <!-- Declare target dependencies here -->
+  <PropertyGroup>
+    <RunFxCopDependsOn>
+      $(RunFxCopDependsOn);
+      SetupFxCopProperties;
+      CopySourceFiles;
+      ValidateFxCopSettings;
+      BeforeFxcop;
+      CoreFxcop;
+      DetectFxCopError;
+      AfterFxcop
+    </RunFxCopDependsOn>
+  </PropertyGroup>
+
+
+  <Target Name="RunFxcop"
+          DependsOnTargets="$(RunFxCopDependsOn)"/>
+<Target Name="CoreFxcop"
+        Inputs="@(FxCopAssemblies)"
+        Outputs="$(FxCopReportFile)">
+  <Message Text="FxCop begin analysis on: @(FxCopAssemblies)"
+           Importance="high"/>
+  <Message Text="FxCopReportFile: $(FxCopReportFile)"
+           Importance="low"/>
+
+  <MSBuild.ExtensionPack.CodeQuality.FxCop
+    TaskAction="Analyse"
+    Files="@(FxCopAssemblies)"
+  
+    ShowSummary="true"
+    FxCopPath="$(MSBuildThisFileDirectory)\..\Contrib\Microsoft FxCop 1.36\FxCopCmd.exe"
+    OutputFile="$(FxCopReportFile)" />
+
+
+  <ItemGroup>
+    <_FxCopReportFileItem Include="$(FxCopReportFile)"/>
+  </ItemGroup>
+  <PropertyGroup>
+    <_FxCopHtmlReportFile>@(_FxCopReportFileItem->'%(Fullpath).html')</_FxCopHtmlReportFile>
+  </PropertyGroup>
+
+  <!-- Create human friendly version -->
+  <XslTransformation
+    XmlInputPaths="$(FxCopReportFile)"
+    XslInputPath="$(FxCopTransformFile)"
+    OutputPaths="$(_FxCopHtmlReportFile)" />
+
+</Target>
+  <Target Name="BeforeFxcop"/>
+  <Target Name="AfterFxcop"/>
+
+  <Target Name="CopySourceFiles" Outputs="%(AllConfigurations.Configuration)">
+    <PropertyGroup>
+      <_CurrentConfig>%(AllConfigurations.Configuration)</_CurrentConfig>
+    </PropertyGroup>
+
+    <Copy SourceFiles="@(FxCopProjectFile)"
+      DestinationFiles="@(FxCopProjectFile->'$(OutputRoot)$(_CurrentConfig)\%(Filename)%(Extension)')"
+      Condition="Exists('@(FxCopProjectFile)')">
+      <!-- TODO: When Support for this is implemented uncomment here -->
+      <!--<Output TaskParameter="CopiedFiles" ItemName="_FxCopReportFile"/>-->
+    </Copy>
+  </Target>
+
+  <!-- 
+  Incremental building not supported here because we always want to execute
+  this target because it can detect failures from when the FxCop was
+  actually executed.
+  -->
+  <Target Name="DetectFxCopError">
+    <Message Text="FxCop HTML Report File: $(_FxCopHtmlReportFile)" Importance="high"/>
+    <PropertyGroup>
+      <FxCopCriticalErrors>0</FxCopCriticalErrors>
+      <FxCopErrors>0</FxCopErrors>
+      <FxCopCriticalWarnings>0</FxCopCriticalWarnings>
+    </PropertyGroup>
+
+    <Error Condition="!Exists($(FxCopReportFile))"
+           Text="File (FxCopReportFile) not found at: [$(FxCopReportFile)]"/>
+
+    <XmlPeek ContinueOnError="True"
+            XmlInputPath="$(FxCopReportFile)"
+             Query="//Issue[@Level='CriticalError']">
+      <Output TaskParameter="Result" ItemName="FxCopCriticalErrors_Item" />
+    </XmlPeek>
+
+    <XmlPeek ContinueOnError="True"
+             XmlInputPath="$(FxCopReportFile)"
+             Query="//Issue[@Level='Error']">
+      <Output TaskParameter="Result" ItemName="FxCopErrors_Item" />
+    </XmlPeek>
+
+    <XmlPeek ContinueOnError="True"
+             XmlInputPath="$(FxCopReportFile)"
+             Query="//Issue[@Level='CriticalWarning']">
+      <Output TaskParameter="Result" ItemName="FxCopCriticalWarnings_Item" />
+    </XmlPeek>
+
+    <MSBuild.ExtensionPack.Framework.MsBuildHelper TaskAction="GetItemCount" InputItems1="@(FxCopCriticalErrors_Item)">
+      <Output TaskParameter="ItemCount" PropertyName="FxCopCriticalErrors"/>
+    </MSBuild.ExtensionPack.Framework.MsBuildHelper>
+
+    <MSBuild.ExtensionPack.Framework.MsBuildHelper TaskAction="GetItemCount" InputItems1="@(FxCopErrors_Item)">
+      <Output TaskParameter="ItemCount" PropertyName="FxCopErrors"/>
+    </MSBuild.ExtensionPack.Framework.MsBuildHelper>
+
+    <MSBuild.ExtensionPack.Framework.MsBuildHelper TaskAction="GetItemCount" InputItems1="@(FxCopCriticalWarnings_Item)">
+      <Output TaskParameter="ItemCount" PropertyName="FxCopCriticalWarnings"/>
+    </MSBuild.ExtensionPack.Framework.MsBuildHelper>
+
+    <Message Text="FxCopCriticalErrors: $(FxCopCriticalErrors)"/>
+    <Message Text="FxCopErrors: $(FxCopErrors)"/>
+    <Message Text="FxCopCriticalWarnings: $(FxCopCriticalWarnings)"/>
+
+    <Error Condition="'$(FxCopCriticalErrors)' != ''
+                        AND
+                       '$(FxCopCriticalErrors)' != '0'
+                        AND
+                       $(IgnoreFxCopCriticalErrors)!=true"
+                Text="FxCopCriticalErrors detected, count: $(FxCopCriticalErrors)"/>
+
+    <Error Condition="'$(FxCopErrors)' != ''
+                        AND
+                       '$(FxCopErrors)' != '0'
+                        AND
+                       $(IgnoreFxCopErrors)!=true"
+                Text="FxCopErrors detected, count: $(FxCopErrors)"/>
+
+    <Error Condition="'$(FxCopCriticalWarnings)' != ''
+                        AND
+                       '$(FxCopCriticalWarnings)' != '0'
+                        AND
+                       $(IgnoreFxCopCriticalWarnings)!=true"
+                Text="FxCopCriticalWarnings detected, count: $(FxCopCriticalWarnings)"/>
+  </Target>
+
+  <PropertyGroup>
+    <SetupFxCopPropertiesDependsOn Condition="'$(SetupFxCopPropertiesDependsOn)'==''"></SetupFxCopPropertiesDependsOn>
+
+  </PropertyGroup>
+
+  <Target Name="SetupFxCopProperties" DependsOnTargets="$(SetupFxCopPropertiesDependsOn)">
+    <!-- ProjectsToBuild -->
+    <PropertyGroup>
+      <!-- Provide some default values here -->
+      <IgnoreFxCopCriticalErrors Condition="'$(IgnoreFxCopCriticalErrors)'==''">false</IgnoreFxCopCriticalErrors>
+      <IgnoreFxCopErrors Condition="'$(IgnoreFxCopErrors)'==''">false</IgnoreFxCopErrors>
+      <IgnoreFxCopCriticalWarnings Condition="'$(IgnoreFxCopCriticalWarnings)'==''">false</IgnoreFxCopCriticalWarnings>
+      <FxCopTempFolderName Condition="'$(FxCopTempFolderName)'==''">__FxCopTemp</FxCopTempFolderName>
+      <FxCopContribRoot Condition="'$(FxCopContribRoot)'==''">$(ContribRoot)Microsoft FxCop 1.36\</FxCopContribRoot>
+      <FxCopOutputRoot Condition="'$(FxCopOutputRoot)'==''">$(OutputRoot)$(FxCopTempFolderName)\</FxCopOutputRoot>
+      <FxCopReportFile Condition="'$(FxCopReportFile)'==''">$(FxCopOutputRoot)fxcopResult.xml</FxCopReportFile>
+      <FxCopCreateHtmlReport Condition="'$(FxCopCreateHtmlReport)'==''">true</FxCopCreateHtmlReport>
+      <FxCopTransformFile Condition="'$(FxCopTransformFile)'==''">$(FxCopContribRoot)Xml\FxCopReport.xsl</FxCopTransformFile>
+
+      <FxCopContribRoot Condition="!HasTrailingSlash($(FxCopContribRoot))">$(FxCopContribRoot)\</FxCopContribRoot>
+      <FxCopOutputRoot Condition="!HasTrailingSlash($(FxCopOutputRoot))">$(FxCopOutputRoot)\</FxCopOutputRoot>
+    </PropertyGroup>
+
+    <MakeDir Directories="$(FxCopOutputRoot)"/>
+
+    <ItemGroup>
+      <CustomFxCopRuleAssemblies Include="$(FxCopContribRoot)Rules\*.dll" />
+    </ItemGroup>
+    <Message
+      Text="%40(CustomFxCopRuleAssemblies): @(CustomFxCopRuleAssemblies)"
+      Importance="low"/>
+
+    <PropertyGroup Condition="$(IgrnoreAllFxCopErrors)==true">
+      <IgnoreFxCopCriticalErrors>true</IgnoreFxCopCriticalErrors>
+      <IgnoreFxCopErrors>true</IgnoreFxCopErrors>
+      <IgnoreFxCopCriticalWarnings>true</IgnoreFxCopCriticalWarnings>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="ValidateFxCopSettings" DependsOnTargets="SetupFxCopProperties">
+    <Error Condition="'@(FxCopAssemblies)'==''"
+           Text="%40(FxCopAssemblies) not defined"/>
+    <Error Condition="!Exists('%(FxCopAssemblies.Fullpath)')"
+           Text="Path not found (FxCopAssemblies): [%(FxCopAssemblies.Fullpath)]"/>
+
+    <Error Condition="'$(FxCopContribRoot)'==''"
+           Text="%24(FxCopContribRoot) is not defined"/>
+    <Error Condition="!Exists($(FxCopContribRoot))"
+           Text="Path not found(FxCopContribRoot): [$(FxCopContribRoot)]"/>
+
+    <Error Condition="'$(FxCopOutputRoot)'==''"
+           Text="%24(FxCopOutputRoot) is not defined"/>
+    <Error Condition="!Exists($(FxCopOutputRoot))"
+           Text="Path not found(FxCopOutputRoot): [$(FxCopOutputRoot)]"/>
+  </Target>
+
+  <PropertyGroup>
+    <CleanFxCopDependsOn>
+      $(CleanFxCopDependsOn);
+      SetupFxCopProperties;
+      BeforeCleanFxCop;
+      CoreCleanFxCop;
+      AfterCleanFxCop;
+    </CleanFxCopDependsOn>
+  </PropertyGroup>
+  <Target Name="CleanFxCop" DependsOnTargets="$(CleanFxCopDependsOn)" />
+  <Target Name="BeforeCleanFxCop"/>
+  <Target Name="AfterCleanFxCop"/>
+  <Target Name="CoreCleanFxCop">
+    <!-- 
+    Make sure that this is not empty, because this target will hang
+    when creating the item FxCopFilesToDelete if that property is empty.
+    -->
+    <Error Condition="'$(FxCopOutputRoot)'==''"
+           Text="%24(FxCopOutputRoot) is not defined"/>
+
+    <ItemGroup>
+      <FxCopFilesToDelete Include="$(FxCopOutputRoot)\**\*"/>
+    </ItemGroup>
+
+    <Delete Files="@(FxCopFilesToDelete)"/>
+  </Target>
+</Project>

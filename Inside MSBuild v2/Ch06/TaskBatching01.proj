@@ -1,0 +1,26 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+  <PropertyGroup>
+    <SourceFolder>src\</SourceFolder>
+    <DestFolder>dest\</DestFolder>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <SourceFiles Include="$(SourceFolder)*.txt" />
+    <Dest Include="$(DestFolder)One" />
+    <Dest Include="$(DestFolder)Two" />
+    <Dest Include="$(DestFolder)Three" />
+    <Dest Include="$(DestFolder)Four" />
+    <Dest Include="$(DestFolder)Five" />
+  </ItemGroup>
+
+  <Target Name="CopyAll">
+    <!-- Task batching to copy files -->
+    <Copy SourceFiles ="@(SourceFiles)"
+          DestinationFolder="%(Dest.FullPath)" SkipUnchangedFiles="false" />
+    <!-- Task batching to print message -->
+    <Message Text="Fullpath: %(Dest.FullPath)" />
+  </Target>
+
+</Project>
+

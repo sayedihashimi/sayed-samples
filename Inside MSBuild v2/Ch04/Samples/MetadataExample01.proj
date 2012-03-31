@@ -1,0 +1,42 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0"
+         DefaultTargets="Demo">
+
+  <UsingTask AssemblyFile="..\Examples.Tasks.dll"
+             TaskName="MetadataExample"/>
+
+  <PropertyGroup>
+    <ConfigFileRoot>$(MSBuildProjectDirectory)\sampleConfigFiles\</ConfigFileRoot>
+  </PropertyGroup>
+  <ItemGroup>
+    <Server Include="$(ConfigFileRoot)server1.app.config">
+      <Name>server1</Name>
+      <DropLocation>D:\Drops\</DropLocation>
+    </Server>
+    <Server Include="$(ConfigFileRoot)server2.app.config">
+      <Name>server2</Name>
+      <DropLocation>E:\Builds\Drops\</DropLocation>
+    </Server>
+    <Server Include="$(ConfigFileRoot)server3.app.config">
+      <Name>server3</Name>
+      <DropLocation>D:\Data\DropDir\</DropLocation>
+    </Server>
+    <Server Include="$(ConfigFileRoot)server4.app.config">
+      <Name>server4</Name>
+      <DropLocation>D:\Projects\DropLocation\</DropLocation>
+    </Server>
+  </ItemGroup>
+
+  <Target Name="Demo">
+    <MetadataExample ServerList="@(Server)">
+      <Output ItemName="ServerIpList" TaskParameter="Result" />
+    </MetadataExample>
+
+    <Message Text="ServerIpList: @(ServerIpList)"/>
+
+    <Message
+      Text="Server: %(ServerIpList.ServerName)
+  %(ServerIpList.DropLoc)
+  %(ServerIpList.IpAddress)"/>
+  </Target>
+</Project>

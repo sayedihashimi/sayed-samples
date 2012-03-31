@@ -1,0 +1,16 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0"
+         DefaultTargets="Demo">
+
+  <UsingTask AssemblyFile="$(MSBuildProjectDirectory)\..\Examples.Tasks.dll"
+             TaskName="MakeZipExe"/>
+
+  <Target Name="Demo">
+    <MakeZipExe ZipFile="Sample.zip"
+                OutputFile="Sample.exe"
+                Overwrite="true"
+                ToolPath="$(DevEnvDir)">
+
+    </MakeZipExe>
+  </Target>
+</Project>

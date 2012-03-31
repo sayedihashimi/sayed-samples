@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  
+  <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml" />
+  </ItemGroup>
+  
+  <UsingTask TaskName="Docx2Html" TaskFactory="XamlTaskFactory" AssemblyName="Microsoft.Build.Tasks.v4.0">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+  
+  <Target Name="Docx2Html" AfterTargets="Build" Condition="'@(ProjDoc)' != ''">
+    <Message Importance="High" Text="Converting docx files to html ..." />
+    <Docx2Html Condition="'@(ProjDoc)' != '' and '%(ProjDoc.ExcludedFromBuild)' != 'true'"
+      CommandLineTemplate="%(ProjDoc.CommandLineTemplate)"
+      OutputDirectory="%(ProjDoc.OutputDirectory)"
+      ValidateHtml="%(ProjDoc.ValidateHtml)"
+      WhichHtmlFileType="%(ProjDoc.WhichHtmlFileType)"
+      Inputs="@(ProjDoc)" />
+  </Target>
+  
+</Project>

@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0" 
+         DefaultTargets="TransformAll">
+  
+  <UsingTask TaskName="TransformXml"
+           AssemblyFile="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\Web\Microsoft.Web.Publishing.Tasks.dll"/>
+
+  <PropertyGroup>
+    <DestDirectory>..\obj\TransformedFiles\</DestDirectory>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <TransformFiles Include="$(FilesToTransform)"/>
+  </ItemGroup>
+  
+  <Target Name="TransformAll" DependsOnTargets="ValidateSettings">
+    <MakeDir Directories="$(DestDirectory)"/>
+    <TransformXml Source="..\web.config"
+                  Transform="%(TransformFiles.Identity)"
+                  Destination="@(TransformFiles->'$(DestDirectory)%(Filename).transformed.config')" />
+  </Target>
+
+  <Target Name="ValidateSettings">
+    <Error Text="FilesToTransform cannot be empty"
+           Condition=" '$(FilesToTransform)'=='' "/>
+    <Error Text="Couldn't find transform file at [%(TransformFiles.Fullpath)]"
+           Condition =" !Exists('%(TransformFiles.Fullpath)') "/>
+  </Target>
+  
+</Project>

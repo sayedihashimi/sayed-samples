@@ -1,0 +1,49 @@
+<!--
+  This sample demonstrates using task batching to
+  copy a set of files into a set of folders.
+  © Copyright 2008, Sayed Ibrahim Hashimi (sayed.hashimi@gmail.com)
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+  <ItemGroup>
+    <Server Include="Server1">
+      <Type>2008</Type>
+      <Name>SVR01</Name>
+      <AdminContact>Sayed Ibrahim Hashimi</AdminContact>
+      <Env>PROD</Env>
+    </Server>
+    <Server Include="Server2">
+      <Type>2003</Type>
+      <Name>SVR02</Name>
+      <AdminContact>Sayed Y. Hashimi</AdminContact>
+      <Env>UAT</Env>
+    </Server>
+    <Server Include="Server3">
+      <Type>2008</Type>
+      <Name>SVR03</Name>
+      <AdminContact>Nicole Woodsmall</AdminContact>
+      <Env>PROD</Env>
+    </Server>
+    <Server Include="Server4">
+      <Type>2003</Type>
+      <Name>SVR04</Name>
+      <AdminContact>Keith Tingle</AdminContact>
+      <Env>DEV</Env>
+    </Server>
+  </ItemGroup>
+
+  <Target Name="PrintTypeEnv">
+    <!-- Batches over Type and Env -->
+    <Message Text="Type: %(Server.Type) Env: %(Server.Env)"/>
+  </Target>
+  <Target Name="PrintTypeName">
+    <!-- Batches over Type and Name -->
+    <Message Text="Type: %(Server.Type) Name: %(Server.Name)"/>
+  </Target>
+  <Target Name="PrintTypeNameEnv">
+    <!-- Batches over Type, Name and Env -->
+    <Message Text="Type: %(Server.Type) Name: %(Server.Name) Env: %(Server.Env)"/>
+  </Target>
+
+  <Target Name="All" DependsOnTargets="PrintTypeEnv;PrintTypeName;PrintTypeNameEnv"/>
+</Project>

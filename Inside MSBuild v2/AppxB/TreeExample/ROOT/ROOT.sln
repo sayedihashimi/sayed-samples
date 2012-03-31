@@ -1,0 +1,118 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildItems", "BuildItems", "{97145161-F6E7-4B31-B48A-A9C75994537D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ROOT", "ROOT", "{6C95AB11-B83B-4E4F-9BC0-E49843DD8360}"
+	ProjectSection(SolutionItems) = preProject
+		dirs.proj = dirs.proj
+		root.setting = root.setting
+		root.traversal.targets = root.traversal.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{B5589341-BB86-4E99-B8F1-CFEA6930D6D7}"
+	ProjectSection(SolutionItems) = preProject
+		Common\common.setting = Common\common.setting
+		Common\common.traversal.targets = Common\common.traversal.targets
+		Common\dirs.proj = Common\dirs.proj
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common.IO", "Common.IO", "{78F1B831-1AF3-4539-AF88-5D0A0ABC8B99}"
+	ProjectSection(SolutionItems) = preProject
+		Common\Common.IO\common.io.setting = Common\Common.IO\common.io.setting
+		Common\Common.IO\common.io.traversal.targets = Common\Common.IO\common.io.traversal.targets
+		Common\Common.IO\dirs.proj = Common\Common.IO\dirs.proj
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common.UI", "Common.UI", "{CB965777-CC22-4F34-81E0-5AC11136A5C7}"
+	ProjectSection(SolutionItems) = preProject
+		Common\Common.UI\common.ui.setting = Common\Common.UI\common.ui.setting
+		Common\Common.UI\common.ui.traversal.targets = Common\Common.UI\common.ui.traversal.targets
+		Common\Common.UI\dirs.proj = Common\Common.UI\dirs.proj
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Products", "Products", "{B7350C14-D5DB-4273-AAB6-48A97160BE34}"
+	ProjectSection(SolutionItems) = preProject
+		Common\Products\dirs.proj = Common\Products\dirs.proj
+		Common\Products\products.setting = Common\Products\products.setting
+		Common\Products\products.traversal.targets = Common\Products\products.traversal.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SCalculator", "SCalculator", "{0C2EABF2-83EB-4FD5-82AA-2326B00CB567}"
+	ProjectSection(SolutionItems) = preProject
+		Common\Products\SCalculator\dirs.proj = Common\Products\SCalculator\dirs.proj
+		Common\Products\SCalculator\scalculator.setting = Common\Products\SCalculator\scalculator.setting
+		Common\Products\SCalculator\scalculator.traversal.targets = Common\Products\SCalculator\scalculator.traversal.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SNotepad", "SNotepad", "{E0095384-8506-4C89-9707-F50F25F3D15F}"
+	ProjectSection(SolutionItems) = preProject
+		Common\Products\SNotepad\dirs.proj = Common\Products\SNotepad\dirs.proj
+		Common\Products\SNotepad\snotepad.setting = Common\Products\SNotepad\snotepad.setting
+		Common\Products\SNotepad\snotepad.traversal.targets = Common\Products\SNotepad\snotepad.traversal.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common.UI.Editors", "Common.UI.Editors", "{AD163FA2-105A-4E53-82CA-805E2F0DBDC4}"
+	ProjectSection(SolutionItems) = preProject
+		Common\Common.UI\Common.UI.Editors\common.ui.editors.setting = Common\Common.UI\Common.UI.Editors\common.ui.editors.setting
+		Common\Common.UI\Common.UI.Editors\common.ui.editors.traversal.targets = Common\Common.UI\Common.UI.Editors\common.ui.editors.traversal.targets
+		Common\Common.UI\Common.UI.Editors\dirs.proj = Common\Common.UI\Common.UI.Editors\dirs.proj
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{162AFEE5-C00F-4248-8982-606B14D16079}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.IO", "Common\Common.IO\Common.IO.csproj", "{8B3F0CC1-F10D-40A0-AEAA-FC30F92F6D11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCalculator", "Common\Products\SCalculator\SCalculator.csproj", "{89DECFBD-9AB8-477C-B4AB-DCD4BB3D7726}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.UI", "Common\Common.UI\Common.UI.csproj", "{30BBAC91-4B4F-4B13-8A49-36B8D2FB1DDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SNotepad", "Common\Products\SNotepad\SNotepad.csproj", "{6B030E91-651B-42F4-B751-53946FFCA06F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.UI.Editors", "Common\Common.UI\Common.UI.Editors\Common.UI.Editors.csproj", "{0D967317-E120-40DB-B35F-3FB2A30794C6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{162AFEE5-C00F-4248-8982-606B14D16079}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{162AFEE5-C00F-4248-8982-606B14D16079}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{162AFEE5-C00F-4248-8982-606B14D16079}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{162AFEE5-C00F-4248-8982-606B14D16079}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B3F0CC1-F10D-40A0-AEAA-FC30F92F6D11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B3F0CC1-F10D-40A0-AEAA-FC30F92F6D11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B3F0CC1-F10D-40A0-AEAA-FC30F92F6D11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B3F0CC1-F10D-40A0-AEAA-FC30F92F6D11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89DECFBD-9AB8-477C-B4AB-DCD4BB3D7726}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89DECFBD-9AB8-477C-B4AB-DCD4BB3D7726}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89DECFBD-9AB8-477C-B4AB-DCD4BB3D7726}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89DECFBD-9AB8-477C-B4AB-DCD4BB3D7726}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30BBAC91-4B4F-4B13-8A49-36B8D2FB1DDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30BBAC91-4B4F-4B13-8A49-36B8D2FB1DDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30BBAC91-4B4F-4B13-8A49-36B8D2FB1DDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30BBAC91-4B4F-4B13-8A49-36B8D2FB1DDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B030E91-651B-42F4-B751-53946FFCA06F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B030E91-651B-42F4-B751-53946FFCA06F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B030E91-651B-42F4-B751-53946FFCA06F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B030E91-651B-42F4-B751-53946FFCA06F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D967317-E120-40DB-B35F-3FB2A30794C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D967317-E120-40DB-B35F-3FB2A30794C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D967317-E120-40DB-B35F-3FB2A30794C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D967317-E120-40DB-B35F-3FB2A30794C6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6C95AB11-B83B-4E4F-9BC0-E49843DD8360} = {97145161-F6E7-4B31-B48A-A9C75994537D}
+		{B5589341-BB86-4E99-B8F1-CFEA6930D6D7} = {6C95AB11-B83B-4E4F-9BC0-E49843DD8360}
+		{78F1B831-1AF3-4539-AF88-5D0A0ABC8B99} = {B5589341-BB86-4E99-B8F1-CFEA6930D6D7}
+		{CB965777-CC22-4F34-81E0-5AC11136A5C7} = {B5589341-BB86-4E99-B8F1-CFEA6930D6D7}
+		{B7350C14-D5DB-4273-AAB6-48A97160BE34} = {B5589341-BB86-4E99-B8F1-CFEA6930D6D7}
+		{AD163FA2-105A-4E53-82CA-805E2F0DBDC4} = {CB965777-CC22-4F34-81E0-5AC11136A5C7}
+		{0C2EABF2-83EB-4FD5-82AA-2326B00CB567} = {B7350C14-D5DB-4273-AAB6-48A97160BE34}
+		{E0095384-8506-4C89-9707-F50F25F3D15F} = {B7350C14-D5DB-4273-AAB6-48A97160BE34}
+	EndGlobalSection
+EndGlobal

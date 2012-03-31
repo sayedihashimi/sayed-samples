@@ -1,0 +1,16 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+
+  <Import Project="common.io.setting"/>
+
+  <!-- Define all ProjectFiles here -->
+
+  <ItemGroup>
+    <ProjectFiles Include="Common.IO.csproj"/>
+    <ProjectFiles Include="..\Products\dirs.proj"/>
+  </ItemGroup>
+
+  <Import Project="common.io.traversal.targets"/>
+
+</Project>
+

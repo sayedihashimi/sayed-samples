@@ -1,0 +1,63 @@
+﻿<!--
+  Demonstates the Exec task.
+  © Copyright 2008, Sayed Ibrahim Hashimi (sayed.hashimi@gmail.com)
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0"
+         DefaultTargets="FullBuild">
+
+  <ItemGroup>
+    <!-- define all the configurations that we should build -->
+    <AllConfigurations Include="Debug" />
+    <AllConfigurations Include="Release" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <SolutionToBuild Include="SampleSolution\SampleSolution.sln" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <FullBuildDependsOn>
+      $(FullBuildDependsOn);
+      BeforeBuild;
+      CoreBuild;
+      AfterBuild
+    </FullBuildDependsOn>
+    <FullRebuildDependsOn>
+      $(FullRebuildDependsOn);
+      Clean;
+      FullBuild
+    </FullRebuildDependsOn>
+  </PropertyGroup>
+
+  <Target Name="FullBuild"
+          DependsOnTargets="$(FullBuildDependsOn)" />
+  <Target Name="BeforeBuild">
+    <!-- TODO: Get latest source from version control -->
+    <!-- TODO: Generate code -->
+  </Target>
+  <Target Name="AfterBuild">
+    <!-- TODO: Unit tests -->
+    <!-- TODO: Code Analysis -->
+  </Target>
+
+  <Target Name="CoreBuild">
+    <MSBuild
+      Projects="@(SolutionToBuild)"
+      BuildInParallel="true"
+      Properties="Configuration=%(AllConfigurations.Identity)" />
+  </Target>
+
+  <Target Name="FullRebuild"
+          DependsOnTargets="$(FullRebuildDependsOn)" />
+  <Target Name="Clean">
+    <!-- Clean for each configuration -->
+    <MSBuild
+      Projects="@(SolutionToBuild)"
+      BuildInParallel="true"
+      Properties="Configuration=%(AllConfigurations.Identity)"
+      Targets="Clean"
+      />
+  </Target>
+
+</Project>

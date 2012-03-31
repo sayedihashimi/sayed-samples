@@ -1,0 +1,15 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0">
+  
+  <Import Project="scalculator.setting"/>
+
+  <!-- Define all ProjectFiles here -->
+
+  <ItemGroup>
+    <ProjectFiles Include="SCalculator.csproj"/>
+  </ItemGroup>
+
+  <Import Project="scalculator.traversal.targets"/>
+  
+</Project>
+

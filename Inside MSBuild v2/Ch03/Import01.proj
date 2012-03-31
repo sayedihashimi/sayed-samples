@@ -1,0 +1,21 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" 
+         ToolsVersion="4.0"
+         DefaultTargets="All">
+
+  <PropertyGroup>
+    <SourceRoot>$(MSBuildProjectDirectory)\src\</SourceRoot>
+    <Configuration>Debug</Configuration>
+  </PropertyGroup>
+  <ItemGroup>
+    <SourceFiles Include="$(SourceRoot)\*" />
+  </ItemGroup>
+
+  <Import Project="$(MSBuildProjectDirectory)\Import01.targets" />
+
+  <Target Name="PrintOutputPath">
+    <Message Text="OutputPath: $(OutputPath)" />
+    <Message Text="MSBuildProjectFile: $(MSBuildProjectFile)" />
+  </Target>
+  <Target Name="All"
+          DependsOnTargets="PrintInfo;PrintOutputPath" />
+</Project>
