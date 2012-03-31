@@ -9,4 +9,4 @@ obj/
 ~*.docx
 **\msbuild.log
 *.private
-Sedodream.Samples.MSBuild*.rar
+*.rar
