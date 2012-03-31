@@ -1,0 +1,16 @@
+﻿<parameters>
+
+	<!-- Prompts where to copy the content files and takes a web site path (such as "contoso.com/app") -->
+	<parameter name="AppID" description="App ID description" defaultValue="your-app-id">
+		<parameterEntry type="XmlFile" 
+                    scope="C:\\Data\\Personal\\MyCode\\sayed-samples\\CustomWebDeployParameters\\obj\\Debug\\Package\\PackageTmp\\Web\.config$" 
+                    match="configuration/appSettings/add[@key='appId']/@value" />
+	</parameter>
+
+  <parameter name="AppSecret" 
+             description="App secret description" 
+             defaultValue="your-app-secret">
+    <parameterEntry type="XmlFile" scope="web\.config" match="configuration/appSettings/add[@key='appSecret']/@value" />
+  </parameter>
+  
+</parameters>

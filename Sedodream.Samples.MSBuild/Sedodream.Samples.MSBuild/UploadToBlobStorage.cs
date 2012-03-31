@@ -54,6 +54,8 @@
                 }
 
                 CloudBlob blob = container.GetBlobReference(this.BlobName);
+                BlobRequestOptions options = new BlobRequestOptions();
+                options.Timeout = new TimeSpan(0, 0, 15);
                 blob.UploadFile(this.FileToUpload);
 
                 this.BlobUri = blob.Uri.AbsoluteUri;
