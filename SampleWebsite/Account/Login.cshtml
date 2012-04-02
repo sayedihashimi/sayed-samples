@@ -1,0 +1,105 @@
+﻿@{
+    Layout = "~/_SiteLayout.cshtml";
+    Page.Title = "Log in";
+
+    // Initialize general page variables
+    var username = "";
+    var password = "";
+    var rememberMe = false;
+
+    // Add Validation scripts
+    Assets.AddScript("~/Scripts/jquery.validate.min.js");
+    Assets.AddScript("~/Scripts/jquery.validate.unobtrusive.min.js");
+
+    // Setup validation
+    Validation.RequireField("username", "You must specify a user name.");
+    Validation.RequireField("password", "You must specify a password.");
+
+    // If this is a POST request, validate and process data
+    if (IsPost) {
+        // is this a OAuth sign in request?
+        string provider = Request.Form["provider"];
+        if (!provider.IsEmpty()) {
+            OAuthWebSecurity.RequestAuthentication(provider, "~/Account/RegisterService");
+            return;
+        } else if (Validation.IsValid()) {
+            username = Request.Form["username"];
+            password = Request.Form["password"];
+            rememberMe = Request.Form["rememberMe"].AsBool();
+
+            if (WebSecurity.UserExists(username) && WebSecurity.GetPasswordFailuresSinceLastSuccess(username) > 4 && WebSecurity.GetLastPasswordFailureDate(username).AddSeconds(60) > DateTime.UtcNow) {
+                Response.Redirect("~/Account/AccountLockedOut");
+                return;
+            }
+
+            // Attempt to log in to the Security object using provided creds
+            if (WebSecurity.Login(username, password, rememberMe)) {
+                var returnUrl = Request.QueryString["ReturnUrl"];
+                if (returnUrl.IsEmpty()) {
+                    Response.Redirect("~/");
+                } else {
+                    Context.RedirectLocal(returnUrl);
+                }
+            } else {
+                ModelState.AddFormError("The user name or password provided is incorrect.");
+            }
+        }
+    }
+}
+
+<hgroup class="title">
+    <h1>@Page.Title.</h1>
+    <h2>Enter your user name and password below.</h2>
+</hgroup>
+
+<section id="loginForm">
+    <form method="post">
+        @* If one or more validation errors exist, show an error *@
+        @Html.ValidationSummary("Log in was unsuccessful. Please correct the errors and try again.", excludeFieldErrors: true, htmlAttributes: null)
+
+        <fieldset>
+            <legend>Log in to Your Account</legend>
+            <ol>
+                <li class="username">
+                    <label for="username" @if(!ModelState.IsValidField("username")){<text>class="error-label"</text>}>User name</label>
+                    <input type="text" id="username" name="username" value="@username" @Validation.For("username")/>
+                    @* Write any user name validation errors to the page *@
+                    @Html.ValidationMessage("username")
+                </li>
+                <li class="password">
+                    <label for="password" @if(!ModelState.IsValidField("password")){<text>class="error-label"</text>}>Password</label>
+                    <input type="password" id="password" name="password" @Validation.For("password")/>
+                    @* Write any password validation errors to the page *@
+                    @Html.ValidationMessage("password")
+                </li>
+                <li class="remember-me">
+                    <input type="checkbox" id="rememberMe" name="rememberMe" value="true" @if (rememberMe) {<text>checked="checked"</text>} />
+                    <label class="checkbox" for="rememberMe">Remember me?</label>
+                </li>
+            </ol>
+            <input type="submit" value="Log in" />
+        </fieldset>
+    </form>
+    <p>
+        <a href="~/Account/Register">Don't have a Account?</a>
+        <a href="~/Account/ForgotPassword">Did you forget your password?</a>
+    </p>
+</section>
+
+<section class="social" id="socialLoginForm">
+    <form method="post">
+        <h2>Use another service to log in.</h2>
+        <div class="message-info">
+            <p>
+                To let users of this site log in using their accounts from other sites such as Facebook, Twitter, 
+                and Windows Live, you must update this site. For more information <a href="http://go.microsoft.com/fwlink/?LinkID=226949">click here</a>.
+            </p>
+        </div>
+        @*<fieldset>
+            <legend>Log in using another service</legend>
+            <input type="submit" name="provider" id="facebook" value="Facebook" title="Log in using your Facebook account." />
+            <input type="submit" name="provider" id="twitter" value="Twitter" title="Log in using your Twitter account." />
+            <input type="submit" name="provider" id="windowsLive" value="WindowsLive" title="Log in using your Windows Live account." />
+        </fieldset>*@
+    </form>
+</section>

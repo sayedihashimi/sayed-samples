@@ -1,0 +1,90 @@
+﻿@{
+    Layout = "~/_SiteLayout.cshtml";
+    Page.Title = "Register an account";
+
+    string email = "";
+
+    // Add Validation scripts
+    Assets.AddScript("~/Scripts/jquery.validate.min.js");
+    Assets.AddScript("~/Scripts/jquery.validate.unobtrusive.min.js");
+
+    // Setup validation
+    Validation.RequireField("email", "The user name field is required.");
+
+    if (IsPost) {
+        var result = (AuthenticationResult)Session["OAuthResult"];
+        if (result == null) {
+            Response.Redirect("~/");
+        }
+
+        email = Request.Form["email"];
+        
+        if (Validation.IsValid()) {
+            // Insert a new user into the database
+            var db = Database.Open("StarterSite");
+
+            // Check if user already exists
+            var user = db.QuerySingle("SELECT Email FROM UserProfile WHERE LOWER(Email) = LOWER(@0)", email);
+            if (user == null) {
+                // Insert email into the profile table
+                db.Execute("INSERT INTO UserProfile (Email) VALUES (@0)", email);
+                OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, email);
+
+                OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false);
+
+                Session.Remove("OAuthResult");
+                
+                Response.Redirect("~/");
+            } else {
+                ModelState.AddError("email", "User name already exists. Please enter a different user name.");
+            }
+        }
+    } else {
+        var result = OAuthWebSecurity.VerifyAuthentication();
+        if (result.IsSuccessful) {
+            // put the ExtraData into the App property bag
+            if (result.ExtraData != null && result.ExtraData.Count > 0) {
+                Session.Add("OAuthExtraData", result.ExtraData);
+            }
+
+            bool registered = OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false);
+            if (registered) {                
+                var returnUrl = Request.QueryString["ReturnUrl"];
+                if (returnUrl.IsEmpty()) {
+                    Response.Redirect("~/");
+                } else {
+                    Context.RedirectLocal(returnUrl);
+                }
+            } else {
+                Session["OAuthResult"] = result;
+            }
+            // set default user name to the value obtained from OAuth
+            email = result.UserName;
+        } else {
+            ModelState.AddFormError("Unsuccessful log in with service.");
+        }
+    }
+}
+
+<hgroup class="title">
+    <h1>@Page.Title.</h1>
+    <h2>Create an account on this site to associate to this service.</h2>
+</hgroup>
+
+<form method="post">
+    @* If at least one validation error exists, notify the user *@
+    @Html.ValidationSummary(excludeFieldErrors: true)
+
+    <fieldset>
+        <legend>Registration Form</legend>
+        <ol>
+            <li class="email">
+                <label for="email" @if (!ModelState.IsValidField("email")) {<text>class="error-label"</text>}>Email address</label>
+                <input type="text" id="email" name="email" value="@email" @Validation.For("email") />
+                @* Write any email validation errors to the page *@
+                @Html.ValidationMessage("email")
+            </li>
+        </ol>
+        <input type="submit" value="Associate" />
+    </fieldset>
+</form>
