@@ -97,7 +97,9 @@
     <None Include="Samples\AzureInfo.proj.private">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Samples\foo.zip" />
+    <None Include="Samples\foo.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Samples\readme.md" />
   </ItemGroup>
   <ItemGroup>
@@ -109,6 +111,7 @@
   <ItemGroup>
     <None Include="Samples\JsonHttpPostSample.proj">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
