@@ -8,7 +8,7 @@ _UpgradeReport_Files
 *.suo
 *.user
 ~*.docx
-**\msbuild.log
+**\msbuild*.log
 *.private
 *.rar
-UpgradeLog*.xml
+**\UpgradeLog*.xml
