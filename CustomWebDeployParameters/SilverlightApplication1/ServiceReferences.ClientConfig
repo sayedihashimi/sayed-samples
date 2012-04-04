@@ -1,0 +1,30 @@
+﻿<configuration>
+      <system.serviceModel>
+        
+        <bindings>
+            <basicHttpBinding>
+                <binding name="AdvancedZipInfoSoap" maxBufferSize="2147483647"
+                    maxReceivedMessageSize="2147483647">
+                    <security mode="None" />
+                </binding>
+            </basicHttpBinding>
+
+          <basicHttpBinding>
+            <binding name="CustomBinding" maxBufferSize="1000000000" transferMode="Buffered">
+              <security mode="TransportWithMessageCredential"/>
+            </binding>
+          </basicHttpBinding>
+          
+        </bindings>
+        <client>
+            <endpoint address="http://wsparam.strikeiron.com/StrikeIron/ZIPPostalCodeInfo5/AdvancedZipInfo"
+                binding="basicHttpBinding" bindingConfiguration="AdvancedZipInfoSoap"
+                contract="ServiceReference1.AdvancedZipInfoSoap" name="AdvancedZipInfoSoap" />
+        </client>
+
+
+        
+        
+        
+    </system.serviceModel>
+</configuration>
