@@ -1,0 +1,14 @@
+# Folders to ignore #
+OutputRoot/
+bin/
+obj/
+_UpgradeReport_Files
+
+# Known files to ignore always #
+*.suo
+*.user
+~*.docx
+**\msbuild*.log
+*.private
+*.rar
+**\UpgradeLog*.xml

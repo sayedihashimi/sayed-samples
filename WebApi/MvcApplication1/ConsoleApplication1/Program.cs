@@ -25,7 +25,6 @@
 
             var jsonFormatter = new System.Net.Http.Formatting.JsonMediaTypeFormatter();
             var mediaType = new MediaTypeHeaderValue("application/json");
-            var jsonSerializerSettings = new JsonSerializerSettings();
             var requestMessage = new HttpRequestMessage<Person>(
                 personToPost,
                 mediaType,
