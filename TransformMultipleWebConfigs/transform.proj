@@ -8,6 +8,9 @@
     <OutputFolder Condition=" '$(OutputFolder)'=='' ">C:\temp\transformed-files\</OutputFolder>
   </PropertyGroup>
   
+  <!--
+  This target shows how to transform web.config with a specific transform file associated to that specific web.config file.
+  -->
   <Target Name="TransformAll">
     
     <!-- discover the files to transform -->
@@ -21,9 +24,8 @@
     <!-- TransformXml only supports single values for source/transform/destination so use %(FilesToTransofm.Identity)
          to sned only 1 value to it -->
     <TransformXml Source="%(FilesToTransofm.Identity)"
-                  Transform="@(FilesToTransofm->'%(RecursiveDir)web.$(Configuration).config')"
-                  Destination="@(FilesToTransofm->'$(OutputFolder)%(RecursiveDir)web.config')" />
-    
+                  Transform="@(FilesToTransofm->'%(RecursiveDir)%(Filename).$(Configuration)%(Extension)')"
+                  Destination="@(FilesToTransofm->'$(OutputFolder)%(RecursiveDir)%(Filename)%(Extension)')" />    
   </Target>
   
 </Project>

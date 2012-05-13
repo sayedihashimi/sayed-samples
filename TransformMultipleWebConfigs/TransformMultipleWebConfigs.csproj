@@ -161,6 +161,7 @@
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\PublishProfiles\Foo.pubxml" />
     <None Include="transform.proj" />
     <Content Include="Views\Home\Web.config" />
     <Content Include="Views\Web.Debug.config">
