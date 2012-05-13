@@ -10,6 +10,10 @@
     <form id="form1" runat="server">
     <div>
         <h2>This sample shows how to parameterize connection strings in files other than web.config</h2>
+
+        <h3>See ParameterizeConStringConfig.wpp.targets for the details</h3>
+
+
         <h3>Connection strings:</h3>
         <ul>
             <% foreach (ConnectionStringSettings cn in ConfigurationManager.ConnectionStrings)
