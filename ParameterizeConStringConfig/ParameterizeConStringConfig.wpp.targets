@@ -9,7 +9,7 @@
       <Match>/connectionStrings/add[@name='ApplicationServices']/@connectionString</Match>
       <Description>Connection string for ApplicationServices</Description>
       <DefaultValue>data source=(localhost);Initial Catalog=AppServices</DefaultValue>
-      <Tags>applicationSettings</Tags>
+      <Tags>SqlConnectionString</Tags>
     </MsDeployDeclareParameters>
 
     <MsDeployDeclareParameters Include="OtherConnectionString-ConnectionString" >
@@ -18,7 +18,7 @@
       <Match>/connectionStrings/add[@name='OtherConnectionString']/@connectionString</Match>
       <Description>Connection string for OtherConnectionString</Description>
       <DefaultValue>data source=(localhost);Initial Catalog=OtherDb</DefaultValue>
-      <Tags>applicationSettings</Tags>
+      <Tags>SqlConnectionString</Tags>
     </MsDeployDeclareParameters>
   </ItemGroup>
 
