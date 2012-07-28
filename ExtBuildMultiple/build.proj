@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <FileToInject Condition=" '$(FileToInject)'=='' ">$(MSBuildThisFileDirectory)extend-corecompile.proj</FileToInject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectsToBuild Include="ProjA\ProjA.csproj"/>
+    <ProjectsToBuild Include="ProjB\ProjB.csproj"/>
+  </ItemGroup>
+
+  <Target Name="Build">
+    <Message Text="CustomAfterMicrosoftCommonTargets=&quot;$(FileToInject)&quot;" Importance="high"/>
+    <Message Text="FileToInject: $(FileToInject)" Importance="high"/>
+    
+    <MSBuild Projects="@(ProjectsToBuild)"
+             Properties="CustomBeforeMicrosoftCommonTargets=$(FileToInject)" />   
+  </Target>
+
+  <Target Name="Clean">
+    <MSBuild Projects="@(ProjectsToBuild)" Targets="Clean"/>
+  </Target>
+
+  <Target Name="Rebuild" DependsOnTargets="Clean;Build"/>
+  
+</Project>
