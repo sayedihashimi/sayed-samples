@@ -10,9 +10,6 @@
   </ItemGroup>
 
   <Target Name="Build">
-    <Message Text="CustomAfterMicrosoftCommonTargets=&quot;$(FileToInject)&quot;" Importance="high"/>
-    <Message Text="FileToInject: $(FileToInject)" Importance="high"/>
-    
     <MSBuild Projects="@(ProjectsToBuild)"
              Properties="CustomBeforeMicrosoftCommonTargets=$(FileToInject)" />   
   </Target>
