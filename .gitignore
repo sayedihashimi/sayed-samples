@@ -2,6 +2,7 @@
 OutputRoot/
 bin/
 obj/
+_UpgradeReport_Files
 
 # Known files to ignore always #
 *.suo
@@ -11,3 +12,4 @@ obj/
 **\msbuild.*.log
 *.private
 *.rar
+**\UpgradeLog*.xml

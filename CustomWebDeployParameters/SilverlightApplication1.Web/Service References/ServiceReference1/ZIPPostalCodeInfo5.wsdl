@@ -1,0 +1,701 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.strikeiron.com" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://www.strikeiron.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.strikeiron.com">
+      <s:element name="ZIPCodeLookup">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UnregisteredUserEmail" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="UserID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ZIPOrPostalCode" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ZIPCodeLookupResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ZIPCodeLookupResult" type="tns:SIWsOutputOfZIPCodeResult" />
+            <s:element name="SISubscriptionInfo" type="tns:SISubscriptionInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="SIWsOutputOfZIPCodeResult">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ServiceStatus" type="tns:SIWsStatus" />
+          <s:element minOccurs="0" maxOccurs="1" name="ServiceResult" type="tns:ZIPCodeResult" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="SIWsStatus">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="StatusNbr" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="StatusDescription" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ZIPCodeResult">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="OriginalZIPOrPostalCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FormattedZIPOrPostalCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StateOrProvinceCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StateOrProvinceName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CountryCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CountryName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CountyName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ClassificationCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ClassificationDescription" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CityDeliveryInd" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RateSortCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RateSortDescription" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AreaCodes" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TimeZoneName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StandardGMTOffset" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DaylightGMTOffset" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="GMTOffsetText" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="UsesDayLightSavingsInd" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Latitude" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Longitude" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Elevation" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CountyArea" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StateFIPS" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CountyFIPS" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="USPSFinanceNbr" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MSA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PMSA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CBSA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CBSADiv" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CBSATitle" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Aliases" type="tns:ArrayOfAliasInfo" />
+          <s:element minOccurs="0" maxOccurs="1" name="Streets" type="tns:ArrayOfStreetInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfAliasInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="AliasInfo" nillable="true" type="tns:AliasInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="AliasInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="AliasCityName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AliasCityAbbrev" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FacilityCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FacilityDescription" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MailingNameInd" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="UniqueNameInd" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfStreetInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="StreetInfo" nillable="true" type="tns:StreetInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="StreetInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ZIPPlus4Low" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ZIPPlus4High" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StreetPreDirection" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StreetName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StreetSuffix" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StreetPostDirection" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StreetNumberLow" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StreetNumberLowCanadaSuffix" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StreetNumberHigh" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StreetNumberHighCanadaSuffix" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="OddEvenCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SecondaryAbbreviation" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SecondaryStreetNumberLow" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SecondaryStreetNumberHigh" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SecondaryOddEvenCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BuildingFirmName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RecordTypeCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CarrierRouteId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BaseAlterateCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LACSStatusInd" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="GovernmentBuildingInd" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CongressionalDistrictNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CanadaStreetSequenceCode" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ZIPCensusInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UnregisteredUserEmail" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="UserID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ZIPCode" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ZIPCensusInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ZIPCensusInfoResult" type="tns:SIWsOutputOfCensusResult" />
+            <s:element name="SISubscriptionInfo" type="tns:SISubscriptionInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="SIWsOutputOfCensusResult">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ServiceStatus" type="tns:SIWsStatus" />
+          <s:element minOccurs="0" maxOccurs="1" name="ServiceResult" type="tns:CensusResult" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="CensusResult">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="CensusValues" type="tns:ArrayOfCensusInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfCensusInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="CensusInfo" nillable="true" type="tns:CensusInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="CensusInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Key" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Value" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="CityStateLookup">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UnregisteredUserEmail" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="UserID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="StateOrProvince" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CityStateLookupResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CityStateLookupResult" type="tns:SIWsOutputOfCityStateResult" />
+            <s:element name="SISubscriptionInfo" type="tns:SISubscriptionInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="SIWsOutputOfCityStateResult">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ServiceStatus" type="tns:SIWsStatus" />
+          <s:element minOccurs="0" maxOccurs="1" name="ServiceResult" type="tns:CityStateResult" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="CityStateResult">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StateOrProvinceCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StateOrProvinceName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CountryCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ZIPCodes" type="tns:ArrayOfString" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ZIPDistance">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UnregisteredUserEmail" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="UserID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ZIPOrPostalCode1" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ZIPOrPostalCode2" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ZIPDistanceResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ZIPDistanceResult" type="tns:SIWsOutputOfZIPDistanceResult" />
+            <s:element name="SISubscriptionInfo" type="tns:SISubscriptionInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="SIWsOutputOfZIPDistanceResult">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ServiceStatus" type="tns:SIWsStatus" />
+          <s:element minOccurs="0" maxOccurs="1" name="ServiceResult" type="tns:ZIPDistanceResult" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ZIPDistanceResult">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ZIP1" type="tns:BasicZIPInfo" />
+          <s:element minOccurs="0" maxOccurs="1" name="ZIP2" type="tns:BasicZIPInfo" />
+          <s:element minOccurs="0" maxOccurs="1" name="Distance" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="BasicZIPInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ZIPOrPostalCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StateOrProvinceCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CountryCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Latitude" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Longitude" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ClosestZIP">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UnregisteredUserEmail" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="UserID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Latitude" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Longitude" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ClosestZIPResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ClosestZIPResult" type="tns:SIWsOutputOfClosestZIPResult" />
+            <s:element name="SISubscriptionInfo" type="tns:SISubscriptionInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="SIWsOutputOfClosestZIPResult">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ServiceStatus" type="tns:SIWsStatus" />
+          <s:element minOccurs="0" maxOccurs="1" name="ServiceResult" type="tns:ClosestZIPResult" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ClosestZIPResult">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ZIP" type="tns:ZIPDistanceInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ZIPDistanceInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ZIPOrPostalCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StateOrProvinceCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CountryCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Latitude" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Longitude" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Distance" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ZIPCodesInRadius">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UnregisteredUserEmail" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="UserID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ZIPOrPostalCode" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="RadiusMiles" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ZIPCodesInRadiusResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ZIPCodesInRadiusResult" type="tns:SIWsOutputOfZIPCodesInRadiusResult" />
+            <s:element name="SISubscriptionInfo" type="tns:SISubscriptionInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="SIWsOutputOfZIPCodesInRadiusResult">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ServiceStatus" type="tns:SIWsStatus" />
+          <s:element minOccurs="0" maxOccurs="1" name="ServiceResult" type="tns:ZIPCodesInRadiusResult" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ZIPCodesInRadiusResult">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ZIPCodes" type="tns:ArrayOfZIPDistanceInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfZIPDistanceInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ZIPDistanceInfo" nillable="true" type="tns:ZIPDistanceInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ZIPCodesInRadiusFromLatLong">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UnregisteredUserEmail" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="UserID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Latitude" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Longitude" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="RadiusMiles" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ZIPCodesInRadiusFromLatLongResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ZIPCodesInRadiusFromLatLongResult" type="tns:SIWsOutputOfZIPCodesInRadiusResult" />
+            <s:element name="SISubscriptionInfo" type="tns:SISubscriptionInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetStatusCodesForMethod">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UnregisteredUserEmail" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="UserID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="MethodName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetStatusCodesForMethodResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetStatusCodesForMethodResult" type="tns:SIWsOutputOfMethodStatusRecord" />
+            <s:element name="SISubscriptionInfo" type="tns:SISubscriptionInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="SIWsOutputOfMethodStatusRecord">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ServiceStatus" type="tns:SIWsStatus" />
+          <s:element minOccurs="0" maxOccurs="1" name="ServiceResult" type="tns:MethodStatusRecord" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="MethodStatusRecord">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:SIWsResultArrayOfSIWsStatus">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="MethodName" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="SIWsResultArrayOfSIWsStatus">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Results" type="tns:ArrayOfSIWsStatus" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfSIWsStatus">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="SIWsStatus" nillable="true" type="tns:SIWsStatus" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetStatusCodes">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UnregisteredUserEmail" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="UserID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetStatusCodesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetStatusCodesResult" type="tns:SIWsOutputOfSIWsResultArrayOfMethodStatusRecord" />
+            <s:element name="SISubscriptionInfo" type="tns:SISubscriptionInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="SIWsOutputOfSIWsResultArrayOfMethodStatusRecord">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ServiceStatus" type="tns:SIWsStatus" />
+          <s:element minOccurs="0" maxOccurs="1" name="ServiceResult" type="tns:SIWsResultArrayOfMethodStatusRecord" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="SIWsResultArrayOfMethodStatusRecord">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Results" type="tns:ArrayOfMethodStatusRecord" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfMethodStatusRecord">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="MethodStatusRecord" nillable="true" type="tns:MethodStatusRecord" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetServiceInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UnregisteredUserEmail" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="UserID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetServiceInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetServiceInfoResult" type="tns:SIWsOutputOfSIWsResultArrayOfServiceInfoRecord" />
+            <s:element name="SISubscriptionInfo" type="tns:SISubscriptionInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="SIWsOutputOfSIWsResultArrayOfServiceInfoRecord">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ServiceStatus" type="tns:SIWsStatus" />
+          <s:element minOccurs="0" maxOccurs="1" name="ServiceResult" type="tns:SIWsResultArrayOfServiceInfoRecord" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="SIWsResultArrayOfServiceInfoRecord">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Results" type="tns:ArrayOfServiceInfoRecord" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfServiceInfoRecord">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ServiceInfoRecord" nillable="true" type="tns:ServiceInfoRecord" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ServiceInfoRecord">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="InfoKey" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="InfoValue" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="SILicenseInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="UnregisteredUserEmail" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="UserID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SILicenseInfo" type="tns:SILicenseInfo" />
+      <s:complexType name="SISubscriptionInfo">
+        <s:sequence>
+          <s:element name="LicenseStatusCode" type="s:int" />
+          <s:element minOccurs="0" name="LicenseStatus" type="s:string" />
+          <s:element name="LicenseActionCode" type="s:int" />
+          <s:element minOccurs="0" name="LicenseAction" type="s:string" />
+          <s:element name="RemainingHits" type="s:int" />
+          <s:element name="Amount" type="s:decimal" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SISubscriptionInfo" type="tns:SISubscriptionInfo" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="ZIPCodeLookupSoapIn">
+    <wsdl:part name="parameters" element="tns:ZIPCodeLookup" />
+  </wsdl:message>
+  <wsdl:message name="ZIPCodeLookupSoapOut">
+    <wsdl:part name="parameters" element="tns:ZIPCodeLookupResponse" />
+  </wsdl:message>
+  <wsdl:message name="ZIPCensusInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:ZIPCensusInfo" />
+  </wsdl:message>
+  <wsdl:message name="ZIPCensusInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:ZIPCensusInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="CityStateLookupSoapIn">
+    <wsdl:part name="parameters" element="tns:CityStateLookup" />
+  </wsdl:message>
+  <wsdl:message name="CityStateLookupSoapOut">
+    <wsdl:part name="parameters" element="tns:CityStateLookupResponse" />
+  </wsdl:message>
+  <wsdl:message name="ZIPDistanceSoapIn">
+    <wsdl:part name="parameters" element="tns:ZIPDistance" />
+  </wsdl:message>
+  <wsdl:message name="ZIPDistanceSoapOut">
+    <wsdl:part name="parameters" element="tns:ZIPDistanceResponse" />
+  </wsdl:message>
+  <wsdl:message name="ClosestZIPSoapIn">
+    <wsdl:part name="parameters" element="tns:ClosestZIP" />
+  </wsdl:message>
+  <wsdl:message name="ClosestZIPSoapOut">
+    <wsdl:part name="parameters" element="tns:ClosestZIPResponse" />
+  </wsdl:message>
+  <wsdl:message name="ZIPCodesInRadiusSoapIn">
+    <wsdl:part name="parameters" element="tns:ZIPCodesInRadius" />
+  </wsdl:message>
+  <wsdl:message name="ZIPCodesInRadiusSoapOut">
+    <wsdl:part name="parameters" element="tns:ZIPCodesInRadiusResponse" />
+  </wsdl:message>
+  <wsdl:message name="ZIPCodesInRadiusFromLatLongSoapIn">
+    <wsdl:part name="parameters" element="tns:ZIPCodesInRadiusFromLatLong" />
+  </wsdl:message>
+  <wsdl:message name="ZIPCodesInRadiusFromLatLongSoapOut">
+    <wsdl:part name="parameters" element="tns:ZIPCodesInRadiusFromLatLongResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetStatusCodesForMethodSoapIn">
+    <wsdl:part name="parameters" element="tns:GetStatusCodesForMethod" />
+  </wsdl:message>
+  <wsdl:message name="GetStatusCodesForMethodSoapOut">
+    <wsdl:part name="parameters" element="tns:GetStatusCodesForMethodResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetStatusCodesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetStatusCodes" />
+  </wsdl:message>
+  <wsdl:message name="GetStatusCodesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetStatusCodesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetServiceInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetServiceInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetServiceInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetServiceInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetRemainingHitsSoapIn">
+    <wsdl:part name="parameters" element="tns:SILicenseInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetRemainingHitsSoapOut">
+    <wsdl:part name="parameters" element="tns:SISubscriptionInfo" />
+  </wsdl:message>
+  <wsdl:portType name="AdvancedZipInfoSoap">
+    <wsdl:operation name="ZIPCodeLookup">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Lookup US ZIP Codes and Canadian Postal Codes.</wsdl:documentation>
+      <wsdl:input message="tns:ZIPCodeLookupSoapIn" />
+      <wsdl:output message="tns:ZIPCodeLookupSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ZIPCensusInfo">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Lookup 2000 US Cenus Info for 5 digit US ZIP Codes.</wsdl:documentation>
+      <wsdl:input message="tns:ZIPCensusInfoSoapIn" />
+      <wsdl:output message="tns:ZIPCensusInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CityStateLookup">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Lookup US ZIP Codes and Canadian Postal Codes by City and State or Province</wsdl:documentation>
+      <wsdl:input message="tns:CityStateLookupSoapIn" />
+      <wsdl:output message="tns:CityStateLookupSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ZIPDistance">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Calculates the distance (in miles) between two zip or postal codes.</wsdl:documentation>
+      <wsdl:input message="tns:ZIPDistanceSoapIn" />
+      <wsdl:output message="tns:ZIPDistanceSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ClosestZIP">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Finds the zip or postal code that is closest to a given point.</wsdl:documentation>
+      <wsdl:input message="tns:ClosestZIPSoapIn" />
+      <wsdl:output message="tns:ClosestZIPSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ZIPCodesInRadius">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Finds the zip or postal codes within a given radius (in miles) from a given ZIP or Postal code centroid.</wsdl:documentation>
+      <wsdl:input message="tns:ZIPCodesInRadiusSoapIn" />
+      <wsdl:output message="tns:ZIPCodesInRadiusSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ZIPCodesInRadiusFromLatLong">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Finds the zip or postal codes within a given radius (in miles) from a given point.</wsdl:documentation>
+      <wsdl:input message="tns:ZIPCodesInRadiusFromLatLongSoapIn" />
+      <wsdl:output message="tns:ZIPCodesInRadiusFromLatLongSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetStatusCodesForMethod">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Gets all status codes a method in the service might return.</wsdl:documentation>
+      <wsdl:input message="tns:GetStatusCodesForMethodSoapIn" />
+      <wsdl:output message="tns:GetStatusCodesForMethodSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetStatusCodes">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get all statuses this service might return.</wsdl:documentation>
+      <wsdl:input message="tns:GetStatusCodesSoapIn" />
+      <wsdl:output message="tns:GetStatusCodesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetServiceInfo">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get information about the web service</wsdl:documentation>
+      <wsdl:input message="tns:GetServiceInfoSoapIn" />
+      <wsdl:output message="tns:GetServiceInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRemainingHits">
+      <wsdl:input message="tns:GetRemainingHitsSoapIn" />
+      <wsdl:output message="tns:GetRemainingHitsSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AdvancedZipInfoSoap" type="tns:AdvancedZipInfoSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ZIPCodeLookup">
+      <soap:operation soapAction="http://www.strikeiron.com/ZIPCodeLookup" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ZIPCensusInfo">
+      <soap:operation soapAction="http://www.strikeiron.com/ZIPCensusInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CityStateLookup">
+      <soap:operation soapAction="http://www.strikeiron.com/CityStateLookup" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ZIPDistance">
+      <soap:operation soapAction="http://www.strikeiron.com/ZIPDistance" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ClosestZIP">
+      <soap:operation soapAction="http://www.strikeiron.com/ClosestZIP" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ZIPCodesInRadius">
+      <soap:operation soapAction="http://www.strikeiron.com/ZIPCodesInRadius" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ZIPCodesInRadiusFromLatLong">
+      <soap:operation soapAction="http://www.strikeiron.com/ZIPCodesInRadiusFromLatLong" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStatusCodesForMethod">
+      <soap:operation soapAction="http://www.strikeiron.com/GetStatusCodesForMethod" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStatusCodes">
+      <soap:operation soapAction="http://www.strikeiron.com/GetStatusCodes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetServiceInfo">
+      <soap:operation soapAction="http://www.strikeiron.com/GetServiceInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRemainingHits">
+      <soap:operation soapAction="http://wsparam.strikeiron.com/StrikeIron/ZIPPostalCodeInfo5/AdvancedZipInfo/GetRemainingHits" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AdvancedZipInfo">
+    <wsdl:port name="AdvancedZipInfoSoap" binding="tns:AdvancedZipInfoSoap">
+      <soap:address location="http://wsparam.strikeiron.com/StrikeIron/ZIPPostalCodeInfo5/AdvancedZipInfo" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
