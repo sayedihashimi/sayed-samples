@@ -1,12 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Target Name="InitalizeAppOffline">
+  <Target Name="InitalizeAppOffline" DependsOnTargets="GenerateGlobalPublishSetting">
     <!-- 
     This property needs to be declared inside of target because this is imported before
     the MSDeployPath property is defined as well as others -->
     <PropertyGroup>
+      <_RemoteCmpName Condition=" '$(_RemoteCmpName)'=='' ">$(MsDeployServiceUrl)</_RemoteCmpName>
       <MSDeployExe Condition=" '$(MSDeployExe)'=='' ">$(MSDeployPath)msdeploy.exe</MSDeployExe>
-    </PropertyGroup>    
+      <_AllowUntrustedCert>true</_AllowUntrustedCert>
+    </PropertyGroup>
   </Target>
 
   <PropertyGroup>
@@ -26,8 +28,8 @@
   <!--***********************************************************************
   Make sure app_offline-template.htm gets published as app_offline.htm
   ***************************************************************************-->
-  <Target Name="PublishAppOfflineToDest" 
-          BeforeTargets="MSDeployPublish" 
+  <Target Name="PublishAppOfflineToDest"
+          BeforeTargets="MSDeployPublish"
           DependsOnTargets="$(PublishAppOfflineToDest)">
     <ItemGroup>
       <_AoPubAppOfflineSourceProviderSetting Include="contentPath">
@@ -39,8 +41,8 @@
       </_AoPubAppOfflineSourceProviderSetting>
 
       <_AoPubAppOfflineDestProviderSetting Include="contentPath">
-        <Path>"$(DeployIisAppPath)/app_offline.htm"</Path>
-        <ComputerName>$(_PublishMsDeployServiceUrl)</ComputerName>
+        <Path>$(DeployIisAppPath)/app_offline.htm</Path>
+        <ComputerName>$(_RemoteCmpName)</ComputerName>
         <UserName>$(UserName)</UserName>
         <Password>$(Password)</Password>
         <EncryptPassword>$(DeployEncryptKey)</EncryptPassword>
@@ -52,13 +54,14 @@
       </_AoPubAppOfflineDestProviderSetting>
     </ItemGroup>
 
+    <!---->
+    <Message Text="AllowUntrustedCertificate: $(_AllowUntrustedCert)" Importance="high"/>
     <MSdeploy
-          MSDeployVersionsToTry="$(_MSDeployVersionsToTry)"
           Verb="sync"
           Source="@(_AoPubAppOfflineSourceProviderSetting)"
           Destination="@(_AoPubAppOfflineDestProviderSetting)"
           EnableRule="DoNotDeleteRule"
-          AllowUntrusted="$(AllowUntrustedCertificate)"
+          AllowUntrusted="$(_AllowUntrustedCert)"
           RetryAttempts="$(RetryAttemptsForDeployment)"
           SimpleSetParameterItems="@(_AoArchivePublishSetParam)"
           ExePath="$(MSDeployPath)" />
@@ -79,20 +82,20 @@
       <ObjectName>filePath</ObjectName>
       <AbsolutePath>$(AppOfflineTemplateFilename)</AbsolutePath>
     </MsDeploySkipRules>
-    
+
     <!-- We need to create a skip rule to ensure app_offline.htm doesn't get deleted if 
          the "Leave Extra files on destination (do not delete)" is not checked. -->
     <MsDeploySkipRules Include="SkipDeleteAppOffline">
       <ObjectName>filePath</ObjectName>
       <AbsolutePath>app_offline.htm</AbsolutePath>
     </MsDeploySkipRules>
-    
+
   </ItemGroup>
 
   <!--***********************************************************************
   When publish is completed we need to delete the app_offline.htm
   ***************************************************************************-->
-  <Target Name="DeleteAppOffline" AfterTargets="MSDeployPublish">
+  <Target Name="DeleteAppOffline" AfterTargets="MSDeployPublish" DependsOnTargets="InitalizeAppOffline">
     <!--
     %msdeploy% 
       -verb:delete 
@@ -105,7 +108,7 @@
     <ItemGroup>
       <_AoDeleteAppOfflineDestProviderSetting Include="contentPath">
         <Path>$(DeployIisAppPath)/app_offline.htm</Path>
-        <ComputerName>$(_PublishMsDeployServiceUrl)</ComputerName>
+        <ComputerName>$(_RemoteCmpName)</ComputerName>
         <UserName>$(UserName)</UserName>
         <Password>$(Password)</Password>
         <EncryptPassword>$(DeployEncryptKey)</EncryptPassword>
@@ -115,7 +118,7 @@
         <WebServerDirectory>$(_MSDeployDestinationWebServerDirectory)</WebServerDirectory>
       </_AoDeleteAppOfflineDestProviderSetting>
     </ItemGroup>
-    
+
     <!-- 
     We cannot use the MSDeploy/VSMSDeploy tasks for delete so we have to call msdeploy.exe directly.
     When they support delete we can just pass in @(_AoDeleteAppOfflineDestProviderSetting) as the dest
@@ -126,8 +129,9 @@
       <_Cmd Condition=" '%(_AoDeleteAppOfflineDestProviderSetting.UserName)' != '' ">$(_Cmd),username="%(_AoDeleteAppOfflineDestProviderSetting.UserName)"</_Cmd>
       <_Cmd Condition=" '%(_AoDeleteAppOfflineDestProviderSetting.Password)' != ''">$(_Cmd),password=$(Password)</_Cmd>
       <_Cmd Condition=" '%(_AoDeleteAppOfflineDestProviderSetting.AuthType)' != ''">$(_Cmd),authType="%(_AoDeleteAppOfflineDestProviderSetting.AuthType)"</_Cmd>
+      <_Cmd Condition=" '$(_AllowUntrustedCert)'=='true' ">$(_Cmd) -allowUntrusted</_Cmd>
     </PropertyGroup>
 
     <Exec Command="$(_Cmd)"/>
-  </Target>  
+  </Target>
 </Project>
