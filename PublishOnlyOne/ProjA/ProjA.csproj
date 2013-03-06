@@ -63,7 +63,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\PublishProfiles\siteone - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\siteone - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -76,6 +75,11 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <DeployOnBuild Condition=" '$(DeployProjA)'!='' ">$(DeployProjA)</DeployOnBuild>
+  </PropertyGroup>
+  
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
@@ -97,6 +101,7 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
@@ -104,4 +109,8 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Target Name="Custom" AfterTargets="Build">
+    <Message Text="DeployOnBuild: $(DeployOnBuild)" Importance="high"/>
+    <Message Text="DeployProjA: $(DeployProjA)" Importance="high"/>
+  </Target>
 </Project>
