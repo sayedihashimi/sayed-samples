@@ -1,0 +1,27 @@
+{
+  "author": "Sayed I. Hashimi",
+  "classifications": [],
+  "description": "template description",
+  "name": "Demo console project",
+  "defaultName": "ConsoleProject",
+  "identity": "Demo.Console.CSharp",
+  "groupIdentity": "Demo.Console",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "shortName": "democon",
+  "sourceName": "Demo.Console",
+  "guids": [
+    "{8E4D0122-A915-4223-B4D9-E98AC54E3EA5}",
+    "{917C3646-D5C6-4B19-ABF4-74C7564B5AEF}"
+  ],
+  "primaryOutputs": [
+    {
+      "path": "Demo.Console\\Demo.Console.csproj"
+    },
+    {
+      "path": "Demo.Console.Test\\Demo.Console.Test.csproj"
+    }
+  ]
+}
