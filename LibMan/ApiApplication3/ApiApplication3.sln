@@ -1,0 +1,89 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31423.177
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{57BAE1BC-D418-4A95-B292-C0E9324B0A54}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D57B72FA-A893-400C-AB2E-6919219A38D2}"
+	ProjectSection(SolutionItems) = preProject
+		ApiApplication3\Tests\.editorconfig = ApiApplication3\Tests\.editorconfig
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FBD2504D-975E-4B64-B938-7DDD19C7DB9D}"
+	ProjectSection(SolutionItems) = preProject
+		ApiApplication3\.dockerignore = ApiApplication3\.dockerignore
+		ApiApplication3\.editorconfig = ApiApplication3\.editorconfig
+		ApiApplication3\.gitattributes = ApiApplication3\.gitattributes
+		ApiApplication3\.gitignore = ApiApplication3\.gitignore
+		ApiApplication3\build.cake = ApiApplication3\build.cake
+		ApiApplication3\Directory.Build.props = ApiApplication3\Directory.Build.props
+		ApiApplication3\dotnet-tools.json = ApiApplication3\dotnet-tools.json
+		ApiApplication3\global.json = ApiApplication3\global.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{60E0F62E-605A-48F2-BFCA-C63B45AB6335}"
+	ProjectSection(SolutionItems) = preProject
+		ApiApplication3\README.md = ApiApplication3\README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiApplication3", "ApiApplication3\Source\ApiApplication3\ApiApplication3.csproj", "{32CD6C26-1DF3-4C07-8BE6-04D7F3F3EED1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiApplication3.IntegrationTest", "ApiApplication3\Tests\ApiApplication3.IntegrationTest\ApiApplication3.IntegrationTest.csproj", "{9DBD3A54-97B2-4C8B-BE4E-1F998682ABAE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{B4493FEA-D330-453B-ACDA-8CAE2F6451CC}"
+	ProjectSection(SolutionItems) = preProject
+		ApiApplication3\.github\dependabot.yml = ApiApplication3\.github\dependabot.yml
+		ApiApplication3\.github\release-drafter.yml = ApiApplication3\.github\release-drafter.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{1CBCA0EF-D16C-4BE6-9577-A0FC67E8B5F1}"
+	ProjectSection(SolutionItems) = preProject
+		ApiApplication3\.github\workflows\build.yml = ApiApplication3\.github\workflows\build.yml
+		ApiApplication3\.github\workflows\codeql-analysis.yml = ApiApplication3\.github\workflows\codeql-analysis.yml
+		ApiApplication3\.github\workflows\release-drafter.yml = ApiApplication3\.github\workflows\release-drafter.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{E5422D5C-ABD4-4150-BDF6-B823D746D157}"
+	ProjectSection(SolutionItems) = preProject
+		ApiApplication3\.github\CODE_OF_CONDUCT.md = ApiApplication3\.github\CODE_OF_CONDUCT.md
+		ApiApplication3\.github\CONTRIBUTING.md = ApiApplication3\.github\CONTRIBUTING.md
+		ApiApplication3\.github\PULL_REQUEST_TEMPLATE.md = ApiApplication3\.github\PULL_REQUEST_TEMPLATE.md
+		ApiApplication3\.github\SECURITY.md = ApiApplication3\.github\SECURITY.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ISSUE_TEMPLATE", "ISSUE_TEMPLATE", "{5C84BC3D-BEFC-4CC2-85B8-C3C4E286368A}"
+	ProjectSection(SolutionItems) = preProject
+		ApiApplication3\.github\ISSUE_TEMPLATE\BUG_REPORT.yml = ApiApplication3\.github\ISSUE_TEMPLATE\BUG_REPORT.yml
+		ApiApplication3\.github\ISSUE_TEMPLATE\FEATURE_REQUEST.yml = ApiApplication3\.github\ISSUE_TEMPLATE\FEATURE_REQUEST.yml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{32CD6C26-1DF3-4C07-8BE6-04D7F3F3EED1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32CD6C26-1DF3-4C07-8BE6-04D7F3F3EED1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32CD6C26-1DF3-4C07-8BE6-04D7F3F3EED1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32CD6C26-1DF3-4C07-8BE6-04D7F3F3EED1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DBD3A54-97B2-4C8B-BE4E-1F998682ABAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DBD3A54-97B2-4C8B-BE4E-1F998682ABAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DBD3A54-97B2-4C8B-BE4E-1F998682ABAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DBD3A54-97B2-4C8B-BE4E-1F998682ABAE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{32CD6C26-1DF3-4C07-8BE6-04D7F3F3EED1} = {57BAE1BC-D418-4A95-B292-C0E9324B0A54}
+		{9DBD3A54-97B2-4C8B-BE4E-1F998682ABAE} = {D57B72FA-A893-400C-AB2E-6919219A38D2}
+		{B4493FEA-D330-453B-ACDA-8CAE2F6451CC} = {FBD2504D-975E-4B64-B938-7DDD19C7DB9D}
+		{1CBCA0EF-D16C-4BE6-9577-A0FC67E8B5F1} = {B4493FEA-D330-453B-ACDA-8CAE2F6451CC}
+		{E5422D5C-ABD4-4150-BDF6-B823D746D157} = {60E0F62E-605A-48F2-BFCA-C63B45AB6335}
+		{5C84BC3D-BEFC-4CC2-85B8-C3C4E286368A} = {E5422D5C-ABD4-4150-BDF6-B823D746D157}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4E464B40-8B3D-427D-BA61-053DB0B94967}
+	EndGlobalSection
+EndGlobal
