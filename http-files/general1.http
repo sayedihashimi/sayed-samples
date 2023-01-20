@@ -1,0 +1,237 @@
+@searchTerm=some-search-term
+@host=https://httpbin.org/
+
+https://httpbin.org/get
+
+###
+
+https://httpbin.org/get
+
+###
+
+
+GET https://example.com/comments/1 HTTP/1.1
+
+###
+
+GET https://example.com/topics/1 HTTP/1.1
+
+###
+
+POST https://example.com/comments HTTP/1.1
+content-type: application/json
+
+{
+    "name": "sample",
+    "time": "Wed, 21 Oct 2015 18:27:50 GMT"
+}
+
+###
+
+GET https://example.com/comments?page=2&pageSize=10
+###
+
+# request with a query string
+GET https://httpbin.org/anything?page=2&pageSize=10
+###
+
+# request with a query string on multiple lines
+GET https://httpbin.org/anything
+    ?page=2
+    &pageSize=10
+
+###
+
+# request with a query string on multiple lines and headers
+GET https://httpbin.org/anything
+    ?page=2
+    &pageSize=10
+User-Agent: rest-client
+Accept-Language: en-GB,en-US;q=0.8,en;q=0.6,zh-CN;q=0.4
+Content-Type: application/json
+
+###
+
+# request with a request body as HTML
+POST https://httpbin.org/anything HTTP/1.1
+Content-Type: application/xml
+Authorization: token xxx
+
+<request>
+    <name>sample</name>
+    <time>Wed, 21 Oct 2015 18:27:50 GMT</time>
+</request>
+
+###
+
+# request with a request body that comes from a file, fullpath
+POST https://httpbin.org/anything HTTP/1.1
+Content-Type: application/xml
+Authorization: token xxx
+
+< C:\data\mycode\sayed-samples\http-files\demo.xml
+###
+
+# request with a request body that comes from a file, relative path
+POST https://httpbin.org/anything HTTP/1.1
+Content-Type: application/xml
+Authorization: token xxx
+
+< ./demo.xml
+###
+
+# request with 
+#    - a request body that comes from a file, relative path
+#    - file has HTTP variables that need to be replaced
+#       - indicated by <@ below.
+# When the request is sent, notice that {{searchTerm}} is replaced
+#    with the value that is defined at the top of this file.
+POST https://httpbin.org/anything HTTP/1.1
+Content-Type: application/xml
+Authorization: token xxx
+
+<@ ./demo.xml
+###
+
+# request with 
+#    - a request body that comes from a file, relative path
+#    - file has HTTP variables that need to be replaced
+#       - indicated by <@ below.
+#    - specifies file encoding (latin1 below)
+# When the request is sent, notice that {{searchTerm}} is replaced
+#    with the value that is defined at the top of this file.
+POST https://httpbin.org/anything HTTP/1.1
+Content-Type: application/xml
+Authorization: token xxx
+
+<@latin1 ./demo.xml
+###
+
+# reqeust with a basic JSON body
+POST {{host}}/anything
+Content-Type: application/json
+
+{
+  "identity": "some-value-here-json"
+}
+
+###
+
+# request with a JSON object as the body
+
+# sample put to update a template
+PUT {{host}}/anything
+Accept: application/json
+Content-Type: application/json
+
+{
+  "author": "author-here",
+  "name": "name here",
+  "tags": {
+    "additionalProp1": "ap1",
+    "additionalProp2": "ap2",
+    "additionalProp3": "ap3"
+  },
+  "classifications": [
+    "console","web"
+  ],
+  "shortName": [
+    "shortNameValue"
+  ],
+}
+###
+
+# request with a form URL encoded body
+POST {{host}}/anything
+Content-Type: application/x-www-form-urlencoded
+
+identity=some-value-here
+
+###
+
+# request with a form URL encoded body across multiple lines
+POST {{host}}/anything
+Content-Type: application/x-www-form-urlencoded
+
+name=foo
+&password=bar
+
+###
+
+# request with content is a multipart/form-data.
+# when this request is sent, the image is uploaded as well.
+POST {{host}}/anything
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="text"
+
+title
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="image"; filename="img1.png"
+Content-Type: image/png
+
+< ./img1.png
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+
+
+####################
+# Things that we don't currently support, and may never support
+####################
+
+# GraphQL request
+POST https://api.github.com/graphql
+Content-Type: application/json
+Authorization: Bearer xxx
+X-REQUEST-TYPE: GraphQL
+
+query ($name: String!, $owner: String!) {
+  repository(name: $name, owner: $owner) {
+    name
+    fullName: nameWithOwner
+    description
+    diskUsage
+    forkCount
+    stargazers(first: 5) {
+        totalCount
+        nodes {
+            login
+            name
+        }
+    }
+    watchers {
+        totalCount
+    }
+  }
+}
+
+{
+    "name": "vscode-restclient",
+    "owner": "Huachao"
+}
+
+###
+curl -X POST -F "field=value" "https://httpbin.org/anything"
+{
+  "author": "author-here",
+  "name": "name here",
+  "tags": {
+    "additionalProp1": "ap1",
+    "additionalProp2": "ap2",
+    "additionalProp3": "ap3"
+  },
+  "classifications": [
+    "console","web"
+  ],
+  "shortName": [
+    "shortNameValue"
+  ],
+}
+
+###
+
+curl -X POST -d '{"field":"value"}' "http://httpbin.org/post"
+
+
+###
