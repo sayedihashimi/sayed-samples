@@ -212,7 +212,7 @@ query ($name: String!, $owner: String!) {
 }
 
 ###
-curl -X POST -F "field=value" "https://httpbin.org/anything"
+curl -X POST -F "field=value1" "https://httpbin.org/anything"
 {
   "author": "author-here",
   "name": "name here",
@@ -231,7 +231,7 @@ curl -X POST -F "field=value" "https://httpbin.org/anything"
 
 ###
 
-curl -X POST -d '{"field":"value"}' "http://httpbin.org/post"
+curl -X POST -d '{"field1":"value1"}' "http://httpbin.org/post"
 
 
 ###
