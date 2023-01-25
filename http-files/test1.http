@@ -1,0 +1,30 @@
+@searchTerm=some-search-term
+@hostname=httpbin.org
+# variable using another variable
+@host=https://{{hostname}}/
+# variable using "dynamic variables"
+@createdAt = {{$datetime iso8601}}
+
+
+POST https://httpbin.org/anything
+Content-Type: application/json
+
+{
+    "request_id": "{{$guid}}",
+    "updated_at": "{{$timestamp}}",
+    "created_at": "{{$timestamp -1 d}}",
+    "review_count": "{{$randomInt 5 200}}",
+    "custom_date": "{{$datetime 'YYYY-MM-DD'}}",
+    "local_custom_date": "{{$localDatetime 'YYYY-MM-DD'}}"
+}
+###
+
+POST {{host}}/anything HTTP/1.1
+content-type: application/json
+
+{
+    "name": "sample1",
+    "time": "{{$timestamp}}"
+}
+
+###

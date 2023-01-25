@@ -1,5 +1,11 @@
 @searchTerm=some-search-term
-@host=https://httpbin.org/
+@hostname=httpbin.org
+# variable using another variable
+@host=https://{{hostname}}
+# variable using "dynamic variables"
+@createdAt = {{$datetime iso8601}}
+@fakeuser=fakeuser
+@fakepwd=fakepwd
 
 https://httpbin.org/get
 
@@ -10,7 +16,9 @@ https://httpbin.org/get
 ###
 
 
-GET https://example.com/comments/1 HTTP/1.1
+GET {{host}}/anything HTTP/1.1
+User-Agent: rest-client
+Content-Type: application/json
 
 ###
 
@@ -18,7 +26,7 @@ GET https://example.com/topics/1 HTTP/1.1
 
 ###
 
-POST https://example.com/comments HTTP/1.1
+POST {{host}}/anything HTTP/1.1
 content-type: application/json
 
 {
@@ -70,6 +78,24 @@ Content-Type: application/xml
 Authorization: token xxx
 
 < C:\data\mycode\sayed-samples\http-files\demo.xml
+###
+
+# request with a request body that comes from a file, fullpath
+#    note: \\ works as well as \
+POST https://httpbin.org/anything HTTP/1.1
+Content-Type: application/xml
+Authorization: token xxx
+
+< C:\\data\\mycode\\sayed-samples\\http-files\\demo.xml
+###
+
+# request with a request body that comes from a file, fullpath
+#    note: / works as well as \ and \\
+POST https://httpbin.org/anything HTTP/1.1
+Content-Type: application/xml
+Authorization: token xxx
+
+< C:/data/mycode/sayed-samples/http-files/demo.xml
 ###
 
 # request with a request body that comes from a file, relative path
@@ -174,13 +200,69 @@ Content-Type: image/png
 < ./img1.png
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
+###
+
+# request that uses
+GET https://httpbin.org/basic-auth/{{fakeuser}}/{{fakepwd}}
 
 
-####################
+###
+
+######
+# Named reqeusts samples
+######
+
+# @name login
+POST {{host}}/api/login HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+name=foo&password=bar
+
+###
+###
+
+#################################
 # Things that we don't currently support, and may never support
-####################
+#################################
 
-# GraphQL request
+######
+# Dynamic variables samples
+######
+
+# request using dynamic variables
+POST https://httpbin.org/anything
+Content-Type: application/json
+
+{
+    "request_id": "{{$guid}}",
+    "updated_at": "{{$timestamp}}",
+    "created_at": "{{$timestamp -1 d}}",
+    "review_count": "{{$randomInt 5 200}}",
+    "custom_date": "{{$datetime 'YYYY-MM-DD'}}",
+    "local_custom_date": "{{$localDatetime 'YYYY-MM-DD'}}"
+}
+
+###
+
+POST {{host}}/anything HTTP/1.1
+Content-Type: application/xml
+Date: {{$datetime rfc1123}}
+
+{
+    "user_name": "{{$dotenv USERNAME}}",
+    "request_id": "{{$guid}}",
+    "updated_at": "{{$timestamp}}",
+    "created_at": "{{$timestamp -1 d}}",
+    "review_count": "{{$randomInt 5 200}}",
+    "custom_date": "{{$datetime 'YYYY-MM-DD'}}",
+    "local_custom_date": "{{$localDatetime 'YYYY-MM-DD'}}"
+}
+
+###
+
+######
+# GraphQL samples
+######
 POST https://api.github.com/graphql
 Content-Type: application/json
 Authorization: Bearer xxx
@@ -212,6 +294,28 @@ query ($name: String!, $owner: String!) {
 }
 
 ###
+
+######
+# Curl samples
+######
+
+# curl request on one line
+curl -X 'POST' 'https://httpbin.org/anything' -H 'accept: application/json' -H 'Content-Type: application/json' -d '"id1-goes-here"'
+
+###
+
+# curl request over multiple lines
+curl -X 'POST' 'https://httpbin.org/anything' 
+-H 'accept: application/json' 
+-H 'Content-Type: application/json' 
+-d '"id2-goes-here"'
+###
+# curl request over multiple lines
+#  notice how there is two -h on a single line
+curl -X 'POST' 'https://httpbin.org/anything' 
+-H 'accept: application/json' -H 'Content-Type: application/json' 
+-d '"id3-goes-here"'
+###
 curl -X POST -F "field=value1" "https://httpbin.org/anything"
 {
   "author": "author-here",
@@ -231,7 +335,24 @@ curl -X POST -F "field=value1" "https://httpbin.org/anything"
 
 ###
 
-curl -X POST -d '{"field1":"value1"}' "http://httpbin.org/post"
+# curl command taking text from a file as the
+#    @filename is the syntax
+curl -X POST -d @postme.json "http://httpbin.org/post"
 
+###
 
+# curl command taking text from a file as the
+#    @filename is a relative path here
+curl -X POST -d @./postme.json "http://httpbin.org/post"
+
+###
+
+# curl command taking text from a file as the
+#    @filename is a full path here
+curl -X POST -d @C:\\data\\mycode\\sayed-samples\\http-files\\postme.json "http://httpbin.org/post"
+###
+
+# curl command taking text from a file as the
+#    @filename is a full path here, using \ instead of \\
+curl -X POST -d @C:/data/mycode/sayed-samples/http-files/postme.json "http://httpbin.org/post"
 ###
