@@ -126,8 +126,9 @@ namespace BlackjackGAFromGPT {
                 if (playerScore < dealerCard) {
                     return -1;
                 }
+                return 0;
             }
-            return 0;
+            return playerScore;
         }
         private List<int> SelectBestIndividual(List<List<int>> population) {
             List<int> bestIndividual = null;
