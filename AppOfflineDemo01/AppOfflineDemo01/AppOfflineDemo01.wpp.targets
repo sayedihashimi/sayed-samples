@@ -6,6 +6,7 @@
     the MSDeployPath property is defined as well as others -->
     <PropertyGroup>
       <_RemoteCmpName Condition=" '$(_RemoteCmpName)'=='' ">$(MsDeployServiceUrl)</_RemoteCmpName>
+      <MSDeployPath Condition="'$(MSDeployPath)'==''">$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\IIS Extensions\MSDeploy\3@InstallPath)</MSDeployPath>
       <MSDeployExe Condition=" '$(MSDeployExe)'=='' ">$(MSDeployPath)msdeploy.exe</MSDeployExe>
       <_AllowUntrustedCert>true</_AllowUntrustedCert>
     </PropertyGroup>
