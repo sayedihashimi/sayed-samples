@@ -7,6 +7,16 @@
 @fakeuser=fakeuser
 @fakepwd=fakepwd
 
+@searchTerm = some-search-term
+@hostname = httpbin.org
+# variable using another variable
+@host = https://{{hostname}}
+@name = Sayed
+@phone = 111-222-3333
+@sampleUrl = https://example.com
+
+
+
 https://httpbin.org/get
 
 ###
@@ -14,6 +24,32 @@ https://httpbin.org/get
 https://httpbin.org/get
 
 ###
+
+
+GET https://httpbin.org/get/{{searchTerm}}
+###
+GET https://httpbin.org/get?name=Sayed?&phone=111-222-3333
+###
+GET https://httpbin.org/get?name=Sayed?&phone=111-222-3333 HTTP/1.1
+Date: Wed, 27 Apr 2023 07:28:00 GMT
+###
+GET https://httpbin.org/get?name=Sayed?&phone=111-222-3333
+Cache-Control: max-age=604800
+Age: 100
+###
+POST https://httpbin.org/post HTTP/1.1
+Content-Type: application/json
+Accept-Language: en-US,en;q=0.5
+
+{
+    "name": "sample",
+    "time": "Wed, 21 Oct 2015 18:27:50 GMT",
+    "someUrl":"https://example.com/sample"
+}
+###
+
+
+
 
 
 GET {{host}}/anything HTTP/1.1
@@ -26,7 +62,11 @@ GET https://example.com/topics/1 HTTP/1.1
 
 ###
 
-POST {{host}}/anything HTTP/1.1
+GET https://httpbin.org/get?name=Sayed?&phone=111-222-3333 HTTP/1.1
+
+###
+
+POST https://httpbin.org/anything HTTP/1.1
 content-type: application/json
 
 {
@@ -184,6 +224,11 @@ name=foo
 
 ###
 
+# @note Are you sure?
+DELETE https://httpbin.org/anything
+
+###
+
 # request with content is a multipart/form-data.
 # when this request is sent, the image is uploaded as well.
 POST {{host}}/anything
@@ -238,24 +283,23 @@ Content-Type: application/json
     "updated_at": "{{$timestamp}}",
     "created_at": "{{$timestamp -1 d}}",
     "review_count": "{{$randomInt 5 200}}",
-    "custom_date": "{{$datetime 'YYYY-MM-DD'}}",
-    "local_custom_date": "{{$localDatetime 'YYYY-MM-DD'}}"
+    "custom_date": "{{$datetime 'yyyy-MM-dd'}}",
+    "local_custom_date": "{{$localDatetime 'yyyy-MM-dd'}}"
 }
 
 ###
 
 POST {{host}}/anything HTTP/1.1
-Content-Type: application/xml
+Content-Type: application/json
 Date: {{$datetime rfc1123}}
 
 {
-    "user_name": "{{$dotenv USERNAME}}",
     "request_id": "{{$guid}}",
     "updated_at": "{{$timestamp}}",
     "created_at": "{{$timestamp -1 d}}",
     "review_count": "{{$randomInt 5 200}}",
-    "custom_date": "{{$datetime 'YYYY-MM-DD'}}",
-    "local_custom_date": "{{$localDatetime 'YYYY-MM-DD'}}"
+    "custom_date": "{{$datetime 'yyyy-MM-dd'}}",
+    "local_custom_date": "{{$localDatetime 'yyyy-MM-dd'}}"
 }
 
 ###
@@ -320,7 +364,7 @@ curl -X POST -F "field=value1" "https://httpbin.org/anything"
 {
   "author": "author-here",
   "name": "name here",
-  "tags": {
+  "tags":{
     "additionalProp1": "ap1",
     "additionalProp2": "ap2",
     "additionalProp3": "ap3"
@@ -330,7 +374,7 @@ curl -X POST -F "field=value1" "https://httpbin.org/anything"
   ],
   "shortName": [
     "shortNameValue"
-  ],
+  ]
 }
 
 ###
@@ -355,4 +399,25 @@ curl -X POST -d @C:\\data\\mycode\\sayed-samples\\http-files\\postme.json "http:
 # curl command taking text from a file as the
 #    @filename is a full path here, using \ instead of \\
 curl -X POST -d @C:/data/mycode/sayed-samples/http-files/postme.json "http://httpbin.org/post"
+###
+
+
+GET https://httpbin.org/anything?page=2&pageSize=10
+
+
+###
+GET https://dotnetnew-api.azurewebsites.net/api/search/winforms
+###
+
+
+POST https://httpbin.org/anything HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+name=foo
+&password=bar
+
+###
+GET https://management.azure.com/subscriptions/{{subscriptionId}}/{{query}}?api-version={{apiversion}}
+Authorization: {{$aadToken}}
+Accept: application/json
 ###

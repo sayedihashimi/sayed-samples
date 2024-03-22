@@ -1,0 +1,11 @@
+# For more info on HTTP files go to https://aka.ms/vs/httpfile
+GET https://httpbin.org/image
+###
+
+
+
+POST https://httpbin.org/anything
+Content-Type: image/jpeg
+
+< C:\temp\doug-face-1.jpeg
+
