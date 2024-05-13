@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.34913.32
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SayedHa.OpenAPIInfo.Console", "SayedHa.OpenAPIInfo.Console\SayedHa.OpenAPIInfo.Console.csproj", "{3C0C7E25-E807-478C-A11C-7E8C2C4722FF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3C0C7E25-E807-478C-A11C-7E8C2C4722FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C0C7E25-E807-478C-A11C-7E8C2C4722FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C0C7E25-E807-478C-A11C-7E8C2C4722FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C0C7E25-E807-478C-A11C-7E8C2C4722FF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {952A1E10-4182-42A4-95E9-C4004F76F335}
+	EndGlobalSection
+EndGlobal
