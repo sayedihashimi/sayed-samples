@@ -66,24 +66,32 @@ public class ExploreCommand : CommandBase {
         //             write:contacts
 
         var sb = new StringBuilder();
-        sb.AppendLine($"{endpoint.OperationType.ToString().PadLeft(8)}");
-        sb.AppendLine($" {endpoint.Path}");
+        sb.AppendLine();
+        sb.Append($"{endpoint.OperationType.ToString()}");
+        sb.Append($" {endpoint.Path}");
         if (!string.IsNullOrWhiteSpace(endpoint.Summary)) {
             sb.AppendLine($" - {endpoint.Summary}");
         }
+        else {
+            sb.AppendLine();
+        }
+
         if(endpoint.Security.Count > 0) {
-			sb.Append("    Security: ");
+			sb.Append("  Security: ");
 			foreach (var sec in endpoint.Security) {
 				foreach (var secItem in sec) {
 					sb.AppendLine($" {secItem.Key.Type}");
 					if (secItem.Value.Any()) {
-						sb.AppendLine("      Scopes");
+						sb.AppendLine("    Scopes");
 					}
 					foreach (var scope in secItem.Value) {
-						sb.AppendLine($"          {scope}");
+						sb.AppendLine($"      {scope}");
 					}
 				}
 			}
+		}
+        else {
+			sb.Append("    Security: None");
 		}
 
 

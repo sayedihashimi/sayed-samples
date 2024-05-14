@@ -68,6 +68,9 @@ public class EndpointWithInfo {
 			Security.Add(sec);
 		}
 
+
+
+		Summary = foundOp.Value.Summary;
 	}
 	public string Path { get; set; }
 	public string Description { get; set; }
