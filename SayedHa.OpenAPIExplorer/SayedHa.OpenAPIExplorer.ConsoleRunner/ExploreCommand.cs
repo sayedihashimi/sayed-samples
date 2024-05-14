@@ -1,5 +1,6 @@
 ﻿using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.Text;
 using Microsoft.OpenApi.Models;
 using Microsoft.OpenApi.Readers;
 using Spectre.Console;
@@ -20,7 +21,10 @@ public class ExploreCommand : CommandBase {
 
                 PrintoutEndpoints(endpoints);
 
-                PromptForEndpoint(endpoints);
+                var endpoint = PromptForEndpoint(endpoints);
+
+                var endpointWithInfo = explorer.GetEndpointFor(endpoint.OperationType, endpoint.Path);
+                PrintEndpointWithInfo(endpointWithInfo);
                 // added here to avoid async/await warning
                 await Task.Delay(1000);
             }),
@@ -51,5 +55,38 @@ public class ExploreCommand : CommandBase {
 				.Title("Select endpoint")
 				.AddChoices(endpoints)
 		);
+    protected void ExplorePath(DocPathWithOperation pathAndOperation) {
+        
+    }
+    protected void PrintEndpointWithInfo(EndpointWithInfo endpoint) {
+        // get /api/Contact - Gets all contacts
+        //     Security: OAuth2
+        //         Scopes: 
+        //             read:contacts
+        //             write:contacts
 
+        var sb = new StringBuilder();
+        sb.AppendLine($"{endpoint.OperationType.ToString().PadLeft(8)}");
+        sb.AppendLine($" {endpoint.Path}");
+        if (!string.IsNullOrWhiteSpace(endpoint.Summary)) {
+            sb.AppendLine($" - {endpoint.Summary}");
+        }
+        if(endpoint.Security.Count > 0) {
+			sb.Append("    Security: ");
+			foreach (var sec in endpoint.Security) {
+				foreach (var secItem in sec) {
+					sb.AppendLine($" {secItem.Key.Type}");
+					if (secItem.Value.Any()) {
+						sb.AppendLine("      Scopes");
+					}
+					foreach (var scope in secItem.Value) {
+						sb.AppendLine($"          {scope}");
+					}
+				}
+			}
+		}
+
+
+		_reporter.WriteLine(sb.ToString());
+	}
 }

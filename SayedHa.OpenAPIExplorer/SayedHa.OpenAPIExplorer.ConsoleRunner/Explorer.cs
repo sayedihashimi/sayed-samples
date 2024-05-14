@@ -3,6 +3,7 @@ using Microsoft.OpenApi.Readers;
 using Microsoft.OpenApi.Extensions;
 using Microsoft.OpenApi;
 using System.Diagnostics;
+using System.Reflection.Metadata;
 
 namespace SayedHa.OpenAPIExplorer.ConsoleRunner; 
 public class Explorer {
@@ -13,7 +14,7 @@ public class Explorer {
 	internal OpenApiDocument? Document { get; private set; }
 
 	public List<DocPathWithOperation> GetEndpointsWithOperation() {
-		if (Document == null) {
+		if (Document is null) {
 			throw new ArgumentException("Document is null");
 		}
 
@@ -27,6 +28,12 @@ public class Explorer {
 
 		return result;
 	}
+	public EndpointWithInfo GetEndpointFor(OperationType opType, string path) {
+		if (Document is null) {
+			throw new ArgumentException("Document is null");
+		}
+		return new EndpointWithInfo(Document, opType, path);
+	}
 }
 public class DocPathWithOperation {
 	public DocPathWithOperation(OperationType operationType, string path) {
@@ -39,4 +46,33 @@ public class DocPathWithOperation {
 	override public string ToString() {
 		return $"{OperationType.ToString().PadLeft(8)} {Path}";
 	}
+}
+public class EndpointWithInfo {
+	public EndpointWithInfo(OpenApiDocument document,OperationType opType, string path) {
+		Debug.Assert(document != null);
+		Debug.Assert(!string.IsNullOrWhiteSpace(path));
+
+		OperationType = opType;
+		Path = path;
+		var foundPath = document.Paths.FirstOrDefault(p => p.Key == path);
+		if (foundPath.Value is null) {
+			throw new ArgumentException($"Path {path} not found");
+		}
+		var foundOp = foundPath.Value.Operations.FirstOrDefault(o => o.Key == opType);
+		if (foundOp.Value is null) {
+			throw new ArgumentException($"Operation {opType} not found for path {path}");
+		}
+
+		var security = foundOp.Value.Security;
+		foreach (var sec in security) {
+			Security.Add(sec);
+		}
+
+	}
+	public string Path { get; set; }
+	public string Description { get; set; }
+	public string Summary { get; set; }
+	public OperationType OperationType { get; set; }
+	public List<OpenApiSecurityRequirement> Security { get; set; } = new List<OpenApiSecurityRequirement>();
+	public List<OpenApiParameter> Parameters { get; set; } = new List<OpenApiParameter>();
 }
