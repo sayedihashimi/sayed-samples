@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SayedHa.OpenAPIExplorer.ConsoleRunner": {
+      "commandName": "Project",
+      "commandLineArgs": "Subcommand --paramname 1234526 --verbose"
+    }
+  }
+}
