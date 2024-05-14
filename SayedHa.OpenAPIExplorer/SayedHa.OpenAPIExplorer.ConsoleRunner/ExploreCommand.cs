@@ -2,6 +2,7 @@
 using System.CommandLine.Invocation;
 using Microsoft.OpenApi.Models;
 using Microsoft.OpenApi.Readers;
+using Spectre.Console;
 
 namespace SayedHa.OpenAPIExplorer.ConsoleRunner; 
 public class ExploreCommand : CommandBase {
@@ -18,6 +19,8 @@ public class ExploreCommand : CommandBase {
 				var endpoints = explorer.GetEndpointsWithOperation();
 
                 PrintoutEndpoints(endpoints);
+
+                PromptForEndpoint(endpoints);
                 // added here to avoid async/await warning
                 await Task.Delay(1000);
             }),
@@ -41,6 +44,12 @@ public class ExploreCommand : CommandBase {
             // var opString = new 
             _reporter.WriteLine($"{item.OperationType.ToString().PadLeft(8)} {item.Path}");
 		}
-
 	}
+    protected DocPathWithOperation PromptForEndpoint(List<DocPathWithOperation> endpoints) =>
+		AnsiConsole.Prompt(
+			new SelectionPrompt<DocPathWithOperation>()
+				.Title("Select endpoint")
+				.AddChoices(endpoints)
+		);
+
 }

@@ -35,4 +35,8 @@ public class DocPathWithOperation {
 	}
 	public OperationType OperationType { get; set; }
 	public string Path { get; set; }
+
+	override public string ToString() {
+		return $"{OperationType.ToString().PadLeft(8)} {Path}";
+	}
 }
