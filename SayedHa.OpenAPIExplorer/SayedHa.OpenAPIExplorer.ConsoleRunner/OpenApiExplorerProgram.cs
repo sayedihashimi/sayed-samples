@@ -15,7 +15,7 @@ public class OpenApiExplorerProgram {
     public Task<int> Execute(string[] args) {
         _parser = new CommandLineBuilder()
                     .AddCommand(
-                        new MyCommand(GetFromServices<IReporter>()).CreateCommand())
+                        new ExploreCommand(GetFromServices<IReporter>()).CreateCommand())
                     .UseDefaults()
                     .Build();
 
