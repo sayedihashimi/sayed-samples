@@ -59,13 +59,15 @@ public class ExploreCommand : CommandBase {
         
     }
     protected void PrintEndpointWithInfo(EndpointWithInfo endpoint) {
-        // get /api/Contact - Gets all contacts
-        //     Security: OAuth2
-        //         Scopes: 
-        //             read:contacts
-        //             write:contacts
+		// get /api/Contact - Gets all contacts
+		//   Security: OAuth2
+		//     Scopes: 
+		//       read:contacts
+		//       write:contacts
+		// Parameters:
+		//   foo: string
 
-        var sb = new StringBuilder();
+		var sb = new StringBuilder();
         sb.AppendLine();
         sb.Append($"{endpoint.OperationType.ToString()}");
         sb.Append($" {endpoint.Path}");
@@ -93,7 +95,29 @@ public class ExploreCommand : CommandBase {
         else {
 			sb.Append("    Security: None");
 		}
+		
 
+        // print parameters
+        if (endpoint.Parameters.Any()) {
+			sb.AppendLine("  Parameters: ");
+			foreach (var param in endpoint.Parameters) {
+				sb.AppendLine($"    {param.Name}: {param.Schema.Type}");
+			}
+        }
+        else {
+            sb.AppendLine("  Parameters: None");
+		}
+
+        // print responses
+        if (endpoint.ResponsesWithKey.Any()) {
+			sb.AppendLine("  Responses: ");
+			foreach (var (key, response) in endpoint.ResponsesWithKey) {
+                sb.AppendLine($"     {key} - {response.Description}");
+			}
+		}
+        else {
+			sb.AppendLine("  Responses: None");
+		}
 
 		_reporter.WriteLine(sb.ToString());
 	}

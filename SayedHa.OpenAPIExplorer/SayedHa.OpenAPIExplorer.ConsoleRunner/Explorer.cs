@@ -68,7 +68,12 @@ public class EndpointWithInfo {
 			Security.Add(sec);
 		}
 
-
+		foreach(var param in foundOp.Value.Parameters) {
+			Parameters.Add(param);
+		}
+		foreach (var response in foundOp.Value.Responses) {
+			ResponsesWithKey.Add((response.Key, response.Value));
+		}
 
 		Summary = foundOp.Value.Summary;
 	}
@@ -78,4 +83,6 @@ public class EndpointWithInfo {
 	public OperationType OperationType { get; set; }
 	public List<OpenApiSecurityRequirement> Security { get; set; } = new List<OpenApiSecurityRequirement>();
 	public List<OpenApiParameter> Parameters { get; set; } = new List<OpenApiParameter>();
+	// public List<OpenApiResponse> Response { get; set; } = new List<OpenApiResponse>();
+	public List<(string key,OpenApiResponse response)>ResponsesWithKey = new List<(string key, OpenApiResponse response)>();
 }
