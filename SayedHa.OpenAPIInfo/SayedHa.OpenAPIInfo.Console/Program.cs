@@ -61,11 +61,16 @@ void PrintOutEndpointsAndAuth(OpenApiDocument openApiDoc) {
 			Console.WriteLine($"  {operation.Key}");
 
 			var security = operation.Value.Security;
+			var securityFound = false;
 			foreach(var sec in security) {
 				foreach(var secItem in sec) {
-					Console.WriteLine($"    Security: {secItem.Key} - {secItem.Key.Type}");
+					securityFound = true;
+					Console.WriteLine($"    Security: {secItem.Key.Type}");
 					secItem.Value.ToList().ForEach(x => Console.WriteLine($"      - {x}"));
 				}
+			}
+			if (!securityFound) {
+				Console.WriteLine("    Security: None");
 			}
 		}
 
