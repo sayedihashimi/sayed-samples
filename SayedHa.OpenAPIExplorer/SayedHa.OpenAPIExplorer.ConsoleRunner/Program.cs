@@ -1,3 +1,3 @@
 ﻿using SayedHa.OpenAPIExplorer.ConsoleRunner;
 
-new OpenApiExplorerProgram().Execute(args);
+await new OpenApiExplorerProgram().Execute(args);

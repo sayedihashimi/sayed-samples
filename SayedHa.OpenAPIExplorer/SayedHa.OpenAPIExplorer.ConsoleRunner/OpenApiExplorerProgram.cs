@@ -15,7 +15,7 @@ namespace SayedHa.OpenAPIExplorer.ConsoleRunner {
         public Task<int> Execute(string[] args) {
             _parser = new CommandLineBuilder()
                         .AddCommand(
-                            new Subcommand(GetFromServices<IReporter>()).CreateCommand())
+                            new MyCommand(GetFromServices<IReporter>()).CreateCommand())
                         .UseDefaults()
                         .Build();
 
