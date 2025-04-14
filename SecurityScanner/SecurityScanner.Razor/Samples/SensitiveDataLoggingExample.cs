@@ -1,6 +1,6 @@
 using System;
 
-namespace SecurityScanner.Razor;
+namespace SecurityScanner.Razor.Samples;
 public class SensitiveDataLoggingExample
 {
     // SECURITY ISSUE: Logging sensitive data

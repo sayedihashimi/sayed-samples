@@ -1,6 +1,6 @@
 using System.Net.Http;
 
-namespace SecurityScanner.Razor;
+namespace SecurityScanner.Razor.Samples;
 public class CertificateValidationBypassExample
 {
     // SECURITY ISSUE: Improper certificate validation

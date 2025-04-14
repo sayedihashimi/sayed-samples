@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace SecurityScanner.Razor;
+namespace SecurityScanner.Razor.Samples;
 public class CommandInjectionController : Controller
 {
     // SECURITY ISSUE: Command Injection

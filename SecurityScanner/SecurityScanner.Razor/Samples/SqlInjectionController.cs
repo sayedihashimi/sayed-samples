@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 
-namespace SecurityScanner.Razor;
+namespace SecurityScanner.Razor.Samples;
 public class SqlInjectionController : Controller
 {
     // SECURITY ISSUE: SQL Injection

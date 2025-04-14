@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace SecurityScanner.Razor;
+namespace SecurityScanner.Razor.Samples;
 public class OpenRedirectController : Controller
 {
     // SECURITY ISSUE: Open Redirect

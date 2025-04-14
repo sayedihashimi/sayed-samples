@@ -1,4 +1,4 @@
-namespace SecurityScanner.Razor;
+namespace SecurityScanner.Razor.Samples;
 public class HardcodedSecretExample
 {
     // SECURITY ISSUE: Hardcoded secret

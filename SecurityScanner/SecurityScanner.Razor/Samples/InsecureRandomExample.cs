@@ -1,12 +1,19 @@
 using System;
 
-namespace SecurityScanner.Razor;
-public class InsecureRandomExample
-{
-    // SECURITY ISSUE: Insecure randomness
-    public string GenerateResetCode()
-    {
+namespace SecurityScanner.Razor.Samples;
+public class InsecureRandomExample {
+    private static readonly HashSet<string> IssuedResetCodes = [];
+
+    // SECURITY ISSUE: Insecure randomness used for password reset tokens
+    public string GenerateResetCode(string userEmail) {
         var rand = new Random();
-        return rand.Next(100000, 999999).ToString();
+        var resetCode = rand.Next(100000, 999999).ToString();
+
+        // Simulate issuing a reset token (insecure due to predictable output)
+        IssuedResetCodes.Add(resetCode);
+        Console.WriteLine($"Issued reset code for {userEmail}: {resetCode}");
+
+        return resetCode;
+
     }
 }
