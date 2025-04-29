@@ -4,7 +4,6 @@ namespace SecurityScanner.Razor.Samples;
 public class InsecureRandomExample {
     private static readonly HashSet<string> IssuedResetCodes = [];
 
-    // SECURITY ISSUE: Insecure randomness used for password reset tokens
     public string GenerateResetCode(string userEmail) {
         var rand = new Random();
         var resetCode = rand.Next(100000, 999999).ToString();

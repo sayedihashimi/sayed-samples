@@ -3,7 +3,6 @@ using System.Net.Http;
 namespace SecurityScanner.Razor.Samples;
 public class CertificateValidationBypassExample
 {
-    // SECURITY ISSUE: Improper certificate validation
     public void MakeRequest()
     {
         var handler = new HttpClientHandler

@@ -4,7 +4,6 @@ using Microsoft.Data.SqlClient;
 namespace SecurityScanner.Razor.Samples;
 public class SqlInjectionController : Controller
 {
-    // SECURITY ISSUE: SQL Injection
     public IActionResult GetUser(string username)
     {
         var query = $"SELECT * FROM Users WHERE Username = '{username}'";

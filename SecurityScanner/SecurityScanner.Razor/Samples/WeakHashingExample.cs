@@ -4,7 +4,6 @@ using System.Text;
 namespace SecurityScanner.Razor.Samples;
 public class WeakHashingExample
 {
-    // SECURITY ISSUE: Weak hash algorithm
     public string HashPassword(string input)
     {
         using var md5 = MD5.Create();

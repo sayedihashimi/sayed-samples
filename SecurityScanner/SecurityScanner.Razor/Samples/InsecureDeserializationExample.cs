@@ -5,7 +5,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace SecurityScanner.Razor.Samples;
 public class InsecureDeserializationExample
 {
-    // SECURITY ISSUE: Insecure deserialization
     public object Deserialize(byte[] data)
     {
 // pragma is required, otherwise the line of code bellow will show an error
