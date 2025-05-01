@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36007.44 main
+VisualStudioVersion = 17.14.36007.44
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sayedha.Analyzers.ProblemSamples", "Sayedha.Analyzers.ProblemSamples\Sayedha.Analyzers.ProblemSamples.csproj", "{75B55CDD-739F-BE1A-F4BA-68ACB8B15118}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{C68EF09E-48E0-4560-9C6B-A9255EF178D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{75B55CDD-739F-BE1A-F4BA-68ACB8B15118}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75B55CDD-739F-BE1A-F4BA-68ACB8B15118}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75B55CDD-739F-BE1A-F4BA-68ACB8B15118}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C68EF09E-48E0-4560-9C6B-A9255EF178D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C68EF09E-48E0-4560-9C6B-A9255EF178D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C68EF09E-48E0-4560-9C6B-A9255EF178D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C68EF09E-48E0-4560-9C6B-A9255EF178D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

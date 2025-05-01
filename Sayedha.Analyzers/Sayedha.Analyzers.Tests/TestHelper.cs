@@ -47,7 +47,6 @@ namespace Sayedha.Analyzers.Tests {
 
             foreach(var type in typesToAdd) {
                 project = project
-                            .AddMetadataReference(MetadataReference.CreateFromFile(typeof(object).Assembly.Location))
                             .AddMetadataReferences(TestHelper.GetAllReferencesNeededForType(type));
             }
 
