@@ -23,6 +23,7 @@ public static class Program {
                 typeof(object), typeof(ImproperCertificateValidationAnalyzer),typeof(HttpClientHandler));
 
             Assert.Single(diagnostics);
+            Assert.Equal("ICV001", diagnostics[0].Id);
         }
 
         // I can't get this test to recognize the Func<> class for some reason.
@@ -30,7 +31,7 @@ public static class Program {
         [Fact]
         public async Task TestLiteralTrueAssignmentFromMethod() {
             var code = @"
-using System.Collections.Immutable;
+using System;
 using System.Net.Http;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
@@ -50,7 +51,7 @@ public class Program {
         var client = new HttpClient(handler);
         client.GetStringAsync(""https://example.com"").Wait();
     }
-    private static Func<HttpRequestMessage, X509Certificate2?, X509Chain?, SslPolicyErrors, bool> GetServerCallback() {
+    private static Func<HttpRequestMessage, X509Certificate2, X509Chain, SslPolicyErrors, bool> GetServerCallback() {
         return (_, __, ___, ____) => true;
     }
 }";
@@ -65,11 +66,14 @@ public class Program {
                 typeof(X509Chain),
                 typeof(SslPolicyErrors),
                 typeof(Uri),
-                typeof(System.Func<HttpRequestMessage, X509Certificate2, X509Chain, SslPolicyErrors, bool>),
-                typeof(System.RuntimeTypeHandle),
-                typeof(System.Func<bool>));
+                typeof(System.Func<HttpRequestMessage, X509Certificate2, X509Chain, SslPolicyErrors, bool>));
 
-            Assert.Single(diagnostics);
+            Assert.Equal(2, diagnostics.Length);
+            foreach(var diag in diagnostics) {
+                Assert.Equal("ICV001", diag.Id);
+            }
+
+            
         }
     }
 }
