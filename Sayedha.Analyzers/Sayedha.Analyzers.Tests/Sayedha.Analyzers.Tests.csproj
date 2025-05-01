@@ -114,8 +114,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="ImmutableArrayTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -124,10 +125,6 @@
     <ProjectReference Include="..\Sayedha.Analyzers.Shared\Sayedha.Analyzers.Shared.csproj">
       <Project>{ab791f4a-fb8a-4850-b15b-e828f22602d9}</Project>
       <Name>Sayedha.Analyzers.Shared</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\src\Sayedha.Analyzers\Sayedha.Analyzers.csproj">
-      <Project>{b59b802a-8cc0-4127-be61-95731710c0d8}</Project>
-      <Name>Sayedha.Analyzers</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
