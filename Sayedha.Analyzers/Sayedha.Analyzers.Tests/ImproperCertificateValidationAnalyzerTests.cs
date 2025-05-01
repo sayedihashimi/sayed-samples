@@ -2,10 +2,10 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Sayedha.Analyzers.Shared;
 using System.Threading.Tasks;
 
-namespace Sayedha.Analyzers.Tests2 {
+namespace Sayedha.Analyzers.Tests {
     public class ImproperCertificateValidationAnalyzerTests {
         [Fact]
-        public async Task FirstTest() {
+        public async Task TestLiteralTrueAssignment() {
             var code = @"
 using System.Net.Http;
 public static class Program {

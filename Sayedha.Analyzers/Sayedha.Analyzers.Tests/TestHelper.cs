@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sayedha.Analyzers.Tests2 {
+namespace Sayedha.Analyzers.Tests {
     public class TestHelper {
         public static MetadataReference[] GetAllReferencesNeededForType(Type type) {
             var files = GetAllAssemblyFilesNeededForType(type);
