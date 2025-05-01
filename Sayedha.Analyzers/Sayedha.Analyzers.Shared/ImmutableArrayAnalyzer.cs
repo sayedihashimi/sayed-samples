@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sayedha.Analyzers.Analyzers {
+namespace Sayedha.Analyzers {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class CreationAnalyzer : DiagnosticAnalyzer {
         private static DiagnosticDescriptor DiagnosticDescriptor =
@@ -18,7 +18,7 @@ namespace Sayedha.Analyzers.Analyzers {
                 "Bad way of creating immutable array",
                 "Bad way of creating immutable array",
                 "Immutable arrays",
-                DiagnosticSeverity.Warning,
+                DiagnosticSeverity.Error,
                 isEnabledByDefault: true);
 
         public override ImmutableArray<DiagnosticDescriptor>
