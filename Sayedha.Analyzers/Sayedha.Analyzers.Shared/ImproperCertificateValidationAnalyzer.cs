@@ -30,9 +30,6 @@ namespace Sayedha.Analyzers.Shared {
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
         public override void Initialize(AnalysisContext context) {
-            if (!System.Diagnostics.Debugger.IsAttached) {
-                System.Diagnostics.Debugger.Launch();
-            }
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
             context.RegisterSyntaxNodeAction(AnalyzeNode2, 
