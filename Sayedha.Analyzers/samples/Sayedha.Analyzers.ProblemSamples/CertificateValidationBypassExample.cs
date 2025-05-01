@@ -18,8 +18,6 @@ namespace Sayedha.Analyzers.Samples {
 
             var client = new HttpClient(handler);
             client.GetStringAsync("https://example.com").Wait();
-
-            var array1 = ImmutableArray<int>.Empty.Add(1);
         }
 
         private Func<HttpRequestMessage, X509Certificate2?, X509Chain?, SslPolicyErrors, bool> GetServerCallback() {
