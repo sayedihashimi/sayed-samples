@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Net.Http;
 
 namespace SecurityScanner.Razor.Samples;
@@ -11,5 +12,7 @@ public class CertificateValidationBypassExample
         };
         var client = new HttpClient(handler);
         client.GetStringAsync("https://example.com").Wait();
+
+        var array1 = ImmutableArray<int>.Empty.Add(1);
     }
 }
