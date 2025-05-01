@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sayedha.Analyzers {
+namespace Sayedha.Analyzers.Shared {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class CreationAnalyzer : DiagnosticAnalyzer {
         private static DiagnosticDescriptor DiagnosticDescriptor =

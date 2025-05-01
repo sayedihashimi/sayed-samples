@@ -8,7 +8,7 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Linq.Expressions;
 
-namespace Sayedha.Analyzers {
+namespace Sayedha.Analyzers.Shared {
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ImproperCertificateValidationAnalyzer : DiagnosticAnalyzer {
