@@ -32,51 +32,63 @@ namespace Sayedha.Analyzers.Shared {
         public override void Initialize(AnalysisContext context) {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
-            context.RegisterSyntaxNodeAction(AnalyzeNode2, 
+            context.RegisterSyntaxNodeAction(AnalyzeNode, 
                 SyntaxKind.SimpleLambdaExpression, 
                 SyntaxKind.ParenthesizedLambdaExpression, 
                 SyntaxKind.AnonymousMethodExpression);
         }
 
+        /// <summary>
+        /// This will check for: 
+        /// 
+        /// var handler = new HttpClientHandler {
+        ///     ServerCertificateCustomValidationCallback = (_, __, ___, ____) => true
+        /// }
+        /// </summary>
+        /// <param name="context"></param>
         private static void AnalyzeNode(SyntaxNodeAnalysisContext context) {
-            if (context.Node is ParenthesizedLambdaExpressionSyntax lambdaExpression) {
-                // Check if the lambda always returns true
-                if (lambdaExpression.Body is LiteralExpressionSyntax literalExpression &&
-                    literalExpression.IsKind(SyntaxKind.TrueLiteralExpression)) {
-                    var parentAssignment = lambdaExpression.Parent as AssignmentExpressionSyntax;
-                    if (parentAssignment?.Left is MemberAccessExpressionSyntax memberAccess &&
-                        memberAccess.Name.Identifier.Text == "ServerCertificateCustomValidationCallback" &&
-                        memberAccess.Expression is IdentifierNameSyntax identifierName &&
-                        identifierName.Identifier.Text == "HttpClientHandler") {
-                        var diagnostic = Diagnostic.Create(Rule, lambdaExpression.GetLocation());
-                        context.ReportDiagnostic(diagnostic);
-                    }
-                }
-            }
-        }
-
-        private static void AnalyzeNode2(SyntaxNodeAnalysisContext context) {
             var node = (ParenthesizedLambdaExpressionSyntax)context.Node;
 
+            // check that we are return True literal to the lamdba expression
             if(!(node.Body is LiteralExpressionSyntax literalExpression &&
                 literalExpression.IsKind(SyntaxKind.TrueLiteralExpression))) {
                 return;
             }
 
+            // parent node must be an assignment
             if (!(node.Parent is AssignmentExpressionSyntax parentAssignment)) {
                 return;
             }
 
+            // left side of the parent node must be a property that is being assigned
             if(!(parentAssignment?.Left is IdentifierNameSyntax idName)) {
+                return;
+            }
+
+            if (!(context.SemanticModel.GetSymbolInfo(idName).Symbol is IPropertySymbol sym)) {
+                return;
+            }
+
+            // check that the type is System.Net.Http.HttpClientHandler and that the
+            //  property being assigned is ServerCertificateCustomValidationCallback
+            if (!(GetFullnameNamespace(sym.ContainingNamespace).Equals("System.Net.Http") &&
+                sym.ContainingType.Name.Equals("HttpClientHandler") &&
+                sym.Name.Equals("ServerCertificateCustomValidationCallback"))) {
                 return;
             }
 
             context.ReportDiagnostic(
                 Diagnostic.Create(Rule,
                 node.Parent.GetLocation()));
+        }
+        private static string GetFullnameNamespace(INamespaceSymbol ns) {
+            if (ns.IsGlobalNamespace)
+                return "";
 
+            if (ns.ContainingNamespace.IsGlobalNamespace)
+                return ns.Name;
 
+            return GetFullnameNamespace(ns.ContainingNamespace) + "." + ns.Name;
         }
     }
-
 }
