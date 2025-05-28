@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AspireCliReact01.ServiceDefaults\AspireCliReact01.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\AspireShared\AspireShared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
