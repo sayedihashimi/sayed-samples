@@ -1,0 +1,13 @@
+GET https://localhost:7508/taskitems
+
+###
+
+POST https://localhost:7508/taskitems
+Content-Type: application/json
+
+{
+  "name": "Sample Task",
+  "isComplete": false
+}
+
+###
