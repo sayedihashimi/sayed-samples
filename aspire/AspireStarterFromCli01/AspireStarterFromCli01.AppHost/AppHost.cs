@@ -9,4 +9,7 @@ builder.AddProject<Projects.AspireStarterFromCli01_Web>("webfrontend")
     .WithReference(apiService)
     .WaitFor(apiService);
 
+builder.AddNpmApp("vuefrontend", "../vue-frontend/", "dev")
+    .WithEndpoint(targetPort: 5173);
+
 builder.Build().Run();
