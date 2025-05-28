@@ -10,6 +10,7 @@ builder.AddProject<Projects.AspireCliReact01_Web>("webfrontend")
     .WaitFor(apiService);
 
 builder.AddNpmApp("my-frontend", "../my-frontend/", "dev")
-        .WithHttpEndpoint(targetPort: 5173);
+    .WithReference(apiService)
+    .WithHttpEndpoint(targetPort: 5173);
 
 builder.Build().Run();
