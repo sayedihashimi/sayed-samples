@@ -1,0 +1,61 @@
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f7f3e9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+header, footer {
+    background: #7c4a02;
+    color: #fff;
+    padding: 1rem;
+    text-align: center;
+}
+.menu-list, .order-table {
+    margin: 2rem auto;
+    max-width: 600px;
+    background: #fffbe7;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    padding: 1.5rem;
+}
+.menu-item, .menu-item-detail {
+    border-bottom: 1px solid #e0cfa9;
+    padding: 1rem 0;
+}
+.menu-item:last-child {
+    border-bottom: none;
+}
+.menu-item h3, .menu-item-detail h2 {
+    margin: 0 0 0.5rem 0;
+    color: #7c4a02;
+}
+.price {
+    float: right;
+    color: #b86b1b;
+}
+button {
+    background: #b86b1b;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem 1.2rem;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 0.5rem;
+}
+button:hover {
+    background: #7c4a02;
+}
+table.order-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+table.order-table th, table.order-table td {
+    border-bottom: 1px solid #e0cfa9;
+    padding: 0.5rem 0.7rem;
+    text-align: left;
+}
+table.order-table th {
+    background: #f7e3b5;
+}

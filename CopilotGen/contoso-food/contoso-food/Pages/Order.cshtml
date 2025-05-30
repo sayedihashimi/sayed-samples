@@ -1,0 +1,35 @@
+@page
+@model OrderModel
+@{
+    ViewData["Title"] = "Order";
+}
+<h1>Your Order</h1>
+@if (Model.OrderItems.Count == 0)
+{
+    <p>Your order is empty.</p>
+}
+else
+{
+    <table class="order-table">
+        <thead>
+            <tr><th>Item</th><th>Price</th><th>Remove</th></tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.OrderItems)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>$@item.Price</td>
+                <td>
+                    <form method="post" asp-page-handler="Remove" asp-route-id="@item.Id">
+                        <button type="submit">Remove</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <form method="post" asp-page-handler="Submit">
+        <button type="submit">Submit Order</button>
+    </form>
+}

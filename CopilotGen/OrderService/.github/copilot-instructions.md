@@ -1,0 +1,3 @@
+<!-- Use this file to provide workspace-specific custom instructions to Copilot. For more details, visit https://code.visualstudio.com/docs/copilot/copilot-customization#_use-a-githubcopilotinstructionsmd-file -->
+
+This project is a .NET 8+ ASP.NET Core Web API for managing customer orders. Use RESTful best practices, attribute routing, async methods, and proper HTTP status codes. The main model is `Order` with properties: OrderId, CustomerId, OrderDate, Items, and TotalAmount. Use in-memory storage for orders. Ensure OpenAPI/Swagger is enabled for API documentation. Place any CSS in `.css` files, not in `<style>` tags.
