@@ -1,0 +1,16 @@
+@model TodoApp.Models.TodoItem
+@{
+    var index = ViewData["Index"] as int? ?? 0;
+}
+<li class="todo-item">
+    <span>@Model.Title</span>
+    <form method="post" asp-page-handler="Delete" asp-route-id="@Model.Id" class="inline-form">
+        <button type="submit" title="Delete">❌</button>
+    </form>
+    <form method="post" asp-page-handler="MoveUp" asp-route-id="@Model.Id" class="inline-form">
+        <button type="submit" title="Move Up">🔼</button>
+    </form>
+    <form method="post" asp-page-handler="MoveDown" asp-route-id="@Model.Id" class="inline-form">
+        <button type="submit" title="Move Down">🔽</button>
+    </form>
+</li>

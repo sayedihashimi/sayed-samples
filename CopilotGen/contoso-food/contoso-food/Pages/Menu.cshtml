@@ -1,0 +1,18 @@
+@page
+@model MenuModel
+@{
+    ViewData["Title"] = "Menu";
+}
+<h1>Menu</h1>
+<div class="menu-list">
+    @foreach (var item in Model.MenuItems)
+    {
+        <div class="menu-item">
+            <h3>@item.Name <span class="price">$@item.Price</span></h3>
+            <p>@item.Description</p>
+            <form method="post" asp-page="/Order/Add" asp-route-id="@item.Id">
+                <button type="submit">Add to Order</button>
+            </form>
+        </div>
+    }
+</div>

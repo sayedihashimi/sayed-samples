@@ -1,0 +1,21 @@
+@page "Add/{id:int}"
+@model AddToOrderModel
+@{
+    ViewData["Title"] = "Add to Order";
+}
+<h1>Add to Order</h1>
+@if (Model.MenuItem != null)
+{
+    <div class="menu-item-detail">
+        <h2>@Model.MenuItem.Name</h2>
+        <p>@Model.MenuItem.Description</p>
+        <p>Price: $@Model.MenuItem.Price</p>
+        <form method="post">
+            <button type="submit">Add to Order</button>
+        </form>
+    </div>
+}
+else
+{
+    <p>Menu item not found.</p>
+}
