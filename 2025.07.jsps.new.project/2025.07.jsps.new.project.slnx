@@ -1,0 +1,10 @@
+<Solution>
+  <Project Path="ReactJSPS/reactjsps.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="VueJSPS/vuejsps.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+</Solution>
