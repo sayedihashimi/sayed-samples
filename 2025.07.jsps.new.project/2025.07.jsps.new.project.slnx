@@ -1,4 +1,8 @@
 <Solution>
+  <Project Path="AngularJSPS/AngularJSPS.esproj">
+    <Build />
+    <Deploy />
+  </Project>
   <Project Path="ReactJSPS/reactjsps.esproj">
     <Build />
     <Deploy />
