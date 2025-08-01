@@ -2,35 +2,6 @@
 @model RazorCSharpSupport.Pages.CSharp7Model
 @using System
 @{
-    int outResult;
-    bool parsed = TryParseInt("123", out outResult);
-    (int sum, int product) = Calculate(3, 4);
-    string typeCheckInt = TypeCheck(42);
-    string typeCheckString = TypeCheck("hello");
-    string switchTypeInt = SwitchType(99);
-    string switchTypeString = SwitchType("world");
-    int fib5 = Fibonacci(5);
-    int square7 = Square(7);
-    string nonNull = GetNonNull("not null");
-    int binary = GetBinaryLiteral();
-    ref int refNum = ref GetNumberRef(2);
-    (int foo, int bar) = Calculate(5, 6);
-}
-
-<h2>C# 7.0 Feature Demos</h2>
-<ul>
-    <li><b>Out variable declaration:</b> Parsed: @parsed, Result: @outResult</li>
-    <li><b>Tuples and deconstruction:</b> Sum: @sum, Product: @product</li>
-    <li><b>Pattern matching (is):</b> Int: @typeCheckInt, String: @typeCheckString</li>
-    <li><b>Pattern matching (switch):</b> Int: @switchTypeInt, String: @switchTypeString</li>
-    <li><b>Local functions (Fibonacci 5):</b> @fib5</li>
-    <li><b>Expression-bodied member (Square 7):</b> @square7</li>
-    <li><b>Throw expressions (non-null):</b> @nonNull</li>
-    <li><b>Binary literal:</b> @binary</li>
-    <li><b>Ref return (index 2):</b> @refNum</li>
-</ul>
-
-@{
     // C# 7.0: Out variable declaration
     bool TryParseInt(string input, out int result)
     {
@@ -90,4 +61,86 @@
     // C# 7.0: Ref returns and locals
     int[] numbers = { 1, 2, 3, 4, 5 };
     ref int GetNumberRef(int index) => ref numbers[index];
+
+    // C# 7.0: Generalized async return types - ValueTask examples
+    async ValueTask<int> CalculateValueAsync(int value)
+    {
+        // ValueTask allows for efficient async operations that may complete synchronously
+        if (value < 10)
+        {
+            // Can return synchronously without Task allocation overhead
+            return value * 2;
+        }
+        
+        // Simulate async work for larger values
+        await Task.Delay(1);
+        return value * 3;
+    }
+
+    async ValueTask ProcessDataAsync()
+    {
+        // ValueTask (without generic parameter) for async void-like operations
+        // More efficient than Task when operation often completes synchronously
+        await Task.Delay(1);
+    }
+
+    int outResult;
+    bool parsed = TryParseInt("123", out outResult);
+    (int sum, int product) = Calculate(3, 4);
+    string typeCheckInt = TypeCheck(42);
+    string typeCheckString = TypeCheck("hello");
+    string switchTypeInt = SwitchType(99);
+    string switchTypeString = SwitchType("world");
+    int fib5 = Fibonacci(5);
+    int square7 = Square(7);
+    string nonNull = GetNonNull("not null");
+    int binary = GetBinaryLiteral();
+    (int foo, int bar) = Calculate(5, 6);
+    
+    // Demonstrate ValueTask usage
+    int valueTaskResult = await CalculateValueAsync(5);
+    int valueTaskResultAsync = await CalculateValueAsync(15);
+    await ProcessDataAsync();
+    
+    // Call the PageModel's ValueTask methods
+    string cachedData = await Model.GetCachedDataAsync();
+    await Model.LogOperationAsync();
+    string taskData = await Model.GetDataWithTaskAsync();
+    
+    // Ref operations must be after async operations
+    ref int refNum = ref GetNumberRef(2);
 }
+
+<h2>C# 7.0 Feature Demos</h2>
+<ul>
+    <li><b>Out variable declaration:</b> Parsed: @parsed, Result: @outResult</li>
+    <li><b>Tuples and deconstruction:</b> Sum: @sum, Product: @product</li>
+    <li><b>Pattern matching (is):</b> Int: @typeCheckInt, String: @typeCheckString</li>
+    <li><b>Pattern matching (switch):</b> Int: @switchTypeInt, String: @switchTypeString</li>
+    <li><b>Local functions (Fibonacci 5):</b> @fib5</li>
+    <li><b>Expression-bodied member (Square 7):</b> @square7</li>
+    <li><b>Throw expressions (non-null):</b> @nonNull</li>
+    <li><b>Binary literal:</b> @binary</li>
+    <li><b>Ref return (index 2):</b> @refNum</li>
+    <li><b>Generalized async return types (ValueTask):</b> 
+        <ul>
+            <li>Small value (sync): @valueTaskResult</li>
+            <li>Large value (async): @valueTaskResultAsync</li>
+            <li>Cached data from PageModel: @cachedData</li>
+            <li>Task method for comparison: @taskData</li>
+        </ul>
+    </li>
+</ul>
+
+<div style="margin-top: 20px; padding: 15px; background-color: #f0f8ff; border-left: 4px solid #0066cc;">
+    <h4>C# 7.0 Generalized Async Return Types Explanation</h4>
+    <p><strong>ValueTask&lt;T&gt;</strong> and <strong>ValueTask</strong> were introduced in C# 7.0 as alternatives to Task&lt;T&gt; and Task.</p>
+    <p><strong>Benefits:</strong></p>
+    <ul>
+        <li>Reduced memory allocation when operations complete synchronously</li>
+        <li>Better performance for frequently-called async methods that often have cached results</li>
+        <li>Can return completed results without Task overhead</li>
+    </ul>
+    <p><strong>When to use:</strong> Methods that frequently return cached or pre-computed values, but occasionally need to perform async work.</p>
+</div>
+
