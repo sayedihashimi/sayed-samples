@@ -144,3 +144,54 @@
     <p><strong>When to use:</strong> Methods that frequently return cached or pre-computed values, but occasionally need to perform async work.</p>
 </div>
 
+<div style="margin-top: 30px; padding: 15px; background-color: #f9f9f9; border-left: 4px solid #28a745;">
+    <h3>C# 7.0 Features with Inline Razor Expressions</h3>
+    
+    <h4>Tuples in Inline Expressions</h4>
+    <p>Create and deconstruct tuples directly in Razor:</p>
+    <ul>
+        <li>Simple tuple: @((10, "Hello").Item1) and @((10, "Hello").Item2)</li>
+        <li>Named tuple elements: @((age: 25, name: "John").age) years old, name is @((age: 25, name: "John").name)</li>
+        <li>Tuple deconstruction: @{var (x, y) = (100, 200);} X: @x, Y: @y</li>
+    </ul>
+    
+    <h4>Pattern Matching with 'is' in Inline Expressions</h4>
+    <p>Use pattern matching directly in expressions:</p>
+    <ul>
+        <li>Check if object is int: @((object)42 is int val ? $"Integer: {val}" : "Not an integer")</li>
+        <li>Check if string is not null/empty: @(("test" is string s && !string.IsNullOrEmpty(s)) ? $"Valid string: {s}" : "Invalid")</li>
+        <li>Pattern match with condition: @((object)15 is int num && num > 10 ? $"Large number: {num}" : "Small or not a number")</li>
+    </ul>
+    
+    <h4>Expression-bodied Members (Lambda-style)</h4>
+    <p>Use expression-bodied syntax in inline expressions:</p>
+    <ul>
+        <li>Simple calculation: @(new Func<int, int>(x => x * x * x)(4)) (cube of 4)</li>
+        <li>Conditional expression: @(new Func<int, string>(age => age >= 18 ? "Adult" : "Minor")(21))</li>
+        <li>String manipulation: @(new Func<string, string>(name => $"Hello, {name.ToUpper()}!")("world"))</li>
+    </ul>
+    
+    <h4>Throw Expressions with Null-Coalescing</h4>
+    <p>Use throw expressions for null checking:</p>
+    <ul>
+        <li>Null-coalescing with throw: @(DateTime.Now.ToString() ?? throw new InvalidOperationException("Date is null"))</li>
+        <li>Parameter validation: @((new Func<string, string>(input => input ?? throw new ArgumentNullException(nameof(input))))("Valid input"))</li>
+    </ul>
+    
+    <h4>Discards in Inline Expressions</h4>
+    <p>Use discards to ignore unwanted values:</p>
+    <ul>
+        <li>Tuple with discard: @{var (first, _) = (100, 200);} First value: @first (second discarded)</li>
+        <li>TryParse with discard: @(int.TryParse("123", out _) ? "Valid number format" : "Invalid")</li>
+        <li>Multiple discards: @{var (a, _, c, _) = (1, 2, 3, 4);} Values: @a and @c (others discarded)</li>
+    </ul>
+    
+    <h4>Binary Literals and Digit Separators</h4>
+    <p>Use new numeric literal formats:</p>
+    <ul>
+        <li>Binary literal: @(0b1010_1010) (decimal: @Convert.ToInt32("10101010", 2))</li>
+        <li>Large number with separators: @(1_000_000) (one million)</li>
+        <li>Hex with separators: @(0xFF_FF_FF_FF) (max uint32)</li>
+    </ul>
+</div>
+
