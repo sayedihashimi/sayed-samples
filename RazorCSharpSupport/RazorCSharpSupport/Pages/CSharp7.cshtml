@@ -1,0 +1,93 @@
+﻿@page
+@model RazorCSharpSupport.Pages.CSharp7Model
+@using System
+@{
+    int outResult;
+    bool parsed = TryParseInt("123", out outResult);
+    (int sum, int product) = Calculate(3, 4);
+    string typeCheckInt = TypeCheck(42);
+    string typeCheckString = TypeCheck("hello");
+    string switchTypeInt = SwitchType(99);
+    string switchTypeString = SwitchType("world");
+    int fib5 = Fibonacci(5);
+    int square7 = Square(7);
+    string nonNull = GetNonNull("not null");
+    int binary = GetBinaryLiteral();
+    ref int refNum = ref GetNumberRef(2);
+    (int foo, int bar) = Calculate(5, 6);
+}
+
+<h2>C# 7.0 Feature Demos</h2>
+<ul>
+    <li><b>Out variable declaration:</b> Parsed: @parsed, Result: @outResult</li>
+    <li><b>Tuples and deconstruction:</b> Sum: @sum, Product: @product</li>
+    <li><b>Pattern matching (is):</b> Int: @typeCheckInt, String: @typeCheckString</li>
+    <li><b>Pattern matching (switch):</b> Int: @switchTypeInt, String: @switchTypeString</li>
+    <li><b>Local functions (Fibonacci 5):</b> @fib5</li>
+    <li><b>Expression-bodied member (Square 7):</b> @square7</li>
+    <li><b>Throw expressions (non-null):</b> @nonNull</li>
+    <li><b>Binary literal:</b> @binary</li>
+    <li><b>Ref return (index 2):</b> @refNum</li>
+</ul>
+
+@{
+    // C# 7.0: Out variable declaration
+    bool TryParseInt(string input, out int result)
+    {
+        return int.TryParse(input, out result);
+    }
+
+    // C# 7.0: Tuples and deconstruction
+    (int sum, int product) Calculate(int a, int b)
+    {
+        return (a + b, a * b);
+    }
+
+    // C# 7.0: Pattern matching with 'is'
+    string TypeCheck(object obj)
+    {
+        if (obj is int i)
+            return $"Integer: {i}";
+        if (obj is string s)
+            return $"String: {s}";
+        return "Unknown type";
+    }
+
+    // C# 7.0: Pattern matching in switch
+    string SwitchType(object obj)
+    {
+        switch (obj)
+        {
+            case int i:
+                return $"int: {i}";
+            case string s:
+                return $"string: {s}";
+            default:
+                return "other";
+        }
+    }
+
+    // C# 7.0: Local functions
+    int Fibonacci(int n)
+    {
+        int Fib(int x)
+        {
+            if (x <= 1) return x;
+            return Fib(x - 1) + Fib(x - 2);
+        }
+        return Fib(n);
+    }
+
+    // C# 7.0: Expression-bodied members
+    int Square(int x) => x * x;
+
+    // C# 7.0: Throw expressions
+    string GetNonNull(string value) => value ?? throw new ArgumentNullException(nameof(value));
+
+    // C# 7.0: Digit separators and binary literals
+    int GetBinaryLiteral() => 0b1010_1010;
+
+    // C# 7.0: Ref returns and locals
+    int[] numbers = { 1, 2, 3, 4, 5 };
+    ref int GetNumberRef(int index) => ref numbers[index];
+}

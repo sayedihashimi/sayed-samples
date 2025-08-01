@@ -1,0 +1,19 @@
+﻿@page
+@model RazorCSharpSupport.Pages.BugRefNumberModel
+
+@{
+    // C# 7.0: Ref returns and locals
+    int[] numbers = { 1, 2, 3, 4, 5 };
+    ref int GetNumberRef(int index) => ref numbers[index];
+
+    int[] numbers2 = { 1, 2, 3, 4, 5 };
+    int GetNumber(int index) => numbers2[index];
+}
+
+<h1>Result:</h1>
+<b>@GetNumberRef(1)</b>
+<b>@GetNumber(2)</b>
+
+@{
+
+}
