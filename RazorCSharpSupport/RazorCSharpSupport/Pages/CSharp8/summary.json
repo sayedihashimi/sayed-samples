@@ -1,0 +1,107 @@
+{
+  "folder": "CSharp8",
+  "files": [
+    {
+      "filename": "CSharp8.cshtml",
+      "description": "Main Razor page demonstrating all compatible C# 8.0 features with both code blocks and inline expressions",
+      "features": [
+        "Switch expressions",
+        "Property patterns", 
+        "Tuple patterns",
+        "Positional patterns",
+        "Using declarations",
+        "Static local functions",
+        "Indices and ranges",
+        "Null-coalescing assignment",
+        "Asynchronous streams",
+        "Enhanced interpolated verbatim strings"
+      ],
+      "code_samples": [
+        {
+          "style": "Switch expressions",
+          "code": "day switch { DayOfWeek.Saturday => \"Weekend\", _ => \"Weekday\" }",
+          "notes": "More concise than traditional switch, works in both code blocks and inline expressions"
+        },
+        {
+          "style": "Property patterns", 
+          "code": "person switch { { Age: < 13 } => \"Child\", { Age: >= 65 } => \"Senior\" }",
+          "notes": "Pattern matching on object properties with complex conditions"
+        },
+        {
+          "style": "Indices and ranges",
+          "code": "fruits[^1] (last), fruits[0..3] (first three), fruits[^2..] (last two)",
+          "notes": "All range and index operators work perfectly in Razor contexts"
+        },
+        {
+          "style": "Using declarations",
+          "code": "using var stream = new MemoryStream(); // automatic disposal",
+          "notes": "Automatic resource disposal at end of scope without explicit using blocks"
+        },
+        {
+          "style": "Async streams",
+          "code": "await Model.GenerateNumbersAsync().ToListAsync()",
+          "notes": "IAsyncEnumerable fully supported with proper await syntax"
+        }
+      ]
+    },
+    {
+      "filename": "CSharp8.cshtml.cs",
+      "description": "PageModel with supporting classes, async stream implementations, and readonly struct demonstrations",
+      "features": [
+        "Asynchronous streams (IAsyncEnumerable)",
+        "Readonly members in structs",
+        "Default interface methods",
+        "Enhanced interpolated verbatim strings",
+        "Nullable reference types"
+      ],
+      "code_samples": [
+        {
+          "style": "Async streams",
+          "code": "public async IAsyncEnumerable<int> GenerateNumbersAsync()",
+          "notes": "IAsyncEnumerable with yield return for memory-efficient streaming"
+        },
+        {
+          "style": "Readonly members",
+          "code": "public readonly double DistanceFromOrigin => Math.Sqrt(X * X + Y * Y);",
+          "notes": "Individual struct members marked readonly for performance optimization"
+        },
+        {
+          "style": "Default interface methods",
+          "code": "int Multiply(int a, int b) => a * b; // default implementation",
+          "notes": "Interfaces can provide default method implementations"
+        }
+      ]
+    },
+    {
+      "filename": "README.md", 
+      "description": "Comprehensive documentation of C# 8.0 features, their Razor compatibility, and usage examples",
+      "features": [
+        "Feature compatibility matrix",
+        "Performance recommendations",
+        "Build requirements",
+        "Testing guidelines"
+      ],
+      "code_samples": [
+        {
+          "style": "Documentation",
+          "code": "Detailed feature compatibility table with ✅/⚠️/❌ indicators",
+          "notes": "Complete reference for developers using C# 8.0 in Razor contexts"
+        }
+      ]
+    }
+  ],
+  "unsupported_features": [
+    {
+      "feature": "Disposable ref structs",
+      "explanation": "Cannot demonstrate effectively in Razor context due to ref struct limitations in method calls and storage. Ref structs have strict constraints that make them impractical for Razor page scenarios."
+    },
+    {
+      "feature": "Unmanaged constructed types", 
+      "explanation": "Requires unsafe code context which is not suitable for Razor pages. Unsafe operations are not practical in web page contexts and would require special compilation flags."
+    },
+    {
+      "feature": "Stackalloc in nested expressions",
+      "explanation": "Requires unsafe context and stack allocation which is not practical in Razor page context. Memory management at this level is inappropriate for web applications."
+    }
+  ]
+}

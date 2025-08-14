@@ -1,0 +1,356 @@
+@page
+@model RazorCSharpSupport.Pages.CSharp8Model
+@using System
+@using System.Collections.Generic
+@using System.Linq
+@{
+    // C# 8.0: Switch expressions
+    string GetDayType(DayOfWeek day) => day switch
+    {
+        DayOfWeek.Saturday or DayOfWeek.Sunday => "Weekend",
+        DayOfWeek.Monday => "Monday Blues",
+        DayOfWeek.Friday => "TGIF",
+        _ => "Weekday"
+    };
+
+    // C# 8.0: Property patterns
+    string ClassifyPerson(Person person) => person switch
+    {
+        { Age: < 13 } => "Child",
+        { Age: >= 13 and < 20 } => "Teenager", 
+        { Age: >= 20 and < 65, IsEmployed: true } => "Working Adult",
+        { Age: >= 65 } => "Senior",
+        _ => "Adult"
+    };
+
+    // C# 8.0: Tuple patterns
+    string AnalyzeCoordinates((int x, int y) point) => point switch
+    {
+        (0, 0) => "Origin",
+        (0, _) => "On Y-axis",
+        (_, 0) => "On X-axis", 
+        (var x, var y) when x == y => "Diagonal",
+        (var x, var y) when x > 0 && y > 0 => "First quadrant",
+        _ => "Other quadrant"
+    };
+
+    // C# 8.0: Positional patterns (with custom types)
+    string ClassifyPoint(Point point) => point switch
+    {
+        (0, 0) => "Origin",
+        (var x, 0) => $"On X-axis at {x}",
+        (0, var y) => $"On Y-axis at {y}",
+        (var x, var y) when x == y => $"Diagonal at ({x}, {y})",
+        _ => $"Point at ({point.X}, {point.Y})"
+    };
+
+    // C# 8.0: Using declarations (automatic disposal)
+    string ReadFromMemoryStream()
+    {
+        using var stream = new MemoryStream();
+        using var writer = new StreamWriter(stream);
+        writer.Write("Hello C# 8!");
+        writer.Flush();
+        stream.Position = 0;
+        using var reader = new StreamReader(stream);
+        return reader.ReadToEnd();
+    }
+
+    // C# 8.0: Static local functions
+    int CalculateFactorial(int n)
+    {
+        static int Factorial(int x, int accumulator = 1)
+        {
+            return x <= 1 ? accumulator : Factorial(x - 1, x * accumulator);
+        }
+        return n < 0 ? throw new ArgumentException("Negative numbers not allowed") : Factorial(n);
+    }
+
+    // C# 8.0: Indices and ranges
+    string[] fruits = { "apple", "banana", "cherry", "date", "elderberry" };
+    
+    // Index from end
+    string lastFruit = fruits[^1];
+    string secondLastFruit = fruits[^2];
+    
+    // Range operations
+    string[] firstThree = fruits[0..3];
+    string[] lastTwo = fruits[^2..];
+    string[] middle = fruits[1..^1];
+    
+    // C# 8.0: Null-coalescing assignment
+    string? nullableString = null;
+    nullableString ??= "Default value assigned";
+    
+    List<string>? nullableList = null;
+    nullableList ??= new List<string> { "item1", "item2" };
+
+    // Demonstrate features
+    var person1 = new Person { Age = 10, IsEmployed = false };
+    var person2 = new Person { Age = 25, IsEmployed = true };
+    var person3 = new Person { Age = 70, IsEmployed = false };
+    
+    var point1 = new Point(0, 0);
+    var point2 = new Point(5, 5);
+    var point3 = new Point(3, 7);
+    
+    string dayTypeWeekend = GetDayType(DayOfWeek.Saturday);
+    string dayTypeMonday = GetDayType(DayOfWeek.Monday);
+    string dayTypeFriday = GetDayType(DayOfWeek.Friday);
+    string dayTypeWednesday = GetDayType(DayOfWeek.Wednesday);
+    
+    string personClass1 = ClassifyPerson(person1);
+    string personClass2 = ClassifyPerson(person2);
+    string personClass3 = ClassifyPerson(person3);
+    
+    string coords1 = AnalyzeCoordinates((0, 0));
+    string coords2 = AnalyzeCoordinates((5, 5));
+    string coords3 = AnalyzeCoordinates((3, 0));
+    string coords4 = AnalyzeCoordinates((2, 8));
+    
+    string pointClass1 = ClassifyPoint(point1);
+    string pointClass2 = ClassifyPoint(point2);
+    string pointClass3 = ClassifyPoint(point3);
+    
+    string memoryContent = ReadFromMemoryStream();
+    int factorial5 = CalculateFactorial(5);
+    
+    // Async streams demonstration (called from PageModel)
+    var numbers = await Model.GenerateNumbersAsync().ToListAsync();
+    var evenNumbers = await Model.GenerateEvenNumbersAsync(10).ToListAsync();
+}
+
+<h2>C# 8.0 Feature Demonstrations</h2>
+
+<div class="feature-section">
+    <h3>🔄 Switch Expressions</h3>
+    <p>More concise and expression-based switch syntax:</p>
+    <ul>
+        <li><strong>Saturday:</strong> @dayTypeWeekend</li>
+        <li><strong>Monday:</strong> @dayTypeMonday</li>
+        <li><strong>Friday:</strong> @dayTypeFriday</li>
+        <li><strong>Wednesday:</strong> @dayTypeWednesday</li>
+    </ul>
+</div>
+
+<div class="feature-section">
+    <h3>🎯 Property Patterns</h3>
+    <p>Pattern matching on object properties:</p>
+    <ul>
+        <li><strong>Age @person1.Age, Employed: @person1.IsEmployed:</strong> @personClass1</li>
+        <li><strong>Age @person2.Age, Employed: @person2.IsEmployed:</strong> @personClass2</li>
+        <li><strong>Age @person3.Age, Employed: @person3.IsEmployed:</strong> @personClass3</li>
+    </ul>
+</div>
+
+<div class="feature-section">
+    <h3>📐 Tuple Patterns</h3>
+    <p>Pattern matching on tuple values:</p>
+    <ul>
+        <li><strong>(0, 0):</strong> @coords1</li>
+        <li><strong>(5, 5):</strong> @coords2</li>
+        <li><strong>(3, 0):</strong> @coords3</li>
+        <li><strong>(2, 8):</strong> @coords4</li>
+    </ul>
+</div>
+
+<div class="feature-section">
+    <h3>📍 Positional Patterns</h3>
+    <p>Pattern matching with positional deconstruction:</p>
+    <ul>
+        <li><strong>Point (0, 0):</strong> @pointClass1</li>
+        <li><strong>Point (5, 5):</strong> @pointClass2</li>
+        <li><strong>Point (3, 7):</strong> @pointClass3</li>
+    </ul>
+</div>
+
+<div class="feature-section">
+    <h3>🔧 Using Declarations</h3>
+    <p>Automatic resource disposal without explicit using blocks:</p>
+    <ul>
+        <li><strong>Memory stream content:</strong> "@memoryContent"</li>
+        <li><em>Resources automatically disposed at end of scope</em></li>
+    </ul>
+</div>
+
+<div class="feature-section">
+    <h3>⚡ Static Local Functions</h3>
+    <p>Local functions that cannot capture local variables (better performance):</p>
+    <ul>
+        <li><strong>Factorial of 5:</strong> @factorial5</li>
+        <li><em>Static local function prevents accidental captures</em></li>
+    </ul>
+</div>
+
+<div class="feature-section">
+    <h3>🔢 Indices and Ranges</h3>
+    <p>New syntax for accessing array elements and slices:</p>
+    <ul>
+        <li><strong>All fruits:</strong> [@string.Join(", ", fruits)]</li>
+        <li><strong>Last fruit (^1):</strong> @lastFruit</li>
+        <li><strong>Second to last (^2):</strong> @secondLastFruit</li>
+        <li><strong>First three (0..3):</strong> [@string.Join(", ", firstThree)]</li>
+        <li><strong>Last two (^2..):</strong> [@string.Join(", ", lastTwo)]</li>
+        <li><strong>Middle fruits (1..^1):</strong> [@string.Join(", ", middle)]</li>
+    </ul>
+</div>
+
+<div class="feature-section">
+    <h3>❓ Null-Coalescing Assignment</h3>
+    <p>Assign value only if left operand is null:</p>
+    <ul>
+        <li><strong>Nullable string result:</strong> "@nullableString"</li>
+        <li><strong>Nullable list count:</strong> @nullableList.Count items</li>
+        <li><em>Values assigned only when null using ??= operator</em></li>
+    </ul>
+</div>
+
+<div class="feature-section">
+    <h3>🌊 Asynchronous Streams</h3>
+    <p>IAsyncEnumerable for async iteration:</p>
+    <ul>
+        <li><strong>Generated numbers:</strong> [@string.Join(", ", numbers)]</li>
+        <li><strong>Even numbers (first 10):</strong> [@string.Join(", ", evenNumbers)]</li>
+        <li><em>Streamed asynchronously using IAsyncEnumerable</em></li>
+    </ul>
+</div>
+
+<div class="feature-section">
+    <h3>💎 Readonly Members</h3>
+    <p>Mark individual struct members as readonly:</p>
+    <ul>
+        <li><strong>Readonly struct demo:</strong> @Model.DemoReadonlyMembers()</li>
+        <li><em>Individual members marked readonly for performance</em></li>
+    </ul>
+</div>
+
+<div class="feature-section">
+    <h3>🔤 Enhanced Interpolated Verbatim Strings</h3>
+    <p>Combine interpolation with verbatim strings in any order:</p>
+    <ul>
+        <li><strong>$&#64;"" syntax:</strong> @Model.InterpolatedVerbatimExample1()</li>
+        <li><strong>&#64;$"" syntax:</strong> @Model.InterpolatedVerbatimExample2()</li>
+        <li><em>Both $&#64;"" and &#64;$"" are now supported</em></li>
+    </ul>
+</div>
+
+<div class="inline-examples">
+    <h3>🚀 Inline Razor Expression Examples</h3>
+    
+    <h4>Switch Expressions in Inline Code</h4>
+    <ul>
+        <li>Grade classification: @((85) switch { >= 90 => "A", >= 80 => "B", >= 70 => "C", >= 60 => "D", _ => "F" })</li>
+        <li>Size classification: @(("Large") switch { "Small" => "S", "Medium" => "M", "Large" => "L", "XLarge" => "XL", _ => "Unknown" })</li>
+        <li>Boolean to string: @((true) switch { true => "Yes", false => "No" })</li>
+    </ul>
+    
+    <h4>Property Patterns in Expressions</h4>
+    <ul>
+        <li>DateTime classification: @(DateTime.Now switch { { DayOfWeek: DayOfWeek.Saturday or DayOfWeek.Sunday } => "Weekend", { Hour: >= 9 and <= 17 } => "Business Hours", _ => "Other Time" })</li>
+        <li>String analysis: @(("Hello World") switch { { Length: > 10 } => "Long string", { Length: <= 5 } => "Short string", _ => "Medium string" })</li>
+    </ul>
+    
+    <h4>Ranges and Indices in Expressions</h4>
+    <ul>
+        <li>Last character: '@("Hello"[^1])'</li>
+        <li>First 3 characters: "@("Programming"[0..3])"</li>
+        <li>Skip first and last: "@("Wonderful"[1..^1])"</li>
+        <li>From index 2 to end: "@("Amazing"[2..])"</li>
+    </ul>
+    
+    <h4>Null-Coalescing Assignment Simulation</h4>
+    <ul>
+        <li>Default assignment: @{string? testStr = null; testStr ??= "assigned"; } Result: "@testStr"</li>
+        <li>Collection initialization: @{List<int>? list = null; list ??= new List<int>{1,2,3}; } Count: @list.Count</li>
+    </ul>
+</div>
+
+<div class="compatibility-notes">
+    <h3>⚠️ Feature Compatibility Notes</h3>
+    
+    <div class="alert alert-info">
+        <h4>✅ Fully Compatible Features</h4>
+        <ul>
+            <li><strong>Switch expressions</strong> - Work perfectly in Razor code blocks and inline expressions</li>
+            <li><strong>Property patterns</strong> - Full support in pattern matching scenarios</li>
+            <li><strong>Tuple patterns</strong> - Complete compatibility with Razor syntax</li>
+            <li><strong>Positional patterns</strong> - Work with custom types that support deconstruction</li>
+            <li><strong>Using declarations</strong> - Automatic disposal works as expected in Razor</li>
+            <li><strong>Static local functions</strong> - Full support for better performance</li>
+            <li><strong>Indices and ranges</strong> - All syntax variations work in Razor</li>
+            <li><strong>Null-coalescing assignment</strong> - ??= operator works in all contexts</li>
+            <li><strong>Asynchronous streams</strong> - IAsyncEnumerable fully supported with await</li>
+            <li><strong>Enhanced interpolated verbatim strings</strong> - Both $&#64;"" and &#64;$"" syntax work</li>
+        </ul>
+    </div>
+    
+    <div class="alert alert-warning">
+        <h4>🔄 Limited/Special Context Features</h4>
+        <ul>
+            <li><strong>Readonly members</strong> - Requires struct definition in code-behind or external class</li>
+            <li><strong>Default interface methods</strong> - Must be defined in separate interface files, not inline</li>
+            <li><strong>Nullable reference types</strong> - Enabled project-wide, warnings appear in build output</li>
+        </ul>
+    </div>
+    
+    <div class="alert alert-danger">
+        <h4>❌ Incompatible/Impractical Features</h4>
+        <ul>
+            <li><strong>Disposable ref structs</strong> - Cannot demonstrate effectively in Razor context due to ref struct limitations</li>
+            <li><strong>Unmanaged constructed types</strong> - Requires unsafe code context, not suitable for Razor pages</li>
+            <li><strong>Stackalloc in nested expressions</strong> - Unsafe context required, not practical in Razor</li>
+        </ul>
+    </div>
+</div>
+
+<style>
+    .feature-section {
+        margin: 20px 0;
+        padding: 15px;
+        border-left: 4px solid #007bff;
+        background-color: #f8f9fa;
+    }
+    
+    .inline-examples {
+        margin: 30px 0;
+        padding: 20px;
+        background-color: #e8f5e8;
+        border-radius: 5px;
+        border-left: 4px solid #28a745;
+    }
+    
+    .compatibility-notes {
+        margin: 30px 0;
+    }
+    
+    .alert {
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 5px;
+    }
+    
+    .alert-info {
+        background-color: #d1ecf1;
+        border-left: 4px solid #bee5eb;
+    }
+    
+    .alert-warning {
+        background-color: #fff3cd;
+        border-left: 4px solid #ffeaa7;
+    }
+    
+    .alert-danger {
+        background-color: #f8d7da;
+        border-left: 4px solid #f5c6cb;
+    }
+    
+    h3 {
+        color: #343a40;
+        margin-bottom: 15px;
+    }
+    
+    h4 {
+        color: #495057;
+        margin-bottom: 10px;
+    }
+</style>
