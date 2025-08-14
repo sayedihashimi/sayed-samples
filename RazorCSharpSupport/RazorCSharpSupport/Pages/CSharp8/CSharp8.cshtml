@@ -636,6 +636,23 @@ WHERE Name = '{userName}'
         </div>
     </div>
 
+@* @{
+    using var scratch = new ScratchBuffer(256); // ref struct with void Dispose()
+    var span = scratch.AsSpan();
+    // do synchronous work with span, no awaits here
+}
+
+@functions {
+    public ref struct ScratchBuffer
+    {
+        private Span<byte> _span;
+        // this line give an error "A result of a stackalloc expression of type 'Span<byte>' cannot be used in this context because it may be exposed outside of the containing method"
+        public ScratchBuffer(int size) => _span = size <= 256 ? stackalloc byte[size] : new byte[size]; // example
+        public Span<byte> AsSpan() => _span;
+        public void Dispose() { /* return stack resources if needed */ }
+    }
+} *@
+
     <!-- Unsupported Features -->
     <div class="card mt-4 border-danger">
         <div class="card-header bg-danger text-white">
