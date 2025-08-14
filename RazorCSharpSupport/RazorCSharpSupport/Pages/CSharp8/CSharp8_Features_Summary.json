@@ -1,0 +1,127 @@
+{
+  "folder": "CSharp8",
+  "files": [
+    {
+      "filename": "CSharp8.cshtml",
+      "description": "Main Razor page demonstrating all compatible C# 8.0 features with comprehensive examples",
+      "features": [
+        "Switch expressions with pattern matching",
+        "Property patterns for object matching", 
+        "Tuple patterns with complex conditions",
+        "Positional patterns with custom deconstruction",
+        "Using declarations for automatic resource disposal",
+        "Static local functions for better performance",
+        "Indices and ranges for array operations",
+        "Null-coalescing assignment operator",
+        "Asynchronous streams with IAsyncEnumerable",
+        "Enhanced interpolated verbatim strings",
+        "Nullable reference types demonstration"
+      ],
+      "code_samples": [
+        {
+          "style": "switch_expressions",
+          "code": "var dayType = today switch { DayOfWeek.Saturday or DayOfWeek.Sunday => \"Weekend\", DayOfWeek.Monday => \"Monday Blues\", _ => \"Regular Weekday\" };",
+          "notes": "Demonstrates concise switch expression syntax with pattern matching and logical operators"
+        },
+        {
+          "style": "property_patterns", 
+          "code": "string ClassifyPerson(Person person) => person switch { { Age: < 13 } => \"Child\", { Age: >= 65 } => \"Senior\", _ => \"Adult\" };",
+          "notes": "Shows property pattern matching with complex age-based conditions"
+        },
+        {
+          "style": "tuple_patterns",
+          "code": "string DescribePoint((int x, int y) point) => point switch { (0, 0) => \"Origin\", (0, _) => \"On Y-axis\", (_, 0) => \"On X-axis\", _ => \"Other\" };",
+          "notes": "Demonstrates tuple pattern matching with wildcard usage"
+        },
+        {
+          "style": "using_declarations",
+          "code": "using var stream = new MemoryStream(); using var writer = new StreamWriter(stream);",
+          "notes": "Automatic resource disposal without explicit using blocks"
+        },
+        {
+          "style": "static_local_functions",
+          "code": "static int Factorial(int x) => x <= 1 ? 1 : x * Factorial(x - 1);",
+          "notes": "Local function that cannot capture variables, providing better performance"
+        },
+        {
+          "style": "indices_and_ranges",
+          "code": "var lastElement = numbers[^1]; var firstThree = numbers[0..3]; var lastTwo = numbers[^2..];",
+          "notes": "New syntax for array element access and slicing operations"
+        },
+        {
+          "style": "null_coalescing_assignment",
+          "code": "message ??= \"Default message\"; items ??= new List<string>();",
+          "notes": "Assigns value only if left operand is null, simplifying null checks"
+        },
+        {
+          "style": "async_streams",
+          "code": "public async IAsyncEnumerable<int> GetAsyncNumbersAsync() { await Task.Delay(10); yield return i; }",
+          "notes": "IAsyncEnumerable for memory-efficient async iteration"
+        },
+        {
+          "style": "interpolated_verbatim_strings",
+          "code": "var path1 = $@\"Welcome {userName}! \\nYour files are at: {filePath}\\data\";",
+          "notes": "Combines string interpolation with verbatim strings in either order"
+        }
+      ]
+    },
+    {
+      "filename": "CSharp8.cshtml.cs",
+      "description": "PageModel and supporting classes demonstrating C# 8.0 features that require separate file definitions",
+      "features": [
+        "Readonly struct members",
+        "Default interface methods", 
+        "Async enumerable implementations",
+        "Complex pattern matching examples"
+      ],
+      "code_samples": [
+        {
+          "style": "readonly_members",
+          "code": "public readonly struct ReadonlyPoint { public readonly double DistanceFromOrigin => Math.Sqrt(X * X + Y * Y); }",
+          "notes": "Readonly struct with readonly properties and methods that don't modify state"
+        },
+        {
+          "style": "default_interface_methods",
+          "code": "public interface ILogger { void Log(string message); void LogWithTimestamp(string message) => Log($\"[{DateTime.Now}] {message}\"); }",
+          "notes": "Interface with default method implementation providing backwards compatibility"
+        },
+        {
+          "style": "async_enumerable_implementation",
+          "code": "public async IAsyncEnumerable<string> GetAsyncMessagesAsync() { await Task.Delay(5); yield return message; }",
+          "notes": "Implementation of async enumerable for streaming data scenarios"
+        }
+      ]
+    },
+    {
+      "filename": "README.md", 
+      "description": "Comprehensive documentation explaining C# 8.0 feature compatibility with Razor Pages",
+      "features": [
+        "Feature compatibility matrix",
+        "Implementation notes and limitations",
+        "Performance recommendations",
+        "Build requirements and setup"
+      ],
+      "code_samples": [
+        {
+          "style": "documentation",
+          "code": "Comprehensive feature analysis with compatibility ratings and usage examples",
+          "notes": "Detailed explanation of which C# 8.0 features work in Razor context and which require workarounds"
+        }
+      ]
+    }
+  ],
+  "unsupported_features": [
+    {
+      "feature": "Disposable ref structs",
+      "explanation": "ref structs that implement IDisposable pattern cannot be effectively demonstrated in Razor context due to ref struct limitations in method calls and storage. They require unsafe code patterns that are not suitable for web page contexts."
+    },
+    {
+      "feature": "Unmanaged constructed types", 
+      "explanation": "Generic types with unmanaged type constraints require unsafe code context, which is not suitable for Razor pages. These features are primarily for low-level programming scenarios."
+    },
+    {
+      "feature": "Stackalloc in nested expressions",
+      "explanation": "Using stackalloc in more expression contexts requires unsafe operations, which are not practical in Razor page context. Stack allocation is meant for performance-critical, low-level code."
+    }
+  ]
+}

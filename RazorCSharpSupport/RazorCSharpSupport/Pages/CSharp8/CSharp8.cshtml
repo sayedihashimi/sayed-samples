@@ -1,356 +1,655 @@
-@page
-@model RazorCSharpSupport.Pages.CSharp8Model
-@using System
-@using System.Collections.Generic
-@using System.Linq
+@page "/csharp8"
+@model RazorCSharpSupport.Pages.CSharp8.CSharp8Model
 @{
-    // C# 8.0: Switch expressions
-    string GetDayType(DayOfWeek day) => day switch
-    {
-        DayOfWeek.Saturday or DayOfWeek.Sunday => "Weekend",
-        DayOfWeek.Monday => "Monday Blues",
-        DayOfWeek.Friday => "TGIF",
-        _ => "Weekday"
-    };
-
-    // C# 8.0: Property patterns
-    string ClassifyPerson(Person person) => person switch
-    {
-        { Age: < 13 } => "Child",
-        { Age: >= 13 and < 20 } => "Teenager", 
-        { Age: >= 20 and < 65, IsEmployed: true } => "Working Adult",
-        { Age: >= 65 } => "Senior",
-        _ => "Adult"
-    };
-
-    // C# 8.0: Tuple patterns
-    string AnalyzeCoordinates((int x, int y) point) => point switch
-    {
-        (0, 0) => "Origin",
-        (0, _) => "On Y-axis",
-        (_, 0) => "On X-axis", 
-        (var x, var y) when x == y => "Diagonal",
-        (var x, var y) when x > 0 && y > 0 => "First quadrant",
-        _ => "Other quadrant"
-    };
-
-    // C# 8.0: Positional patterns (with custom types)
-    string ClassifyPoint(Point point) => point switch
-    {
-        (0, 0) => "Origin",
-        (var x, 0) => $"On X-axis at {x}",
-        (0, var y) => $"On Y-axis at {y}",
-        (var x, var y) when x == y => $"Diagonal at ({x}, {y})",
-        _ => $"Point at ({point.X}, {point.Y})"
-    };
-
-    // C# 8.0: Using declarations (automatic disposal)
-    string ReadFromMemoryStream()
-    {
-        using var stream = new MemoryStream();
-        using var writer = new StreamWriter(stream);
-        writer.Write("Hello C# 8!");
-        writer.Flush();
-        stream.Position = 0;
-        using var reader = new StreamReader(stream);
-        return reader.ReadToEnd();
-    }
-
-    // C# 8.0: Static local functions
-    int CalculateFactorial(int n)
-    {
-        static int Factorial(int x, int accumulator = 1)
-        {
-            return x <= 1 ? accumulator : Factorial(x - 1, x * accumulator);
-        }
-        return n < 0 ? throw new ArgumentException("Negative numbers not allowed") : Factorial(n);
-    }
-
-    // C# 8.0: Indices and ranges
-    string[] fruits = { "apple", "banana", "cherry", "date", "elderberry" };
-    
-    // Index from end
-    string lastFruit = fruits[^1];
-    string secondLastFruit = fruits[^2];
-    
-    // Range operations
-    string[] firstThree = fruits[0..3];
-    string[] lastTwo = fruits[^2..];
-    string[] middle = fruits[1..^1];
-    
-    // C# 8.0: Null-coalescing assignment
-    string? nullableString = null;
-    nullableString ??= "Default value assigned";
-    
-    List<string>? nullableList = null;
-    nullableList ??= new List<string> { "item1", "item2" };
-
-    // Demonstrate features
-    var person1 = new Person { Age = 10, IsEmployed = false };
-    var person2 = new Person { Age = 25, IsEmployed = true };
-    var person3 = new Person { Age = 70, IsEmployed = false };
-    
-    var point1 = new Point(0, 0);
-    var point2 = new Point(5, 5);
-    var point3 = new Point(3, 7);
-    
-    string dayTypeWeekend = GetDayType(DayOfWeek.Saturday);
-    string dayTypeMonday = GetDayType(DayOfWeek.Monday);
-    string dayTypeFriday = GetDayType(DayOfWeek.Friday);
-    string dayTypeWednesday = GetDayType(DayOfWeek.Wednesday);
-    
-    string personClass1 = ClassifyPerson(person1);
-    string personClass2 = ClassifyPerson(person2);
-    string personClass3 = ClassifyPerson(person3);
-    
-    string coords1 = AnalyzeCoordinates((0, 0));
-    string coords2 = AnalyzeCoordinates((5, 5));
-    string coords3 = AnalyzeCoordinates((3, 0));
-    string coords4 = AnalyzeCoordinates((2, 8));
-    
-    string pointClass1 = ClassifyPoint(point1);
-    string pointClass2 = ClassifyPoint(point2);
-    string pointClass3 = ClassifyPoint(point3);
-    
-    string memoryContent = ReadFromMemoryStream();
-    int factorial5 = CalculateFactorial(5);
-    
-    // Async streams demonstration (called from PageModel)
-    var numbers = await Model.GenerateNumbersAsync().ToListAsync();
-    var evenNumbers = await Model.GenerateEvenNumbersAsync(10).ToListAsync();
+    ViewData["Title"] = "C# 8.0 Features Demo";
 }
 
-<h2>C# 8.0 Feature Demonstrations</h2>
+@functions {
+    // Supporting classes for demonstrations - moved from code-behind
+    public class Person
+    {
+        public string Name { get; set; } = "";
+        public int Age { get; set; }
+    }
 
-<div class="feature-section">
-    <h3>🔄 Switch Expressions</h3>
-    <p>More concise and expression-based switch syntax:</p>
-    <ul>
-        <li><strong>Saturday:</strong> @dayTypeWeekend</li>
-        <li><strong>Monday:</strong> @dayTypeMonday</li>
-        <li><strong>Friday:</strong> @dayTypeFriday</li>
-        <li><strong>Wednesday:</strong> @dayTypeWednesday</li>
-    </ul>
-</div>
+    public class Point3D
+    {
+        public int X { get; }
+        public int Y { get; }
+        public int Z { get; }
 
-<div class="feature-section">
-    <h3>🎯 Property Patterns</h3>
-    <p>Pattern matching on object properties:</p>
-    <ul>
-        <li><strong>Age @person1.Age, Employed: @person1.IsEmployed:</strong> @personClass1</li>
-        <li><strong>Age @person2.Age, Employed: @person2.IsEmployed:</strong> @personClass2</li>
-        <li><strong>Age @person3.Age, Employed: @person3.IsEmployed:</strong> @personClass3</li>
-    </ul>
-</div>
+        public Point3D(int x, int y, int z)
+        {
+            X = x;
+            Y = y;
+            Z = z;
+        }
 
-<div class="feature-section">
-    <h3>📐 Tuple Patterns</h3>
-    <p>Pattern matching on tuple values:</p>
-    <ul>
-        <li><strong>(0, 0):</strong> @coords1</li>
-        <li><strong>(5, 5):</strong> @coords2</li>
-        <li><strong>(3, 0):</strong> @coords3</li>
-        <li><strong>(2, 8):</strong> @coords4</li>
-    </ul>
-</div>
+        public void Deconstruct(out int x, out int y, out int z)
+        {
+            x = X;
+            y = Y;
+            z = Z;
+        }
 
-<div class="feature-section">
-    <h3>📍 Positional Patterns</h3>
-    <p>Pattern matching with positional deconstruction:</p>
-    <ul>
-        <li><strong>Point (0, 0):</strong> @pointClass1</li>
-        <li><strong>Point (5, 5):</strong> @pointClass2</li>
-        <li><strong>Point (3, 7):</strong> @pointClass3</li>
-    </ul>
-</div>
+        public override string ToString() => $"({X}, {Y}, {Z})";
+    }
 
-<div class="feature-section">
-    <h3>🔧 Using Declarations</h3>
-    <p>Automatic resource disposal without explicit using blocks:</p>
-    <ul>
-        <li><strong>Memory stream content:</strong> "@memoryContent"</li>
-        <li><em>Resources automatically disposed at end of scope</em></li>
-    </ul>
-</div>
+    // Simple logger for demonstrations
+    public class SimpleLogger
+    {
+        public void Log(string message)
+        {
+            Console.WriteLine(message);
+            System.Diagnostics.Debug.WriteLine(message);
+        }
+        
+        public void LogWithTimestamp(string message)
+        {
+            Log($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {message}");
+        }
+    }
 
-<div class="feature-section">
-    <h3>⚡ Static Local Functions</h3>
-    <p>Local functions that cannot capture local variables (better performance):</p>
-    <ul>
-        <li><strong>Factorial of 5:</strong> @factorial5</li>
-        <li><em>Static local function prevents accidental captures</em></li>
-    </ul>
-</div>
+    // HTTP request simulation for demo purposes
+    public class HttpRequest
+    {
+        public string Method { get; set; } = "GET";
+        public string Path { get; set; } = "/";
+        
+        public HttpRequest(string method, string path)
+        {
+            Method = method;
+            Path = path;
+        }
+    }
 
-<div class="feature-section">
-    <h3>🔢 Indices and Ranges</h3>
-    <p>New syntax for accessing array elements and slices:</p>
-    <ul>
-        <li><strong>All fruits:</strong> [@string.Join(", ", fruits)]</li>
-        <li><strong>Last fruit (^1):</strong> @lastFruit</li>
-        <li><strong>Second to last (^2):</strong> @secondLastFruit</li>
-        <li><strong>First three (0..3):</strong> [@string.Join(", ", firstThree)]</li>
-        <li><strong>Last two (^2..):</strong> [@string.Join(", ", lastTwo)]</li>
-        <li><strong>Middle fruits (1..^1):</strong> [@string.Join(", ", middle)]</li>
-    </ul>
-</div>
+    // Helper methods for demonstrations
+    private async IAsyncEnumerable<int> GetAsyncNumbers()
+    {
+        for (int i = 1; i <= 5; i++)
+        {
+            await Task.Delay(10);
+            yield return i * 10;
+        }
+    }
 
-<div class="feature-section">
-    <h3>❓ Null-Coalescing Assignment</h3>
-    <p>Assign value only if left operand is null:</p>
-    <ul>
-        <li><strong>Nullable string result:</strong> "@nullableString"</li>
-        <li><strong>Nullable list count:</strong> @nullableList.Count items</li>
-        <li><em>Values assigned only when null using ??= operator</em></li>
-    </ul>
-</div>
+    private async IAsyncEnumerable<string> GetAsyncMessages()
+    {
+        var messages = new[] { "Loading...", "Processing...", "Almost done...", "Complete!" };
+        
+        foreach (var message in messages)
+        {
+            await Task.Delay(5);
+            yield return $"{DateTime.Now:HH:mm:ss} - {message}";
+        }
+    }
+}
 
-<div class="feature-section">
-    <h3>🌊 Asynchronous Streams</h3>
-    <p>IAsyncEnumerable for async iteration:</p>
-    <ul>
-        <li><strong>Generated numbers:</strong> [@string.Join(", ", numbers)]</li>
-        <li><strong>Even numbers (first 10):</strong> [@string.Join(", ", evenNumbers)]</li>
-        <li><em>Streamed asynchronously using IAsyncEnumerable</em></li>
-    </ul>
-</div>
+<div class="container">
+    <h1>C# 8.0 Features in Razor Pages</h1>
+    <p class="lead">Comprehensive demonstration of C# 8.0 features within Razor Pages context.</p>
 
-<div class="feature-section">
-    <h3>💎 Readonly Members</h3>
-    <p>Mark individual struct members as readonly:</p>
-    <ul>
-        <li><strong>Readonly struct demo:</strong> @Model.DemoReadonlyMembers()</li>
-        <li><em>Individual members marked readonly for performance</em></li>
-    </ul>
-</div>
+    <div class="row">
+        <div class="col-md-12">
 
-<div class="feature-section">
-    <h3>🔤 Enhanced Interpolated Verbatim Strings</h3>
-    <p>Combine interpolation with verbatim strings in any order:</p>
-    <ul>
-        <li><strong>$&#64;"" syntax:</strong> @Model.InterpolatedVerbatimExample1()</li>
-        <li><strong>&#64;$"" syntax:</strong> @Model.InterpolatedVerbatimExample2()</li>
-        <li><em>Both $&#64;"" and &#64;$"" are now supported</em></li>
-    </ul>
-</div>
+            <!-- Switch Expressions -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3>1. Switch Expressions</h3>
+                </div>
+                <div class="card-body">
+                    <p>More concise and expression-based switch syntax:</p>
+                    @{
+                        var today = DateTime.Now.DayOfWeek;
+                        var dayType = today switch
+                        {
+                            DayOfWeek.Saturday or DayOfWeek.Sunday => "Weekend",
+                            DayOfWeek.Monday => "Monday Blues",
+                            DayOfWeek.Friday => "TGIF",
+                            _ => "Regular Weekday"
+                        };
+                    }
+                    <div class="alert alert-info">
+                        <strong>Today (@today):</strong> @dayType
+                    </div>
 
-<div class="inline-examples">
-    <h3>🚀 Inline Razor Expression Examples</h3>
-    
-    <h4>Switch Expressions in Inline Code</h4>
-    <ul>
-        <li>Grade classification: @((85) switch { >= 90 => "A", >= 80 => "B", >= 70 => "C", >= 60 => "D", _ => "F" })</li>
-        <li>Size classification: @(("Large") switch { "Small" => "S", "Medium" => "M", "Large" => "L", "XLarge" => "XL", _ => "Unknown" })</li>
-        <li>Boolean to string: @((true) switch { true => "Yes", false => "No" })</li>
-    </ul>
-    
-    <h4>Property Patterns in Expressions</h4>
-    <ul>
-        <li>DateTime classification: @(DateTime.Now switch { { DayOfWeek: DayOfWeek.Saturday or DayOfWeek.Sunday } => "Weekend", { Hour: >= 9 and <= 17 } => "Business Hours", _ => "Other Time" })</li>
-        <li>String analysis: @(("Hello World") switch { { Length: > 10 } => "Long string", { Length: <= 5 } => "Short string", _ => "Medium string" })</li>
-    </ul>
-    
-    <h4>Ranges and Indices in Expressions</h4>
-    <ul>
-        <li>Last character: '@("Hello"[^1])'</li>
-        <li>First 3 characters: "@("Programming"[0..3])"</li>
-        <li>Skip first and last: "@("Wonderful"[1..^1])"</li>
-        <li>From index 2 to end: "@("Amazing"[2..])"</li>
-    </ul>
-    
-    <h4>Null-Coalescing Assignment Simulation</h4>
-    <ul>
-        <li>Default assignment: @{string? testStr = null; testStr ??= "assigned"; } Result: "@testStr"</li>
-        <li>Collection initialization: @{List<int>? list = null; list ??= new List<int>{1,2,3}; } Count: @list.Count</li>
-    </ul>
-</div>
+                    @{
+                        // Switch expression with method call
+                        static string GetSeasonFromMonth(int month) => month switch
+                        {
+                            12 or 1 or 2 => "Winter",
+                            3 or 4 or 5 => "Spring", 
+                            6 or 7 or 8 => "Summer",
+                            9 or 10 or 11 => "Fall",
+                            _ => "Invalid Month"
+                        };
+                    }
+                    <p><strong>Current Season:</strong> @GetSeasonFromMonth(DateTime.Now.Month)</p>
+                </div>
+            </div>
 
-<div class="compatibility-notes">
-    <h3>⚠️ Feature Compatibility Notes</h3>
-    
-    <div class="alert alert-info">
-        <h4>✅ Fully Compatible Features</h4>
-        <ul>
-            <li><strong>Switch expressions</strong> - Work perfectly in Razor code blocks and inline expressions</li>
-            <li><strong>Property patterns</strong> - Full support in pattern matching scenarios</li>
-            <li><strong>Tuple patterns</strong> - Complete compatibility with Razor syntax</li>
-            <li><strong>Positional patterns</strong> - Work with custom types that support deconstruction</li>
-            <li><strong>Using declarations</strong> - Automatic disposal works as expected in Razor</li>
-            <li><strong>Static local functions</strong> - Full support for better performance</li>
-            <li><strong>Indices and ranges</strong> - All syntax variations work in Razor</li>
-            <li><strong>Null-coalescing assignment</strong> - ??= operator works in all contexts</li>
-            <li><strong>Asynchronous streams</strong> - IAsyncEnumerable fully supported with await</li>
-            <li><strong>Enhanced interpolated verbatim strings</strong> - Both $&#64;"" and &#64;$"" syntax work</li>
-        </ul>
+            <!-- Property Patterns -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3>2. Property Patterns</h3>
+                </div>
+                <div class="card-body">
+                    <p>Pattern matching on object properties:</p>
+                    @{
+                        var people = new[]
+                        {
+                            new Person { Name = "Alice", Age = 10 },
+                            new Person { Name = "Bob", Age = 25 },
+                            new Person { Name = "Charlie", Age = 70 },
+                            new Person { Name = "Diana", Age = 16 }
+                        };
+
+                        string ClassifyPerson(Person person) => person switch
+                        {
+                            { Age: < 13 } => "Child",
+                            { Age: >= 13 and < 18 } => "Teenager", 
+                            { Age: >= 18 and < 65 } => "Adult",
+                            { Age: >= 65 } => "Senior",
+                            _ => "Unknown"
+                        };
+                    }
+
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Age</th>
+                                <th>Category</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var person in people)
+                            {
+                                <tr>
+                                    <td>@person.Name</td>
+                                    <td>@person.Age</td>
+                                    <td>@ClassifyPerson(person)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tuple Patterns -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3>3. Tuple Patterns</h3>
+                </div>
+                <div class="card-body">
+                    <p>Pattern matching on tuple values:</p>
+                    @{
+                        var coordinates = new[] { (0, 0), (0, 5), (3, 0), (2, 3), (-1, -1) };
+
+                        string DescribePoint((int x, int y) point) => point switch
+                        {
+                            (0, 0) => "Origin",
+                            (0, _) => "On Y-axis",
+                            (_, 0) => "On X-axis", 
+                            (_, _) when point.x == point.y => "On diagonal",
+                            (_, _) when point.x > 0 && point.y > 0 => "First quadrant",
+                            _ => "Other location"
+                        };
+                    }
+
+                    <ul class="list-group">
+                        @foreach (var coord in coordinates)
+                        {
+                            <li class="list-group-item">
+                                <strong>(@coord.Item1, @coord.Item2):</strong> @DescribePoint(coord)
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Positional Patterns -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3>4. Positional Patterns</h3>
+                </div>
+                <div class="card-body">
+                    <p>Pattern matching with positional deconstruction:</p>
+                    @{
+                        var points = new[]
+                        {
+                            new Point3D(0, 0, 0),
+                            new Point3D(1, 1, 1),
+                            new Point3D(5, 0, 0),
+                            new Point3D(0, 3, 4)
+                        };
+
+                        string AnalyzePoint(Point3D pt) => pt switch
+                        {
+                            (0, 0, 0) => "Origin in 3D",
+                            (var x, 0, 0) => $"On X-axis at {x}",
+                            (0, var y, 0) => $"On Y-axis at {y}",
+                            (0, 0, var z) => $"On Z-axis at {z}",
+                            (var x, var y, var z) when x == y && y == z => $"Cubic diagonal at ({x})",
+                            _ => $"General point {pt}"
+                        };
+                    }
+
+                    <ul class="list-group">
+                        @foreach (var pt in points)
+                        {
+                            <li class="list-group-item">
+                                <strong>@pt:</strong> @AnalyzePoint(pt)
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Using Declarations -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3>5. Using Declarations</h3>
+                </div>
+                <div class="card-body">
+                    <p>Automatic resource disposal without explicit using blocks:</p>
+                    @{
+                        string ProcessMemoryStream()
+                        {
+                            using var stream = new MemoryStream();
+                            using var writer = new StreamWriter(stream);
+                            
+                            writer.Write("Hello, C# 8!");
+                            writer.Flush();
+                            
+                            stream.Position = 0;
+                            using var reader = new StreamReader(stream);
+                            return reader.ReadToEnd();
+                            // All resources automatically disposed here
+                        }
+                    }
+                    
+                    <div class="alert alert-success">
+                        <strong>Processed Data:</strong> @ProcessMemoryStream()
+                    </div>
+                    
+                    @{
+                        // Multiple using declarations
+                        string ProcessMultipleResources()
+                        {
+                            using var timer = new System.Timers.Timer(1000);
+                            using var httpClient = new HttpClient();
+                            using var stream = new MemoryStream();
+                            
+                            return $"Created {3} disposable resources that will be automatically cleaned up";
+                        }
+                    }
+                    
+                    <p><em>@ProcessMultipleResources()</em></p>
+                </div>
+            </div>
+
+            <!-- Static Local Functions -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3>6. Static Local Functions</h3>
+                </div>
+                <div class="card-body">
+                    <p>Local functions that cannot capture variables (better performance):</p>
+                    @{
+                        int CalculateFactorial(int n)
+                        {
+                            if (n < 0) throw new ArgumentException("Negative numbers not allowed");
+                            
+                            static int Factorial(int x) => x <= 1 ? 1 : x * Factorial(x - 1);
+                            
+                            return Factorial(n);
+                        }
+
+                        static string FormatNumber(int number)
+                        {
+                            static string AddCommas(int num) => num.ToString("N0");
+                            static string GetOrdinal(int num) => num switch
+                            {
+                                1 => "1st",
+                                2 => "2nd", 
+                                3 => "3rd",
+                                _ => $"{num}th"
+                            };
+                            
+                            return $"{GetOrdinal(number)} number is {AddCommas(number)}";
+                        }
+                    }
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Number</th>
+                                <th>Factorial</th>
+                                <th>Formatted</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i <= 6; i++)
+                            {
+                                <tr>
+                                    <td>@i</td>
+                                    <td>@CalculateFactorial(i)</td>
+                                    <td>@FormatNumber(i + 1)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Indices and Ranges -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3>7. Indices and Ranges</h3>
+                </div>
+                <div class="card-body">
+                    <p>New syntax for array element access and slicing:</p>
+                    @{
+                        var numbers = new[] { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100 };
+                        var fruits = new[] { "Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape" };
+                    }
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Index Operations</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>Last element (^1):</strong> @numbers[^1]</li>
+                                <li><strong>Second to last (^2):</strong> @numbers[^2]</li>
+                                <li><strong>Third from end (^3):</strong> @numbers[^3]</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Range Operations</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>First 3 (0..3):</strong> [@string.Join(", ", numbers[0..3])]</li>
+                                <li><strong>Last 3 (^3..):</strong> [@string.Join(", ", numbers[^3..])]</li>
+                                <li><strong>Middle (2..^2):</strong> [@string.Join(", ", numbers[2..^2])]</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    @{
+                        // Range with fruits
+                        var firstTwo = fruits[..2];
+                        var lastTwo = fruits[^2..];
+                        var middle = fruits[2..5];
+                    }
+
+                    <div class="alert alert-info">
+                        <p><strong>Fruit Examples:</strong></p>
+                        <ul>
+                            <li><strong>First two:</strong> @string.Join(", ", firstTwo)</li>
+                            <li><strong>Last two:</strong> @string.Join(", ", lastTwo)</li>
+                            <li><strong>Middle three:</strong> @string.Join(", ", middle)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Null-Coalescing Assignment -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3>8. Null-Coalescing Assignment (??=)</h3>
+                </div>
+                <div class="card-body">
+                    <p>Assign value only if left operand is null:</p>
+                    @{
+                        string? message = null;
+                        string? name = "Alice";
+                        List<string>? items = null;
+
+                        // Assign default values using ??=
+                        message ??= "Default message";
+                        name ??= "Unknown";
+                        items ??= new List<string>();
+
+                        // Add some items
+                        items.Add("Item 1");
+                        items.Add("Item 2");
+
+                        // Configuration example
+                        Dictionary<string, string?> config = new()
+                        {
+                            {"timeout", null},
+                            {"retries", "3"},
+                            {"endpoint", null}
+                        };
+
+                        config["timeout"] ??= "30";
+                        config["retries"] ??= "5"; // Won't override existing value
+                        config["endpoint"] ??= "https://api.example.com";
+                    }
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Variable Assignments</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>Message:</strong> @message</li>
+                                <li><strong>Name:</strong> @name</li>
+                                <li><strong>Items:</strong> [@string.Join(", ", items)]</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Configuration</h5>
+                            <ul class="list-unstyled">
+                                @foreach (var kvp in config)
+                                {
+                                    <li><strong>@kvp.Key:</strong> @kvp.Value</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced Interpolated Verbatim Strings -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3>9. Enhanced Interpolated Verbatim Strings</h3>
+                </div>
+                <div class="card-body">
+                    <p>Combine interpolation with verbatim strings in any order:</p>
+                    @{
+                        var userName = "Alice";
+                        var filePath = @"C:\Users\Alice\Documents";
+
+                        // Both syntaxes work: $@"" and @$""
+                        var path1 = $@"Welcome {userName}! 
+Your files are at: {filePath}\data
+Use backslashes: \n \t \r";
+
+                        var path2 = @$"Alternative syntax:
+User: {userName}
+Path: {filePath}\backup
+Special chars: \\ \n \t";
+
+                        var multilineQuery = $@"
+SELECT * 
+FROM Users 
+WHERE Name = '{userName}' 
+  AND Path LIKE '{filePath}%'
+  AND Created > '2023-01-01'";
+                    }
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Dollar-At-Quote Syntax</h5>
+                            <pre class="bg-light p-2">@path1</pre>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>At-Dollar-Quote Syntax</h5>
+                            <pre class="bg-light p-2">@path2</pre>
+                        </div>
+                    </div>
+
+                    <h5>SQL Query Example</h5>
+                    <pre class="bg-light p-2">@multilineQuery</pre>
+                </div>
+            </div>
+
+            <!-- Asynchronous Streams -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3>10. Asynchronous Streams</h3>
+                </div>
+                <div class="card-body">
+                    <p>IAsyncEnumerable for async iteration:</p>
+                    @{
+                        // Note: Using local async methods instead of PageModel methods
+                        var asyncNumbers = await GetAsyncNumbers().ToListAsync();
+                        var asyncMessages = await GetAsyncMessages().ToListAsync();
+                    }
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Async Numbers</h5>
+                            <ul class="list-group list-group-flush">
+                                @foreach (var number in asyncNumbers)
+                                {
+                                    <li class="list-group-item">Number: @number</li>
+                                }
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Async Messages</h5>
+                            <ul class="list-group list-group-flush">
+                                @foreach (var msg in asyncMessages)
+                                {
+                                    <li class="list-group-item">@msg</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nullable Reference Types -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3>11. Nullable Reference Types</h3>
+                </div>
+                <div class="card-body">
+                    <p>Compile-time null safety for reference types (enabled project-wide):</p>
+                    @{
+                        // These will generate compiler warnings if used incorrectly
+                        string nonNullable = "Hello";
+                        string? nullable = null;
+
+                        // Safe operations
+                        var length1 = nonNullable.Length; // Safe
+                        var length2 = nullable?.Length ?? 0; // Safe with null-conditional
+
+                        // Examples of nullable-aware code
+                        string ProcessString(string? input)
+                        {
+                            if (string.IsNullOrEmpty(input))
+                                return "Empty or null input";
+                            
+                            return $"Processed: {input.ToUpper()}"; // Safe after null check
+                        }
+
+                        string?[] nullableArray = { "Hello", null, "World", null, "!" };
+                        var processedStrings = nullableArray
+                            .Where(s => s != null)
+                            .Select(s => s!.ToUpper())
+                            .ToArray();
+                    }
+
+                    <div class="alert alert-warning">
+                        <h6>Nullable Analysis Results:</h6>
+                        <ul>
+                            <li><strong>Non-nullable length:</strong> @length1</li>
+                            <li><strong>Nullable length (safe):</strong> @length2</li>
+                            <li><strong>Processed null:</strong> @ProcessString(null)</li>
+                            <li><strong>Processed valid:</strong> @ProcessString("test")</li>
+                            <li><strong>Filtered array:</strong> [@string.Join(", ", processedStrings)]</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Readonly Members -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3>12. Readonly Members (Limited Support)</h3>
+                </div>
+                <div class="card-body">
+                    <p>Readonly struct members (defined in code-behind):</p>
+                    @{
+                        // Note: Using readonly struct from code-behind since structs need separate definition
+                        var point = Model.CreateReadonlyPoint(10, 20);
+                        var distance = point.DistanceFromOrigin;
+                        var description = point.ToString();
+                    }
+
+                    <div class="alert alert-info">
+                        <ul>
+                            <li><strong>Point:</strong> @point</li>
+                            <li><strong>Distance from origin:</strong> @distance.ToString("F2")</li>
+                            <li><strong>Description:</strong> @description</li>
+                        </ul>
+                        <p><em>Note: Readonly members must be defined in code-behind or separate classes.</em></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Default Interface Methods -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3>13. Default Interface Methods (Limited Support)</h3>
+                </div>
+                <div class="card-body">
+                    <p>Interfaces with default implementations (defined in code-behind):</p>
+                    @{
+                        var logger = new SimpleLogger();
+                        var logMessage = "Test message";
+                        
+                        // Simple logging demonstrations
+                        logger.Log(logMessage);
+                        logger.LogWithTimestamp(logMessage);
+                        
+                        // For true default interface methods, see code-behind examples
+                    }
+
+                    <div class="alert alert-info">
+                        <p><strong>Logger Output:</strong> Check console for logged messages</p>
+                        <p><em>Note: Default interface methods must be defined in separate interface files.</em></p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
-    
-    <div class="alert alert-warning">
-        <h4>🔄 Limited/Special Context Features</h4>
-        <ul>
-            <li><strong>Readonly members</strong> - Requires struct definition in code-behind or external class</li>
-            <li><strong>Default interface methods</strong> - Must be defined in separate interface files, not inline</li>
-            <li><strong>Nullable reference types</strong> - Enabled project-wide, warnings appear in build output</li>
-        </ul>
+
+    <!-- Unsupported Features -->
+    <div class="card mt-4 border-danger">
+        <div class="card-header bg-danger text-white">
+            <h3>❌ Unsupported/Impractical Features in Razor Context</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Disposable Ref Structs</h5>
+                    <p class="text-muted">ref structs with IDisposable pattern cannot be effectively demonstrated in Razor context due to ref struct limitations in method calls and storage.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Unmanaged Constructed Types</h5>
+                    <p class="text-muted">Generic types with unmanaged type constraints require unsafe code context, which is not suitable for Razor pages.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Stackalloc in Nested Expressions</h5>
+                    <p class="text-muted">Using stackalloc in more expression contexts requires unsafe operations, which are not practical in Razor page context.</p>
+                </div>
+            </div>
+        </div>
     </div>
-    
-    <div class="alert alert-danger">
-        <h4>❌ Incompatible/Impractical Features</h4>
-        <ul>
-            <li><strong>Disposable ref structs</strong> - Cannot demonstrate effectively in Razor context due to ref struct limitations</li>
-            <li><strong>Unmanaged constructed types</strong> - Requires unsafe code context, not suitable for Razor pages</li>
-            <li><strong>Stackalloc in nested expressions</strong> - Unsafe context required, not practical in Razor</li>
-        </ul>
-    </div>
+
 </div>
 
-<style>
-    .feature-section {
-        margin: 20px 0;
-        padding: 15px;
-        border-left: 4px solid #007bff;
-        background-color: #f8f9fa;
-    }
-    
-    .inline-examples {
-        margin: 30px 0;
-        padding: 20px;
-        background-color: #e8f5e8;
-        border-radius: 5px;
-        border-left: 4px solid #28a745;
-    }
-    
-    .compatibility-notes {
-        margin: 30px 0;
-    }
-    
-    .alert {
-        padding: 15px;
-        margin: 15px 0;
-        border-radius: 5px;
-    }
-    
-    .alert-info {
-        background-color: #d1ecf1;
-        border-left: 4px solid #bee5eb;
-    }
-    
-    .alert-warning {
-        background-color: #fff3cd;
-        border-left: 4px solid #ffeaa7;
-    }
-    
-    .alert-danger {
-        background-color: #f8d7da;
-        border-left: 4px solid #f5c6cb;
-    }
-    
-    h3 {
-        color: #343a40;
-        margin-bottom: 15px;
-    }
-    
-    h4 {
-        color: #495057;
-        margin-bottom: 10px;
-    }
-</style>
+
