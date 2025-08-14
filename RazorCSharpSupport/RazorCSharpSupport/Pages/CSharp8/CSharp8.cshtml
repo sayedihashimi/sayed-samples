@@ -5,6 +5,11 @@
 }
 
 @functions {
+    public class SayedHa
+    {
+        public readonly int Id = 100;
+    }
+    private readonly SayedHa sayed = new SayedHa();
     // Supporting classes for demonstrations - moved from code-behind
     public class Person
     {
@@ -87,6 +92,7 @@
 
 <div class="container">
     <h1>C# 8.0 Features in Razor Pages</h1>
+    <p>Readonly int: @sayed.Id</p>
     <p class="lead">Comprehensive demonstration of C# 8.0 features within Razor Pages context.</p>
 
     <div class="row">
@@ -136,6 +142,9 @@
                 <div class="card-body">
                     <p>Pattern matching on object properties:</p>
                     @{
+                        var pSample = new Person { Name = "Alice", Age = 10 };
+                        var readonlyClass = new SayedHa();
+                        Console.WriteLine($"Readonly class ID: {readonlyClass.Id}");
                         var people = new[]
                         {
                             new Person { Name = "Alice", Age = 10 },
