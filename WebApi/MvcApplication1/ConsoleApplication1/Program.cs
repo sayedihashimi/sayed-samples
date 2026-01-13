@@ -19,7 +19,6 @@
                 Id = new Random().Next()
             };
 
-
             var jsonFormatter = new System.Net.Http.Formatting.JsonMediaTypeFormatter();
             var mediaType = new MediaTypeHeaderValue("application/json");
             var requestMessage = new HttpRequestMessage<Person>(
