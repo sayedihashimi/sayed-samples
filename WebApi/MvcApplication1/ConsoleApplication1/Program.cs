@@ -8,8 +8,6 @@
     using System.Text;
     using System.Threading.Tasks;
     using MvcApplication1.Models;
-
-
     public class Program {
         public static void Main(string[] args) {
 
