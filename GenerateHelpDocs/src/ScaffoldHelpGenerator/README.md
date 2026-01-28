@@ -1,6 +1,6 @@
 # ScaffoldHelpGenerator
 
-A .NET 8 console application that generates comprehensive help documentation for `dotnet scaffold` commands.
+A .NET 10 console application that generates comprehensive help documentation for `dotnet scaffold` commands.
 
 ## Overview
 
@@ -8,7 +8,7 @@ This tool recursively discovers all `dotnet scaffold` commands and generates a s
 
 ## Prerequisites
 
-- .NET 8 SDK
+- .NET 10 SDK
 - `dotnet scaffold` tool installed globally:
   ```bash
   dotnet tool install -g Microsoft.dotnet-scaffold
