@@ -83,7 +83,7 @@ public class DocumentGenerator
         
         var displayName = string.IsNullOrEmpty(command.FullCommandPath) 
             ? "scaffold" 
-            : command.FullCommandPath.Replace(" ", " ");
+            : command.FullCommandPath;
         
         sb.AppendLine($"## {displayName}");
         sb.AppendLine();

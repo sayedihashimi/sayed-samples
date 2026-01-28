@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Diagnostics;
 
 namespace ScaffoldHelpGenerator.Services;
@@ -34,7 +35,7 @@ public class CommandExecutor
             var timeout = TimeSpan.FromSeconds(TimeoutSeconds);
             if (!process.WaitForExit((int)timeout.TotalMilliseconds))
             {
-                process.Kill();
+                process.Kill(true);
                 var command = string.IsNullOrEmpty(commandPath) ? "dotnet scaffold" : $"dotnet scaffold {commandPath}";
                 throw new TimeoutException($"Error: Command '{command}' timed out after {TimeoutSeconds} seconds");
             }
@@ -50,7 +51,7 @@ public class CommandExecutor
 
             return output;
         }
-        catch (System.ComponentModel.Win32Exception)
+        catch (Win32Exception)
         {
             throw new InvalidOperationException("Error: 'dotnet scaffold' command not found. Please ensure dotnet-scaffold tool is installed globally using: dotnet tool install -g Microsoft.dotnet-scaffold");
         }
@@ -78,7 +79,7 @@ public class CommandExecutor
             var timeout = TimeSpan.FromSeconds(TimeoutSeconds);
             if (!process.WaitForExit((int)timeout.TotalMilliseconds))
             {
-                process.Kill();
+                process.Kill(true);
                 return null;
             }
 

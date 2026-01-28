@@ -90,7 +90,7 @@ rootCommand.SetHandler(async (FileInfo output, bool force) =>
         }
 
         // Build command tree starting from root
-        var rootCommand = new CommandInfo
+        var scaffoldRootCommand = new CommandInfo
         {
             FullCommandPath = "",
             Name = "scaffold",
@@ -98,12 +98,12 @@ rootCommand.SetHandler(async (FileInfo output, bool force) =>
             RawHelpOutput = rootHelp
         };
 
-        var allCommands = new List<CommandInfo> { rootCommand };
+        var allCommands = new List<CommandInfo> { scaffoldRootCommand };
 
         // Discover and collect all commands recursively
-        await CollectCommandsRecursively(rootCommand, executor, parser);
+        await CollectCommandsRecursively(scaffoldRootCommand, executor, parser);
 
-        var totalCommands = CountCommands(rootCommand);
+        var totalCommands = CountCommands(scaffoldRootCommand);
         Console.WriteLine();
         Console.WriteLine("Generating documentation...");
         Console.WriteLine($"Writing to: {output.FullName}");
