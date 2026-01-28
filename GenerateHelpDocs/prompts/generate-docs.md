@@ -2,7 +2,7 @@
 
 ## Overview
 
-Create a .NET 8 console application named `ScaffoldHelpGenerator` that generates comprehensive help documentation for `dotnet scaffold` commands. The generated documentation will be consumed by GitHub Copilot to provide context about how to use `dotnet scaffold`.
+Create a .NET 10 console application named `ScaffoldHelpGenerator` that generates comprehensive help documentation for `dotnet scaffold` commands. The generated documentation will be consumed by GitHub Copilot to provide context about how to use `dotnet scaffold`.
 
 ## Project Setup
 
