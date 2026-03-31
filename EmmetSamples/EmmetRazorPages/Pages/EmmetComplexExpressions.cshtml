@@ -1,0 +1,259 @@
+@page
+@model EmmetRazorPages.Pages.EmmetComplexExpressionsModel
+@{
+    ViewData["Title"] = "Emmet: Complex Expressions";
+}
+
+<h1>Emmet Complex &amp; Real-World Expressions</h1>
+<p>
+    Real-world Emmet abbreviations combining multiple operators to generate
+    common HTML patterns. Each tests several features at once.
+</p>
+
+<hr />
+
+<h2>1 &ndash; Navigation Bar</h2>
+
+<!-- Expected:
+<nav class="navbar">
+    <ul class="nav-list">
+        <li class="nav-item"><a href="" class="nav-link">Link 1</a></li>
+        <li class="nav-item"><a href="" class="nav-link">Link 2</a></li>
+        <li class="nav-item"><a href="" class="nav-link">Link 3</a></li>
+        <li class="nav-item"><a href="" class="nav-link">Link 4</a></li>
+    </ul>
+</nav>
+-->
+nav.navbar>ul.nav-list>li.nav-item*4>a.nav-link{Link $}
+
+<hr />
+
+<h2>2 &ndash; Bootstrap Card</h2>
+
+<!-- Expected:
+<div class="card">
+    <img src="" alt="" class="card-img-top" />
+    <div class="card-body">
+        <h5 class="card-title"></h5>
+        <p class="card-text"></p>
+        <a href="" class="btn btn-primary">Go somewhere</a>
+    </div>
+</div>
+-->
+.card>img.card-img-top+.card-body>h5.card-title+p.card-text+a.btn.btn-primary{Go somewhere}
+
+<hr />
+
+<h2>3 &ndash; Definition List</h2>
+
+<!-- Expected:
+<dl>
+    <dt>Term 1</dt>
+    <dd>Definition 1</dd>
+    <dt>Term 2</dt>
+    <dd>Definition 2</dd>
+    <dt>Term 3</dt>
+    <dd>Definition 3</dd>
+</dl>
+-->
+dl>(dt{Term $}+dd{Definition $})*3
+
+<hr />
+
+<h2>4 &ndash; Form with Labeled Inputs</h2>
+
+<!-- Expected:
+<form id="registration" class="form" method="post">
+    <div class="form-group">
+        <label for=""></label>
+        <input type="text" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for=""></label>
+        <input type="text" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for=""></label>
+        <input type="text" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Register</button>
+</form>
+-->
+form#registration.form[method=post]>(.form-group>label+input.form-control)*3+button[type=submit].btn.btn-primary{Register}
+
+<hr />
+
+<h2>5 &ndash; Responsive Grid</h2>
+
+<!-- Expected:
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel">
+                <h3>Panel 1</h3>
+                <p></p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel">
+                <h3>Panel 2</h3>
+                <p></p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel">
+                <h3>Panel 3</h3>
+                <p></p>
+            </div>
+        </div>
+    </div>
+</div>
+-->
+.container>.row>.col-md-4*3>.panel>h3{Panel $}+p
+
+<hr />
+
+<h2>6 &ndash; Table with Header and Body</h2>
+
+<!-- Expected:
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Header 1</th>
+            <th>Header 2</th>
+            <th>Header 3</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+-->
+table.table.table-striped>(thead>tr>th{Header $}*3)+(tbody>tr*3>td*3)
+
+<hr />
+
+<h2>7 &ndash; Hero Section</h2>
+
+<!-- Expected:
+<section id="hero" class="hero bg-dark text-white">
+    <div class="container">
+        <h1 class="display-4">Welcome</h1>
+        <p class="lead">This is a hero section</p>
+        <a href="" class="btn btn-lg btn-primary">Get Started</a>
+    </div>
+</section>
+-->
+section#hero.hero.bg-dark.text-white>.container>h1.display-4{Welcome}+p.lead{This is a hero section}+a.btn.btn-lg.btn-primary{Get Started}
+
+<hr />
+
+<h2>8 &ndash; Breadcrumb</h2>
+
+<!-- Expected:
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="">Home</a></li>
+        <li class="breadcrumb-item"><a href="">Library</a></li>
+        <li class="breadcrumb-item active">Data</li>
+    </ol>
+</nav>
+-->
+nav[aria-label=breadcrumb]>ol.breadcrumb>li.breadcrumb-item*2>a{Home}
+
+<hr />
+
+<h2>9 &ndash; Accordion / Collapsible Sections</h2>
+
+<!-- Expected:
+<div class="accordion" id="faq">
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button">Question 1</button>
+        </h2>
+        <div class="accordion-body">
+            <p></p>
+        </div>
+    </div>
+    ... (repeated 3 times)
+</div>
+-->
+.accordion#faq>.accordion-item*3>h2.accordion-header>button.accordion-button{Question $}^.accordion-body>p
+
+<hr />
+
+<h2>10 &ndash; Footer with Multiple Columns</h2>
+
+<!-- Expected:
+<footer class="site-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <h4>Column 1</h4>
+                <ul>
+                    <li><a href="">Link 1</a></li>
+                    <li><a href="">Link 2</a></li>
+                    <li><a href="">Link 3</a></li>
+                </ul>
+            </div>
+            ... (repeated 4 times)
+        </div>
+    </div>
+</footer>
+-->
+footer.site-footer>.container>.row>.col-md-3*4>h4{Column $}+ul>li*3>a{Link $}
+
+<hr />
+
+<h2>11 &ndash; Media Object</h2>
+
+<!-- Expected:
+<div class="media">
+    <img src="" alt="" class="media-image mr-3" />
+    <div class="media-body">
+        <h5 class="mt-0">Media heading</h5>
+        <p></p>
+    </div>
+</div>
+-->
+.media>img.media-image.mr-3+.media-body>h5.mt-0{Media heading}+p
+
+<hr />
+
+<h2>12 &ndash; Modal Dialog</h2>
+
+<!-- Expected:
+<div class="modal" id="myModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal Title</h5>
+                <button class="btn-close" type="button"></button>
+            </div>
+            <div class="modal-body">
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary">Close</button>
+                <button class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+-->
+.modal#myModal[tabindex=-1]>.modal-dialog>.modal-content>(.modal-header>h5.modal-title{Modal Title}+button.btn-close[type=button])+(.modal-body>p)+(.modal-footer>button.btn.btn-secondary{Close}+button.btn.btn-primary{Save})
+

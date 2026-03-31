@@ -1,0 +1,140 @@
+@page
+@model EmmetRazorPages.Pages.EmmetAttributesModel
+@{
+    ViewData["Title"] = "Emmet: Attributes";
+}
+
+<h1>Emmet Attributes &amp; ID/Class Operators</h1>
+<p>
+    Tests for <strong>ID (#)</strong>, <strong>class (.)</strong>,
+    <strong>custom attributes ([])</strong>, and <strong>implicit tag names</strong>.
+</p>
+
+<hr />
+
+<h2>1 &ndash; ID Attribute (#)</h2>
+
+<!-- Expected: <div id="header"></div> -->
+div#header
+
+<!-- Expected: <div id="header"></div> (implicit div) -->
+#header
+
+<!-- Expected: <section id="main-content"></section> -->
+section#main-content
+
+<!-- Expected: <form id="login-form"></form> -->
+form#login-form
+
+<!-- Expected: <span id="icon"></span> -->
+span#icon
+
+<hr />
+
+<h2>2 &ndash; Class Attribute (.)</h2>
+
+<!-- Expected: <div class="container"></div> -->
+div.container
+
+<!-- Expected: <div class="container"></div> (implicit div) -->
+.container
+
+<!-- Expected: <p class="lead text-muted"></p> -->
+p.lead.text-muted
+
+<!-- Expected: <div class="row"></div> -->
+.row
+
+<!-- Expected: <span class="badge bg-primary"></span> -->
+span.badge.bg-primary
+
+<!-- Expected: <div class="col-md-6 col-lg-4"></div> -->
+.col-md-6.col-lg-4
+
+<hr />
+
+<h2>3 &ndash; ID + Class Combined</h2>
+
+<!-- Expected: <div id="header" class="container"></div> -->
+#header.container
+
+<!-- Expected: <div id="footer" class="class1 class2 class3"></div> -->
+div#footer.class1.class2.class3
+
+<!-- Expected: <section id="hero" class="bg-dark text-white"></section> -->
+section#hero.bg-dark.text-white
+
+<!-- Expected: <form id="signup" class="form-horizontal needs-validation"></form> -->
+form#signup.form-horizontal.needs-validation
+
+<hr />
+
+<h2>4 &ndash; Custom Attributes ([])</h2>
+
+<!-- Expected: <td title="Hello world!" colspan="3"></td> -->
+td[title="Hello world!" colspan=3]
+
+<!-- Expected: <div data-role="page" data-theme="a"></div> -->
+div[data-role=page data-theme=a]
+
+<!-- Expected: <a href="https://example.com" target="_blank"></a> -->
+a[href=https://example.com target=_blank]
+
+<!-- Expected: <input type="text" placeholder="Enter name" required /> -->
+input[placeholder="Enter name" required]
+
+<!-- Expected: <div contenteditable="true"></div> -->
+div[contenteditable=true]
+
+<!-- Expected: <td colspan="" title=""></td> (empty attribute values) -->
+td[colspan title]
+
+<!-- Expected: <button type="button" disabled></button> -->
+button[type=button disabled]
+
+<!-- Expected: <img src="photo.jpg" alt="A photo" width="300" height="200" /> -->
+img[src=photo.jpg alt="A photo" width=300 height=200]
+
+<!-- Expected: <script src="app.js" async defer></script> -->
+script[src=app.js async defer]
+
+<hr />
+
+<h2>5 &ndash; Implicit Tag Names</h2>
+
+<!-- Expected: <div class="wrap"><div class="content"></div></div> -->
+.wrap>.content
+
+<!-- Expected: <em><span class="info"></span></em> -->
+em>.info
+
+<!-- Expected:
+<ul>
+    <li class="item"></li>
+    <li class="item"></li>
+    <li class="item"></li>
+</ul>
+-->
+ul>.item*3
+
+<!-- Expected:
+<table>
+    <tr id="row1">
+        <td colspan="2"></td>
+    </tr>
+    <tr id="row2">
+        <td colspan="2"></td>
+    </tr>
+</table>
+-->
+table>#row$*2>[colspan=2]
+
+<!-- Expected:
+<select>
+    <option class="opt"></option>
+    <option class="opt"></option>
+    <option class="opt"></option>
+</select>
+-->
+select>.opt*3
+

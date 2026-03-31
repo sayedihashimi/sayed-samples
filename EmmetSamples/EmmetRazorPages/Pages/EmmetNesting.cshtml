@@ -1,0 +1,236 @@
+@page
+@model EmmetRazorPages.Pages.EmmetNestingModel
+@{
+    ViewData["Title"] = "Emmet: Nesting Operators";
+}
+
+<h1>Emmet Nesting Operators</h1>
+<p>
+    Tests for <strong>child (&gt;)</strong>, <strong>sibling (+)</strong>,
+    <strong>climb-up (^)</strong>, <strong>multiplication (*)</strong>,
+    and <strong>grouping ()</strong> operators.
+</p>
+
+<hr />
+
+<h2>1 &ndash; Child Operator (&gt;)</h2>
+
+<!-- Expected:
+<div>
+    <ul>
+        <li></li>
+    </ul>
+</div>
+-->
+div>ul>li
+
+<!-- Expected:
+<nav>
+    <ul>
+        <li>
+            <a href=""></a>
+        </li>
+    </ul>
+</nav>
+-->
+nav>ul>li>a
+
+<!-- Expected:
+<header>
+    <div>
+        <p>
+            <span></span>
+        </p>
+    </div>
+</header>
+-->
+header>div>p>span
+
+<!-- Expected:
+<table>
+    <tr>
+        <td></td>
+    </tr>
+</table>
+-->
+table>tr>td
+
+<!-- Expected:
+<form>
+    <fieldset>
+        <legend></legend>
+    </fieldset>
+</form>
+-->
+form>fieldset>legend
+
+<hr />
+
+<h2>2 &ndash; Sibling Operator (+)</h2>
+
+<!-- Expected:
+<div></div>
+<p></p>
+<blockquote></blockquote>
+-->
+div+p+bq
+
+<!-- Expected:
+<header></header>
+<main></main>
+<footer></footer>
+-->
+header+main+footer
+
+<!-- Expected:
+<h1></h1>
+<p></p>
+<p></p>
+-->
+h1+p+p
+
+<!-- Expected:
+<dt></dt>
+<dd></dd>
+-->
+dt+dd
+
+<!-- Expected:
+<input type="text" />
+<input type="submit" value="" />
+-->
+input+input:submit
+
+<hr />
+
+<h2>3 &ndash; Climb-Up Operator (^)</h2>
+
+<!-- Expected:
+<div></div>
+<div>
+    <p><span></span><em></em></p>
+    <blockquote></blockquote>
+</div>
+-->
+div+div>p>span+em^bq
+
+<!-- Expected:
+<div></div>
+<div>
+    <p><span></span><em></em></p>
+</div>
+<blockquote></blockquote>
+-->
+div+div>p>span+em^^^bq
+
+<!-- Expected:
+<section>
+    <div>
+        <p></p>
+    </div>
+    <footer></footer>
+</section>
+-->
+section>div>p^footer
+
+<!-- Expected:
+<ul>
+    <li>
+        <a href=""></a>
+    </li>
+    <li></li>
+</ul>
+-->
+ul>li>a^li
+
+<hr />
+
+<h2>4 &ndash; Multiplication Operator (*)</h2>
+
+<!-- Expected:
+<ul>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
+-->
+ul>li*5
+
+<!-- Expected: 3 <p></p> elements -->
+p*3
+
+<!-- Expected: table with 4 rows, each with 3 cells -->
+table>tr*4>td*3
+
+<!-- Expected: <div></div> repeated 2 times -->
+div*2
+
+<!-- Expected: <option></option> repeated 6 times inside <select> -->
+select>option*6
+
+<!-- Expected: <ol> with 8 <li> children -->
+ol>li*8
+
+<hr />
+
+<h2>5 &ndash; Grouping ()</h2>
+
+<!-- Expected:
+<div>
+    <header>
+        <ul>
+            <li><a href=""></a></li>
+            <li><a href=""></a></li>
+        </ul>
+    </header>
+    <footer>
+        <p></p>
+    </footer>
+</div>
+-->
+div>(header>ul>li*2>a)+footer>p
+
+<!-- Expected:
+<div>
+    <dl>
+        <dt></dt>
+        <dd></dd>
+        <dt></dt>
+        <dd></dd>
+        <dt></dt>
+        <dd></dd>
+    </dl>
+</div>
+<footer>
+    <p></p>
+</footer>
+-->
+(div>dl>(dt+dd)*3)+footer>p
+
+<!-- Expected:
+<div>
+    <header></header>
+    <main></main>
+    <footer></footer>
+</div>
+-->
+div>(header+main+footer)
+
+<!-- Expected:
+<section>
+    <h2></h2>
+    <p></p>
+</section>
+<section>
+    <h2></h2>
+    <p></p>
+</section>
+<section>
+    <h2></h2>
+    <p></p>
+</section>
+-->
+(section>h2+p)*3
+

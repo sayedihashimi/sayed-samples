@@ -1,0 +1,73 @@
+@page
+@model EmmetRazorPages.Pages.EmmetLoremIpsumModel
+@{
+    ViewData["Title"] = "Emmet: Lorem Ipsum";
+}
+
+<h1>Emmet Lorem Ipsum Generator</h1>
+<p>
+    Tests for the built-in <strong>lorem</strong> (lipsum) dummy text generator.
+</p>
+
+<hr />
+
+<h2>1 &ndash; Basic Lorem</h2>
+
+<!-- Expected: ~30 words of dummy text -->
+lorem
+
+<!-- Expected: same as lorem -->
+lipsum
+
+<hr />
+
+<h2>2 &ndash; Word Count Control</h2>
+
+<!-- Expected: ~5 words of dummy text -->
+lorem5
+
+<!-- Expected: ~10 words of dummy text -->
+lorem10
+
+<!-- Expected: ~50 words of dummy text -->
+lorem50
+
+<!-- Expected: ~100 words of dummy text -->
+lorem100
+
+<hr />
+
+<h2>3 &ndash; Lorem inside Elements</h2>
+
+<!-- Expected: <p> containing ~30 words of dummy text </p> -->
+p>lorem
+
+<!-- Expected: <div class="content"> containing ~20 words </div> -->
+div.content>lorem20
+
+<!-- Expected: <blockquote> containing ~15 words </blockquote> -->
+bq>lorem15
+
+<hr />
+
+<h2>4 &ndash; Repeated Lorem</h2>
+
+<!-- Expected: 4 <p> tags each with unique ~30 words of dummy text -->
+p*4>lorem
+
+<!-- Expected: 3 <li> tags each with ~10 words -->
+ul>li*3>lorem10
+
+<!-- Expected: 2 <div class="card"> each with ~25 words -->
+div.card*2>lorem25
+
+<hr />
+
+<h2>5 &ndash; Lorem with Implicit Tags</h2>
+
+<!-- Expected: <ul class="generic-list"> with 4 <li class="item"> each with ~10 words -->
+ul.generic-list>lorem10.item*4
+
+<!-- Expected: 3 <p class="paragraph"> each with ~15 words -->
+p.paragraph*3>lorem15
+

@@ -1,0 +1,130 @@
+@page
+@model EmmetRazorPages.Pages.EmmetBasicElementsModel
+@{
+    ViewData["Title"] = "Emmet: Basic Elements";
+}
+
+<h1>Emmet Basic Elements</h1>
+<p>
+    Each line below contains an Emmet abbreviation. Place your cursor at the end of the
+    abbreviation and press <kbd>Tab</kbd> to expand it. The expected output is shown in
+    a comment above each expression.
+</p>
+
+<hr />
+
+<h2>1 &ndash; Simple Tags</h2>
+
+<!-- Expected: <div></div> -->
+div
+
+<!-- Expected: <p></p> -->
+p
+
+<!-- Expected: <span></span> -->
+span
+
+<!-- Expected: <section></section> -->
+section
+
+<!-- Expected: <article></article> -->
+article
+
+<!-- Expected: <header></header> -->
+header
+
+<!-- Expected: <footer></footer> -->
+footer
+
+<!-- Expected: <main></main> -->
+main
+
+<!-- Expected: <nav></nav> -->
+nav
+
+<!-- Expected: <aside></aside> -->
+aside
+
+<!-- Expected: <h1></h1> -->
+h1
+
+<!-- Expected: <h2></h2> -->
+h2
+
+<!-- Expected: <h3></h3> -->
+h3
+
+<!-- Expected: <blockquote></blockquote> -->
+bq
+
+<!-- Expected: <a href=""></a> -->
+a
+
+<!-- Expected: <img src="" alt="" /> -->
+img
+
+<!-- Expected: <input type="text" /> -->
+inp
+
+<!-- Expected: <link rel="stylesheet" href="" /> -->
+link
+
+<!-- Expected: <link rel="stylesheet" href="style.css" /> -->
+link:css
+
+<!-- Expected: <script src=""></script> -->
+script:src
+
+<!-- Expected: <form action=""></form> -->
+form
+
+<!-- Expected: <button></button> -->
+btn
+
+<!-- Expected: <hr /> -->
+hr
+
+<!-- Expected: <br /> -->
+br
+
+<hr />
+
+<h2>2 &ndash; Self-Closing / Void Elements</h2>
+
+<!-- Expected: <input type="text" /> -->
+input
+
+<!-- Expected: <input type="checkbox" /> -->
+input:checkbox
+
+<!-- Expected: <input type="radio" /> -->
+input:radio
+
+<!-- Expected: <input type="hidden" name="" value="" /> -->
+input:hidden
+
+<!-- Expected: <input type="email" /> -->
+input:email
+
+<!-- Expected: <input type="password" /> -->
+input:password
+
+<!-- Expected: <input type="search" /> -->
+input:search
+
+<!-- Expected: <input type="number" /> -->
+input:number
+
+<!-- Expected: <input type="submit" value="" /> -->
+input:submit
+
+<!-- Expected: <input type="file" /> -->
+input:file
+
+<hr />
+
+<h2>3 &ndash; HTML Boilerplate</h2>
+
+<!-- Expected: Full HTML5 boilerplate (<!DOCTYPE html> ... </html>) -->
+!
+

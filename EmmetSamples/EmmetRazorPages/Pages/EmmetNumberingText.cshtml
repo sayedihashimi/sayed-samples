@@ -1,0 +1,167 @@
+@page
+@model EmmetRazorPages.Pages.EmmetNumberingTextModel
+@{
+    ViewData["Title"] = "Emmet: Numbering & Text";
+}
+
+<h1>Emmet Item Numbering ($) &amp; Text ({})</h1>
+<p>
+    Tests for the <strong>item numbering ($)</strong> operator, <strong>zero-padding ($$)</strong>,
+    <strong>numbering direction (@@-)</strong>, <strong>counter base (@@N)</strong>,
+    and <strong>text content ({})</strong>.
+</p>
+
+<hr />
+
+<h2>1 &ndash; Basic Item Numbering ($)</h2>
+
+<!-- Expected:
+<ul>
+    <li class="item1"></li>
+    <li class="item2"></li>
+    <li class="item3"></li>
+    <li class="item4"></li>
+    <li class="item5"></li>
+</ul>
+-->
+ul>li.item$*5
+
+<!-- Expected:
+<h2 id="section1"></h2>
+<h2 id="section2"></h2>
+<h2 id="section3"></h2>
+-->
+h2#section$*3
+
+<!-- Expected:
+<div class="row1">
+    <div class="col1"></div>
+    <div class="col2"></div>
+    <div class="col3"></div>
+</div>
+-->
+.row$>.col$*3
+
+<hr />
+
+<h2>2 &ndash; Zero-Padded Numbering ($$, $$$)</h2>
+
+<!-- Expected:
+<ul>
+    <li class="item01"></li>
+    <li class="item02"></li>
+    <li class="item03"></li>
+    <li class="item04"></li>
+    <li class="item05"></li>
+</ul>
+-->
+ul>li.item$$*5
+
+<!-- Expected:
+<ul>
+    <li class="item001"></li>
+    <li class="item002"></li>
+    <li class="item003"></li>
+</ul>
+-->
+ul>li.item$$$*3
+
+<!-- Expected:
+<div id="img001"></div>
+<div id="img002"></div>
+<div id="img003"></div>
+<div id="img004"></div>
+-->
+div#img$$$*4
+
+<hr />
+
+<h2>3 &ndash; Numbering Direction (&#64;-) &amp; Base (&#64;N)</h2>
+<p class="text-warning">
+    <strong>&#9888; Manual Test:</strong> The Emmet expressions below use the <code>&#64;</code>
+    modifier which conflicts with Razor syntax. Type each expression on a blank line below
+    its comment, then press <kbd>Tab</kbd> to expand.
+    This is also a great test of Emmet-in-Razor <code>&#64;</code> handling.
+</p>
+
+@* TEST 3a: Type the following on a blank line, then Tab *@
+@* ul>li.item$@-*5 *@
+@* Expected: items numbered 5,4,3,2,1 (descending) *@
+
+@* TEST 3b: Type the following on a blank line, then Tab *@
+@* ul>li.item$@3*5 *@
+@* Expected: items numbered starting at 3: 3,4,5,6,7 *@
+
+@* TEST 3c: Type the following on a blank line, then Tab *@
+@* ul>li.item$@-3*5 *@
+@* Expected: items numbered 7,6,5,4,3 (descending from base 3) *@
+
+@* TEST 3d: Type the following on a blank line, then Tab *@
+@* div.section$@10*3 *@
+@* Expected: items numbered starting at 10: 10,11,12 *@
+
+@* TEST 3e: Type the following on a blank line, then Tab *@
+@* ul>li.item$$@-*5 *@
+@* Expected: zero-padded descending: 05,04,03,02,01 *@
+
+<hr />
+
+<h2>4 &ndash; Text Content ({})</h2>
+
+<!-- Expected: <a href="">Click me</a> -->
+a{Click me}
+
+<!-- Expected: <p>Hello World</p> -->
+p{Hello World}
+
+<!-- Expected: <span>Copyright 2026</span> -->
+span{Copyright 2026}
+
+<!-- Expected: <h1>Welcome to Emmet Testing</h1> -->
+h1{Welcome to Emmet Testing}
+
+<!-- Expected: <button>Submit Form</button> -->
+button{Submit Form}
+
+<hr />
+
+<h2>5 &ndash; Text with Nesting</h2>
+
+<!-- Expected:
+<a href="">click</a><b>here</b>
+-->
+a{click}+b{here}
+
+<!-- Expected:
+<a href="">click<b>here</b></a>
+-->
+a>{click}+b{here}
+
+<!-- Expected:
+<p>Click <a href="">here</a> to continue</p>
+-->
+p>{Click }+a{here}+{ to continue}
+
+<!-- Expected:
+<div id="page">
+    <div class="logo"></div>
+    <ul id="navigation">
+        <li><a href="">Item 1</a></li>
+        <li><a href="">Item 2</a></li>
+        <li><a href="">Item 3</a></li>
+        <li><a href="">Item 4</a></li>
+        <li><a href="">Item 5</a></li>
+    </ul>
+</div>
+-->
+#page>div.logo+ul#navigation>li*5>a{Item $}
+
+<!-- Expected:
+<ul>
+    <li>Item 1: Description</li>
+    <li>Item 2: Description</li>
+    <li>Item 3: Description</li>
+</ul>
+-->
+ul>li{Item $: Description}*3
+
