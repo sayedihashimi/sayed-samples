@@ -8,20 +8,16 @@
     using System.Text;
     using System.Threading.Tasks;
     using MvcApplication1.Models;
-
-
     public class Program {
         public static void Main(string[] args) {
 
             string url = @"http://localhost:10512/api/values";
             
-
             Person personToPost = new Person {
                 FirstName = "first name here",
                 LastName = "last name here",
                 Id = new Random().Next()
             };
-
 
             var jsonFormatter = new System.Net.Http.Formatting.JsonMediaTypeFormatter();
             var mediaType = new MediaTypeHeaderValue("application/json");
